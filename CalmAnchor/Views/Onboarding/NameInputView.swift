@@ -10,10 +10,12 @@ struct NameInputView: View {
             Spacer()
 
             VStack(spacing: 16) {
-                Image(systemName: "person.crop.circle.badge.moon.fill")
-                    .font(.system(size: 64))
-                    .foregroundStyle(AppConstants.Colors.softLavender)
-                    .symbolEffect(.pulse)
+                Image("BrandIcon")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80, height: 80)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .shadow(color: Color(hex: "00C9B7").opacity(0.4), radius: 12, y: 4)
 
                 Text("What should we call\nyour calmest self?")
                     .font(.system(size: 28, weight: .bold, design: .rounded))

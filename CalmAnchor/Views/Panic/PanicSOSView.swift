@@ -254,8 +254,10 @@ struct PanicSOSView: View {
 
     // MARK: - Helpers
     private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            secondsElapsed += 1
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] _ in
+            Task { @MainActor in
+                secondsElapsed += 1
+            }
         }
     }
 

@@ -11,8 +11,14 @@ struct MoodBaselineView: View {
             Spacer()
 
             VStack(spacing: 16) {
+                Image("Onboarding-3")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 140)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+
                 Text(moodEmojis[baselineMood - 1])
-                    .font(.system(size: 80))
+                    .font(.system(size: 64))
                     .contentTransition(.numericText())
 
                 Text("How are you feeling\nright now?")

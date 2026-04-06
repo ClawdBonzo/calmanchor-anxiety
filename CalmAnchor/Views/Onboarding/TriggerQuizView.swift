@@ -14,9 +14,11 @@ struct TriggerQuizView: View {
             Spacer().frame(height: 60)
 
             VStack(spacing: 12) {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.system(size: 48))
-                    .foregroundStyle(AppConstants.Colors.warmPeach)
+                Image("Onboarding-2")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 140)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
 
                 Text("What triggers\nyour anxiety?")
                     .font(.system(size: 28, weight: .bold, design: .rounded))

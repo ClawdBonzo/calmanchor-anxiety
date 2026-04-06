@@ -16,14 +16,12 @@ struct SettingsView: View {
                 // Profile Section
                 Section {
                     HStack(spacing: 14) {
-                        ZStack {
-                            Circle()
-                                .fill(AppConstants.Colors.calmBlue.opacity(0.15))
-                                .frame(width: 56, height: 56)
-                            Text(String((profile?.calmName ?? "F").prefix(1)))
-                                .font(.system(size: 24, weight: .bold, design: .rounded))
-                                .foregroundStyle(AppConstants.Colors.calmBlue)
-                        }
+                        Image("BrandIcon")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 56, height: 56)
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                            .shadow(color: Color(hex: "00C9B7").opacity(0.3), radius: 6, y: 2)
 
                         VStack(alignment: .leading, spacing: 4) {
                             Text(profile?.calmName ?? "Friend")

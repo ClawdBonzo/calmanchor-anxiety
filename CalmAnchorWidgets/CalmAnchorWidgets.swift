@@ -88,11 +88,14 @@ struct CalmAnchorWidgetEntryView: View {
     private var smallWidget: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                Image(systemName: "leaf.fill")
-                    .foregroundStyle(.green)
-                Text("CalmAnchor")
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .foregroundStyle(.secondary)
+                Image("BrandIcon")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                    Text("CalmAnchor")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundStyle(.secondary)
             }
 
             Spacer()

@@ -3,7 +3,7 @@ import SwiftData
 
 struct HealingPlanService {
     static func generatePlan(for profile: UserProfile, in context: ModelContext) {
-        let triggers = profile.triggers
+        let _ = profile.triggers
         let minutes = profile.dailyMinutes
 
         let plans: [(String, String, String, Int)] = [
@@ -42,7 +42,7 @@ struct HealingPlanService {
         for day in 1...30 {
             var dayMinutes = 0
             var sortOrder = 0
-            var taskIndex = (day - 1) * 2 // rotate through tasks
+            let taskIndex = (day - 1) * 2 // rotate through tasks
 
             while dayMinutes < minutes && sortOrder < 5 {
                 let idx = (taskIndex + sortOrder) % plans.count

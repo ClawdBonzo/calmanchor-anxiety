@@ -22,9 +22,12 @@ struct CraftingPlanView: View {
 
             VStack(spacing: 20) {
                 ZStack {
-                    Circle()
-                        .fill(AppConstants.Colors.calmBlue.opacity(0.15))
-                        .frame(width: 120, height: 120)
+                    Image("Onboarding-4")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 140)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .opacity(showComplete ? 0.4 : 1.0)
 
                     if showComplete {
                         Image(systemName: "checkmark.circle.fill")

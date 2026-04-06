@@ -16,7 +16,15 @@ struct PaywallView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Spacer().frame(height: 50)
+                Spacer().frame(height: 30)
+
+                // Paywall header illustration
+                Image("Onboarding-5")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 160)
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .padding(.horizontal, 20)
 
                 // Before / After teaser
                 VStack(spacing: 20) {

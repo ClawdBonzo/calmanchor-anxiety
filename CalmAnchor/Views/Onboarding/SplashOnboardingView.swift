@@ -8,29 +8,29 @@ struct SplashOnboardingView: View {
     @State private var breatheScale: CGFloat = 1.0
 
     var body: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 32) {
             Spacer()
 
-            // Breathing circle animation
+            // Onboarding illustration
             ZStack {
                 ForEach(0..<3) { i in
                     Circle()
-                        .fill(
-                            AppConstants.Colors.calmBlue
-                                .opacity(0.15 - Double(i) * 0.04)
-                        )
-                        .frame(width: 200 + CGFloat(i) * 40)
+                        .fill(Color(hex: "00C9B7").opacity(0.1 - Double(i) * 0.03))
+                        .frame(width: 240 + CGFloat(i) * 40)
                         .scaleEffect(breatheScale)
                 }
 
-                Image(systemName: "leaf.fill")
-                    .font(.system(size: 60))
-                    .foregroundStyle(AppConstants.Colors.mintGreen)
+                Image("Onboarding-1")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 220)
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .shadow(color: Color(hex: "00C9B7").opacity(0.3), radius: 16, y: 8)
                     .scaleEffect(breatheScale)
             }
             .onAppear {
                 withAnimation(.easeInOut(duration: 4).repeatForever(autoreverses: true)) {
-                    breatheScale = 1.15
+                    breatheScale = 1.05
                 }
             }
 
@@ -43,7 +43,7 @@ struct SplashOnboardingView: View {
 
                 Text("Your personal anxiety recovery companion")
                     .font(.system(size: 18, weight: .medium, design: .rounded))
-                    .foregroundStyle(AppConstants.Colors.softLavender)
+                    .foregroundStyle(Color(hex: "D4A574"))
                     .multilineTextAlignment(.center)
                     .opacity(animateSubtitle ? 1 : 0)
                     .offset(y: animateSubtitle ? 0 : 15)
@@ -63,13 +63,13 @@ struct SplashOnboardingView: View {
                 .padding(.vertical, 18)
                 .background(
                     LinearGradient(
-                        colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal],
+                        colors: [Color(hex: "00C9B7"), Color(hex: "0D3B4F")],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .shadow(color: AppConstants.Colors.calmBlue.opacity(0.4), radius: 12, y: 6)
+                .shadow(color: Color(hex: "00C9B7").opacity(0.4), radius: 12, y: 6)
             }
             .opacity(animateButton ? 1 : 0)
             .offset(y: animateButton ? 0 : 30)
