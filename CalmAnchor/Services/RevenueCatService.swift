@@ -1,28 +1,18 @@
 import Foundation
-
-// MARK: - RevenueCat Integration Placeholder
-// Add RevenueCat SDK via Swift Package Manager:
-// https://github.com/RevenueCat/purchases-ios.git
-//
-// In your Xcode project:
-// 1. File > Add Package Dependencies
-// 2. Enter: https://github.com/RevenueCat/purchases-ios.git
-// 3. Add "RevenueCat" package product to CalmAnchor target
-//
-// Then uncomment and configure below:
-
-/*
 import RevenueCat
 
 @MainActor
-class RevenueCatService: ObservableObject {
+class RevenueCatService: NSObject, ObservableObject {
     static let shared = RevenueCatService()
+    static let apiKey = "test_QJLnYIOJlJhMBesdxCCJrnOJgdy"
+    static let entitlementID = "CalmAnchor Pro"
 
     @Published var isPremium = false
     @Published var offerings: Offerings?
+    @Published var currentOffering: Offering?
 
-    func configure(apiKey: String) {
-        Purchases.configure(withAPIKey: apiKey)
+    func configure() {
+        Purchases.configure(withAPIKey: Self.apiKey)
         Purchases.shared.delegate = self
 
         Task {
@@ -34,29 +24,31 @@ class RevenueCatService: ObservableObject {
     func checkSubscriptionStatus() async {
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
-            isPremium = !customerInfo.entitlements.active.isEmpty
+            isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         } catch {
-            print("Error checking subscription: \(error)")
+            print("RevenueCat: Error checking subscription: \(error)")
         }
     }
 
     func fetchOfferings() async {
         do {
-            offerings = try await Purchases.shared.offerings()
+            let fetchedOfferings = try await Purchases.shared.offerings()
+            offerings = fetchedOfferings
+            currentOffering = fetchedOfferings.current
         } catch {
-            print("Error fetching offerings: \(error)")
+            print("RevenueCat: Error fetching offerings: \(error)")
         }
     }
 
     func purchase(_ package: Package) async throws -> Bool {
         let result = try await Purchases.shared.purchase(package: package)
-        isPremium = !result.customerInfo.entitlements.active.isEmpty
+        isPremium = result.customerInfo.entitlements[Self.entitlementID]?.isActive == true
         return isPremium
     }
 
     func restorePurchases() async throws -> Bool {
         let customerInfo = try await Purchases.shared.restorePurchases()
-        isPremium = !customerInfo.entitlements.active.isEmpty
+        isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         return isPremium
     }
 }
@@ -64,20 +56,7 @@ class RevenueCatService: ObservableObject {
 extension RevenueCatService: PurchasesDelegate {
     nonisolated func purchases(_ purchases: Purchases, receivedUpdated customerInfo: CustomerInfo) {
         Task { @MainActor in
-            isPremium = !customerInfo.entitlements.active.isEmpty
+            isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         }
-    }
-}
-*/
-
-// Temporary stub for development without RevenueCat SDK
-@MainActor
-class RevenueCatService: ObservableObject {
-    static let shared = RevenueCatService()
-    @Published var isPremium = false
-
-    func configure(apiKey: String) {
-        // TODO: Replace with real RevenueCat configuration
-        print("RevenueCat would be configured with key: \(apiKey)")
     }
 }

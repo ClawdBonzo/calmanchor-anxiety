@@ -4,6 +4,7 @@ import SwiftData
 @main
 struct CalmAnchorApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+    @StateObject private var revenueCat = RevenueCatService.shared
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -25,6 +26,10 @@ struct CalmAnchorApp: App {
         WindowGroup {
             RootView(hasCompletedOnboarding: $hasCompletedOnboarding)
                 .modelContainer(sharedModelContainer)
+                .environmentObject(revenueCat)
+                .onAppear {
+                    revenueCat.configure()
+                }
         }
     }
 }

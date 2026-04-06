@@ -1,17 +1,28 @@
 import SwiftUI
+import RevenueCat
 
 struct PaywallView: View {
     let calmName: String
     let onContinue: () -> Void
     let onRestore: () -> Void
 
-    @State private var selectedPlan = 1 // 0=weekly, 1=annual (highlighted), 2=monthly
+    @EnvironmentObject private var revenueCat: RevenueCatService
+    @State private var selectedIndex = 1 // default to monthly (BEST VALUE)
+    @State private var isPurchasing = false
+    @State private var errorMessage: String?
 
-    private let plans: [(String, String, String, String)] = [
-        ("Weekly", "$4.99/wk", "Flexible", ""),
-        ("Annual", "$39.99/yr", "Best Value", "3-Day Free Trial"),
-        ("Monthly", "$9.99/mo", "Popular", "")
-    ]
+    private var packages: [Package] {
+        revenueCat.currentOffering?.availablePackages ?? []
+    }
+
+    private var sortedPackages: [Package] {
+        let order: [PackageType] = [.weekly, .monthly, .annual, .lifetime]
+        return packages.sorted { a, b in
+            let ai = order.firstIndex(of: a.packageType) ?? 99
+            let bi = order.firstIndex(of: b.packageType) ?? 99
+            return ai < bi
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -64,33 +75,60 @@ struct PaywallView: View {
                 }
                 .padding(.horizontal, 24)
 
-                // Plan selection
+                // Plan selection - live from RevenueCat
                 VStack(spacing: 10) {
-                    ForEach(0..<3) { index in
-                        PlanCard(
-                            name: plans[index].0,
-                            price: plans[index].1,
-                            badge: plans[index].2,
-                            trial: plans[index].3,
-                            isSelected: selectedPlan == index,
-                            action: { selectedPlan = index }
-                        )
+                    if sortedPackages.isEmpty {
+                        // Fallback static plans while loading
+                        ForEach(0..<4) { index in
+                            let fallback = fallbackPlans[index]
+                            PlanCard(
+                                name: fallback.0,
+                                price: fallback.1,
+                                badge: fallback.2,
+                                trial: fallback.3,
+                                isSelected: selectedIndex == index,
+                                action: { selectedIndex = index }
+                            )
+                        }
+                    } else {
+                        ForEach(Array(sortedPackages.enumerated()), id: \.element.id) { index, package in
+                            PlanCard(
+                                name: packageName(package),
+                                price: package.localizedPriceString + priceSuffix(package),
+                                badge: packageBadge(package),
+                                trial: packageTrial(package),
+                                isSelected: selectedIndex == index,
+                                action: { selectedIndex = index }
+                            )
+                        }
                     }
                 }
                 .padding(.horizontal, 24)
 
+                // Error message
+                if let errorMessage {
+                    Text(errorMessage)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.red)
+                        .padding(.horizontal, 24)
+                }
+
                 // CTA
-                Button(action: {
-                    // TODO: RevenueCat purchase
-                    onContinue()
-                }) {
-                    VStack(spacing: 4) {
-                        Text(plans[selectedPlan].3.isEmpty ? "Continue" : "Start Free Trial")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                        if !plans[selectedPlan].3.isEmpty {
-                            Text("3 days free, then \(plans[selectedPlan].1)")
-                                .font(.system(size: 13, weight: .medium, design: .rounded))
-                                .opacity(0.8)
+                Button(action: { Task { await purchaseSelected() } }) {
+                    Group {
+                        if isPurchasing {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            VStack(spacing: 4) {
+                                Text(ctaTitle)
+                                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                                if let subtitle = ctaSubtitle {
+                                    Text(subtitle)
+                                        .font(.system(size: 13, weight: .medium, design: .rounded))
+                                        .opacity(0.8)
+                                }
+                            }
                         }
                     }
                     .foregroundStyle(.white)
@@ -106,13 +144,16 @@ struct PaywallView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: AppConstants.Colors.calmBlue.opacity(0.4), radius: 12, y: 6)
                 }
+                .disabled(isPurchasing)
                 .padding(.horizontal, 24)
 
                 // Restore + skip
                 HStack(spacing: 24) {
-                    Button("Restore Purchase") { onRestore() }
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.5))
+                    Button("Restore Purchase") {
+                        Task { await restore() }
+                    }
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.5))
 
                     Button("Skip for now") { onContinue() }
                         .font(.system(size: 14, weight: .medium))
@@ -127,6 +168,110 @@ struct PaywallView: View {
             }
         }
         .scrollIndicators(.hidden)
+        .onAppear {
+            // Default select monthly (index 1)
+            if !sortedPackages.isEmpty {
+                selectedIndex = sortedPackages.firstIndex(where: { $0.packageType == .monthly }) ?? 1
+            }
+        }
+    }
+
+    // MARK: - Purchase Logic
+
+    private func purchaseSelected() async {
+        guard !sortedPackages.isEmpty else {
+            onContinue()
+            return
+        }
+        let index = min(selectedIndex, sortedPackages.count - 1)
+        let package = sortedPackages[index]
+        isPurchasing = true
+        errorMessage = nil
+
+        do {
+            let success = try await revenueCat.purchase(package)
+            isPurchasing = false
+            if success { onContinue() }
+        } catch {
+            isPurchasing = false
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    private func restore() async {
+        isPurchasing = true
+        errorMessage = nil
+        do {
+            let success = try await revenueCat.restorePurchases()
+            isPurchasing = false
+            if success { onContinue() }
+            else { errorMessage = "No active subscription found." }
+        } catch {
+            isPurchasing = false
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    // MARK: - Helpers
+
+    private let fallbackPlans: [(String, String, String, String)] = [
+        ("Weekly", "$4.99/wk", "Flexible", ""),
+        ("Monthly", "$9.99/mo", "BEST VALUE", "3-Day Free Trial"),
+        ("Yearly", "$49.99/yr", "Save 58%", ""),
+        ("Lifetime", "$79.99", "One-Time", "")
+    ]
+
+    private var ctaTitle: String {
+        if sortedPackages.isEmpty { return "Continue" }
+        let pkg = sortedPackages[min(selectedIndex, sortedPackages.count - 1)]
+        if pkg.storeProduct.introductoryDiscount != nil { return "Start Free Trial" }
+        return "Subscribe Now"
+    }
+
+    private var ctaSubtitle: String? {
+        if sortedPackages.isEmpty { return nil }
+        let pkg = sortedPackages[min(selectedIndex, sortedPackages.count - 1)]
+        if let intro = pkg.storeProduct.introductoryDiscount {
+            let days = intro.subscriptionPeriod.value
+            return "\(days) days free, then \(pkg.localizedPriceString)\(priceSuffix(pkg))"
+        }
+        return nil
+    }
+
+    private func packageName(_ pkg: Package) -> String {
+        switch pkg.packageType {
+        case .weekly: return "Weekly"
+        case .monthly: return "Monthly"
+        case .annual: return "Yearly"
+        case .lifetime: return "Lifetime"
+        default: return pkg.storeProduct.localizedTitle
+        }
+    }
+
+    private func priceSuffix(_ pkg: Package) -> String {
+        switch pkg.packageType {
+        case .weekly: return "/wk"
+        case .monthly: return "/mo"
+        case .annual: return "/yr"
+        default: return ""
+        }
+    }
+
+    private func packageBadge(_ pkg: Package) -> String {
+        switch pkg.packageType {
+        case .monthly: return "BEST VALUE"
+        case .annual: return "Save 58%"
+        case .weekly: return "Flexible"
+        case .lifetime: return "One-Time"
+        default: return ""
+        }
+    }
+
+    private func packageTrial(_ pkg: Package) -> String {
+        if let intro = pkg.storeProduct.introductoryDiscount {
+            return "\(intro.subscriptionPeriod.value)-Day Free Trial"
+        }
+        return ""
     }
 }
 
