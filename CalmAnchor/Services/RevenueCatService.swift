@@ -4,8 +4,9 @@ import RevenueCat
 @MainActor
 class RevenueCatService: NSObject, ObservableObject {
     static let shared = RevenueCatService()
-    static let apiKey = "test_QJLnYIOJlJhMBesdxCCJrnOJgdy"
-    static let entitlementID = "CalmAnchor Pro"
+    // TODO: Replace with live key before App Store release
+    static let apiKey = "test_AFpuFmRxwiYCSJV0rgzxFqKjZDa"
+    static let entitlementID = "pro"
 
     @Published var isPremium = false
     @Published var offerings: Offerings?
