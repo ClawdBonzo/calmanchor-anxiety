@@ -5,6 +5,8 @@ struct NameInputView: View {
     let onNext: () -> Void
     @FocusState private var isFocused: Bool
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var appeared = false
     @State private var pulseScale: CGFloat = 1.0
 
@@ -31,7 +33,10 @@ struct NameInputView: View {
             .scaleEffect(appeared ? 1.0 : 0.6)
             .opacity(appeared ? 1 : 0)
             .animation(.spring(response: 0.65, dampingFraction: 0.65).delay(0.1), value: appeared)
-            .animation(.easeInOut(duration: 3.5).repeatForever(autoreverses: true), value: pulseScale)
+            .animation(
+                reduceMotion ? nil : .easeInOut(duration: 3.5).repeatForever(autoreverses: true),
+                value: pulseScale
+            )
             .padding(.bottom, 32)
 
             // Heading
@@ -111,8 +116,11 @@ struct NameInputView: View {
         }
         .onAppear {
             appeared = true
-            pulseScale = 1.05
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { isFocused = true }
+            if !reduceMotion { pulseScale = 1.05 }
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(500))
+                isFocused = true
+            }
         }
     }
 }

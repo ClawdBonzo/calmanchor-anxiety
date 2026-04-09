@@ -4,6 +4,8 @@ struct CraftingPlanView: View {
     let calmName: String
     let onNext: () -> Void
 
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var progress1: CGFloat = 0
     @State private var progress2: CGFloat = 0
     @State private var progress3: CGFloat = 0
@@ -35,8 +37,10 @@ struct CraftingPlanView: View {
                         .frame(width: 10, height: 10)
                         .offset(x: 65)
                         .rotationEffect(.degrees(orbitAngle))
-                        .animation(.linear(duration: 2).repeatForever(autoreverses: false),
-                                   value: orbitAngle)
+                        .animation(
+                            reduceMotion ? nil : .linear(duration: 2).repeatForever(autoreverses: false),
+                            value: orbitAngle
+                        )
                 }
 
                 if showComplete {
@@ -57,7 +61,7 @@ struct CraftingPlanView: View {
                         Image(systemName: "brain.head.profile")
                             .font(.system(size: 44))
                             .foregroundStyle(AppConstants.Colors.calmBlue)
-                            .symbolEffect(.pulse)
+                            .symbolEffect(.pulse, isActive: !reduceMotion)
                     }
                 }
             }
@@ -126,7 +130,7 @@ struct CraftingPlanView: View {
         }
         .onAppear {
             withAnimation(.spring(response: 0.7, dampingFraction: 0.7).delay(0.1)) { appeared = true }
-            orbitAngle = 360
+            if !reduceMotion { orbitAngle = 360 }
             startAnimation()
         }
     }
@@ -134,20 +138,19 @@ struct CraftingPlanView: View {
     private func startAnimation() {
         withAnimation(.easeInOut(duration: 1.5)) { progress1 = 1.0 }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(1200))
             withAnimation { currentLabel = labels[1] }
             withAnimation(.easeInOut(duration: 1.5)) { progress2 = 1.0 }
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            try? await Task.sleep(for: .milliseconds(1300))
             withAnimation { currentLabel = labels[2] }
             withAnimation(.easeInOut(duration: 1.5)) { progress3 = 1.0 }
-        }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4.2) {
+            try? await Task.sleep(for: .milliseconds(1700))
             withAnimation(.spring(response: 0.55, dampingFraction: 0.65)) {
                 showComplete = true
-                currentLabel = "Your Peace Plan is ready! ✨"
+                currentLabel = "Your Peace Plan is ready!"
             }
         }
     }
