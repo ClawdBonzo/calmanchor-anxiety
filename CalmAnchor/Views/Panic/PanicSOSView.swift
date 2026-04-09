@@ -4,9 +4,9 @@ import SwiftData
 struct PanicSOSView: View {
     @Binding var isPresented: Bool
     @Environment(\.modelContext) private var modelContext
+
     @State private var currentPhase: SOSPhase = .grounding
     @State private var breathCount = 0
-    @State private var isBreathing = false
     @State private var breathScale: CGFloat = 0.6
     @State private var breathLabel = "Breathe In"
     @State private var secondsElapsed: TimeInterval = 0
@@ -17,144 +17,208 @@ struct PanicSOSView: View {
     @State private var timer: Timer?
     @State private var breathTimer: Timer?
 
+    // Entry flare animation
+    @State private var entryFlare = false
+    @State private var flareOpacity: Double = 1
+
     enum SOSPhase {
         case grounding, breathing, affirmations, complete
     }
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [Color(hex: "1a1a2e"), Color(hex: "16213e")],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            // Premium dark background (stormy → calming)
+            ZStack {
+                LinearGradient(
+                    colors: [Color(hex: "080E1C"), Color(hex: "0D1A2E"), Color(hex: "091828")],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
 
+                // Phase-reactive ambient glow
+                Circle()
+                    .fill(phaseGlowColor.opacity(0.08))
+                    .frame(width: 400)
+                    .blur(radius: 80)
+                    .offset(y: -100)
+                    .animation(.easeInOut(duration: 1.5), value: currentPhase)
+            }
+
+            // Entry flare: expanding rings when SOS first opens
+            if flareOpacity > 0 {
+                ZStack {
+                    ForEach(0..<5) { i in
+                        Circle()
+                            .stroke(Color.red.opacity(max(0, 0.35 - Double(i) * 0.06)), lineWidth: 2)
+                            .frame(width: 60 + CGFloat(i) * 50)
+                            .scaleEffect(entryFlare ? 3.5 + CGFloat(i) * 0.4 : 1.0)
+                            .opacity(entryFlare ? 0 : 1)
+                            .animation(
+                                .easeOut(duration: 1.2).delay(Double(i) * 0.12),
+                                value: entryFlare
+                            )
+                    }
+                }
+                .opacity(flareOpacity)
+                .allowsHitTesting(false)
+            }
+
+            // Main content
             VStack(spacing: 0) {
-                // Close button
+                // Header
                 HStack {
+                    // Phase indicator pills
+                    HStack(spacing: 6) {
+                        ForEach(SOSPhase.allCases, id: \.rawValue) { phase in
+                            Circle()
+                                .fill(phase == currentPhase
+                                      ? phaseGlowColor
+                                      : .white.opacity(phaseIndex(phase) < phaseIndex(currentPhase) ? 0.35 : 0.12))
+                                .frame(width: phase == currentPhase ? 10 : 7,
+                                       height: phase == currentPhase ? 10 : 7)
+                                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentPhase)
+                        }
+                    }
+
                     Spacer()
+
                     Button(action: { completeSession() }) {
                         Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 32))
-                            .foregroundStyle(.white.opacity(0.5))
+                            .font(.system(size: 28))
+                            .foregroundStyle(.white.opacity(0.35))
                     }
-                    .padding(20)
                 }
+                .padding(.horizontal, 24)
+                .padding(.top, 20)
+                .padding(.bottom, 8)
 
                 switch currentPhase {
-                case .grounding:
-                    groundingView
-                case .breathing:
-                    breathingView
-                case .affirmations:
-                    affirmationsView
-                case .complete:
-                    completeView
+                case .grounding:    groundingView
+                case .breathing:    breathingView
+                case .affirmations: affirmationsView
+                case .complete:     completeView
                 }
             }
         }
-        .onAppear { startTimer() }
+        .onAppear {
+            startTimer()
+            // Trigger entry flare
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                withAnimation { entryFlare = true }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                    withAnimation(.easeOut(duration: 0.4)) { flareOpacity = 0 }
+                }
+            }
+        }
         .onDisappear { stopTimers() }
     }
 
     // MARK: - Grounding (5-4-3-2-1)
+
     private var groundingView: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 28) {
             Spacer()
 
-            Image(systemName: "hand.raised.fill")
-                .font(.system(size: 56))
-                .foregroundStyle(AppConstants.Colors.sereneTeal)
-                .symbolEffect(.breathe)
-
-            Text("5-4-3-2-1 Grounding")
-                .font(.system(size: 28, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-
-            VStack(alignment: .leading, spacing: 18) {
-                GroundingRow(count: 5, sense: "things you can SEE", icon: "eye.fill")
-                GroundingRow(count: 4, sense: "things you can TOUCH", icon: "hand.point.up.fill")
-                GroundingRow(count: 3, sense: "things you can HEAR", icon: "ear.fill")
-                GroundingRow(count: 2, sense: "things you can SMELL", icon: "nose.fill")
-                GroundingRow(count: 1, sense: "thing you can TASTE", icon: "mouth.fill")
+            ZStack {
+                Circle()
+                    .fill(AppConstants.Colors.electricTeal.opacity(0.1))
+                    .frame(width: 110, height: 110)
+                Circle()
+                    .fill(AppConstants.Colors.electricTeal.opacity(0.05))
+                    .frame(width: 145, height: 145)
+                Image(systemName: "hand.raised.fill")
+                    .font(.system(size: 52, weight: .semibold))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [AppConstants.Colors.electricTeal, AppConstants.Colors.sereneTeal],
+                            startPoint: .top, endPoint: .bottom
+                        )
+                    )
+                    .shadow(color: AppConstants.Colors.electricTeal.opacity(0.5), radius: 16, y: 4)
+                    .symbolEffect(.breathe)
             }
-            .padding(.horizontal, 32)
 
-            Spacer()
-
-            Button(action: {
-                withAnimation { currentPhase = .breathing }
-                startBreathing()
-            }) {
-                Text("I'm grounded. Next: Breathing")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+            VStack(spacing: 6) {
+                Text("5-4-3-2-1 Grounding")
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(AppConstants.Colors.sereneTeal)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                Text("Anchor yourself in the present")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.45))
             }
-            .padding(.horizontal, 32)
-            .padding(.bottom, 50)
+
+            VStack(alignment: .leading, spacing: 14) {
+                GroundingRow(count: 5, sense: "things you can SEE",   icon: "eye.fill")
+                GroundingRow(count: 4, sense: "things you can TOUCH", icon: "hand.point.up.fill")
+                GroundingRow(count: 3, sense: "things you can HEAR",  icon: "ear.fill")
+                GroundingRow(count: 2, sense: "things you can SMELL", icon: "nose.fill")
+                GroundingRow(count: 1, sense: "thing you can TASTE",  icon: "mouth.fill")
+            }
+            .padding(.horizontal, 28)
+
+            Spacer()
+
+            ctaButton(label: "I'm grounded. Next: Breathing", color: AppConstants.Colors.electricTeal) {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .breathing }
+                startBreathing()
+            }
         }
     }
 
     // MARK: - Breathing
+
     private var breathingView: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 28) {
             Spacer()
 
             Text(breathLabel)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
-                .foregroundStyle(.white.opacity(0.8))
-                .contentTransition(.numericText())
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.75))
+                .animation(.easeInOut(duration: 0.4), value: breathLabel)
 
+            // Breathing orb
             ZStack {
-                ForEach(0..<3) { i in
+                ForEach(0..<4) { i in
                     Circle()
-                        .fill(AppConstants.Colors.calmBlue.opacity(0.12 - Double(i) * 0.03))
-                        .frame(width: 200 + CGFloat(i) * 50)
+                        .fill(AppConstants.Colors.calmBlue.opacity(0.06 - Double(i) * 0.01))
+                        .frame(width: 180 + CGFloat(i) * 40)
                         .scaleEffect(breathScale)
+                        .animation(.easeInOut(duration: 4), value: breathScale)
                 }
-
                 Circle()
                     .fill(
                         RadialGradient(
-                            colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal.opacity(0.5)],
-                            center: .center,
-                            startRadius: 20,
-                            endRadius: 80
+                            colors: [
+                                AppConstants.Colors.electricTeal.opacity(0.6),
+                                AppConstants.Colors.calmBlue.opacity(0.3),
+                                AppConstants.Colors.roseGold.opacity(0.1)
+                            ],
+                            center: .center, startRadius: 10, endRadius: 70
                         )
                     )
                     .frame(width: 140, height: 140)
                     .scaleEffect(breathScale)
+                    .shadow(color: AppConstants.Colors.electricTeal.opacity(0.4), radius: 20, y: 4)
+                    .animation(.easeInOut(duration: 4), value: breathScale)
 
-                Text("🫁")
-                    .font(.system(size: 48))
+                Image(systemName: "wind")
+                    .font(.system(size: 36, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.7))
                     .scaleEffect(breathScale)
+                    .animation(.easeInOut(duration: 4), value: breathScale)
             }
 
             Text("Breath \(breathCount) of 6")
-                .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.6))
+                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.45))
 
             Spacer()
 
             if breathCount >= 6 {
-                Button(action: {
+                ctaButton(label: "Continue to Affirmations", color: AppConstants.Colors.calmBlue) {
                     stopBreathTimer()
-                    withAnimation { currentPhase = .affirmations }
-                }) {
-                    Text("Continue to Affirmations")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(AppConstants.Colors.calmBlue)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .affirmations }
                 }
-                .padding(.horizontal, 32)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
@@ -163,101 +227,103 @@ struct PanicSOSView: View {
     }
 
     // MARK: - Affirmations
+
     private var affirmationsView: some View {
-        VStack(spacing: 40) {
+        VStack(spacing: 36) {
             Spacer()
 
-            Image(systemName: "sparkles")
-                .font(.system(size: 48))
-                .foregroundStyle(AppConstants.Colors.sunsetGold)
-                .symbolEffect(.variableColor)
+            ZStack {
+                Circle()
+                    .fill(AppConstants.Colors.sunsetGold.opacity(0.1))
+                    .frame(width: 100, height: 100)
+                Image(systemName: "sparkles")
+                    .font(.system(size: 44, weight: .semibold))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [AppConstants.Colors.sunsetGold, AppConstants.Colors.roseGoldBright],
+                            startPoint: .topLeading, endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: AppConstants.Colors.sunsetGold.opacity(0.5), radius: 16, y: 4)
+                    .symbolEffect(.variableColor)
+            }
 
             Text(currentAffirmation)
-                .font(.system(size: 26, weight: .bold, design: .serif))
+                .font(.system(size: 24, weight: .bold, design: .serif))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, 36)
                 .contentTransition(.opacity)
 
             Button(action: nextAffirmation) {
-                Label("Next Affirmation", systemImage: "arrow.right.circle.fill")
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.7))
+                HStack(spacing: 6) {
+                    Text("Next Affirmation")
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.system(size: 14))
+                }
+                .foregroundStyle(.white.opacity(0.55))
             }
 
             Spacer()
 
-            Button(action: { withAnimation { currentPhase = .complete } }) {
-                Text("I Feel Calmer Now")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(AppConstants.Colors.mintGreen)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+            ctaButton(label: "I Feel Calmer Now", color: AppConstants.Colors.mintGreen) {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .complete }
             }
-            .padding(.horizontal, 32)
-            .padding(.bottom, 50)
         }
     }
 
-    // MARK: - Complete
+    // MARK: - Complete (Anchor Bloom)
+
     private var completeView: some View {
-        VStack(spacing: 32) {
-            Spacer()
+        AnchorBloomCompleteView(
+            intensityAfter: $intensityAfter,
+            onClose: { completeSession() }
+        )
+    }
 
-            Image(systemName: "checkmark.seal.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(AppConstants.Colors.mintGreen)
-                .symbolEffect(.bounce)
+    // MARK: - Shared CTA Button
 
-            Text("You did it!")
-                .font(.system(size: 32, weight: .bold, design: .rounded))
+    private func ctaButton(label: String, color: Color, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(label)
+                .font(.system(size: 17, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 17)
+                .background(color)
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .shadow(color: color.opacity(0.45), radius: 12, y: 4)
+        }
+        .padding(.horizontal, 28)
+        .padding(.bottom, 50)
+    }
 
-            Text("You navigated through the storm.\nEvery time you use these tools, you grow stronger.")
-                .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.7))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 32)
+    // MARK: - Phase Helpers
 
-            VStack(spacing: 14) {
-                Text("How intense is your anxiety now?")
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.8))
-
-                Slider(value: Binding(get: { Double(intensityAfter) }, set: { intensityAfter = Int($0) }),
-                       in: 1...10, step: 1)
-                .tint(AppConstants.Colors.mintGreen)
-                .padding(.horizontal, 40)
-
-                Text("\(intensityAfter)/10")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(AppConstants.Colors.mintGreen)
-            }
-
-            Spacer()
-
-            Button(action: { completeSession() }) {
-                Text("Close & Return")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(AppConstants.Colors.calmBlue)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-            }
-            .padding(.horizontal, 32)
-            .padding(.bottom, 50)
+    private var phaseGlowColor: Color {
+        switch currentPhase {
+        case .grounding:    return AppConstants.Colors.electricTeal
+        case .breathing:    return AppConstants.Colors.calmBlue
+        case .affirmations: return AppConstants.Colors.sunsetGold
+        case .complete:     return AppConstants.Colors.mintGreen
         }
     }
 
-    // MARK: - Helpers
+    private func phaseIndex(_ phase: SOSPhase) -> Int {
+        switch phase {
+        case .grounding: return 0
+        case .breathing: return 1
+        case .affirmations: return 2
+        case .complete: return 3
+        }
+    }
+
+    // MARK: - Timer Logic
+
     private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [self] _ in
-            Task { @MainActor in
-                secondsElapsed += 1
-            }
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            Task { @MainActor in secondsElapsed += 1 }
         }
     }
 
@@ -268,46 +334,30 @@ struct PanicSOSView: View {
 
     private func runBreathCycle() {
         guard breathCount < 6 else { return }
-
-        // Inhale 4s
         breathLabel = "Breathe In..."
         withAnimation(.easeInOut(duration: 4)) { breathScale = 1.0 }
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            // Hold 4s
             breathLabel = "Hold..."
-
             DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                // Exhale 4s
                 breathLabel = "Breathe Out..."
                 withAnimation(.easeInOut(duration: 4)) { breathScale = 0.6 }
-
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                     breathCount += 1
-                    if breathCount < 6 {
-                        runBreathCycle()
-                    } else {
-                        breathLabel = "Well done!"
-                    }
+                    if breathCount < 6 { runBreathCycle() }
+                    else { breathLabel = "Well done!" }
                 }
             }
         }
     }
 
-    private func stopBreathTimer() {
-        breathTimer?.invalidate()
-        breathTimer = nil
-    }
-
-    private func stopTimers() {
-        timer?.invalidate()
-        timer = nil
-        stopBreathTimer()
-    }
+    private func stopBreathTimer() { breathTimer?.invalidate(); breathTimer = nil }
+    private func stopTimers() { timer?.invalidate(); timer = nil; stopBreathTimer() }
 
     private func nextAffirmation() {
         affirmationIndex = (affirmationIndex + 1) % AppConstants.affirmations.count
-        withAnimation { currentAffirmation = AppConstants.affirmations[affirmationIndex] }
+        withAnimation(.easeInOut(duration: 0.4)) {
+            currentAffirmation = AppConstants.affirmations[affirmationIndex]
+        }
     }
 
     private func completeSession() {
@@ -320,9 +370,183 @@ struct PanicSOSView: View {
         )
         modelContext.insert(event)
         stopTimers()
-        withAnimation { isPresented = false }
+        withAnimation(.easeInOut(duration: 0.35)) { isPresented = false }
     }
 }
+
+// MARK: - SOSPhase CaseIterable (for progress dots)
+
+extension PanicSOSView.SOSPhase: CaseIterable, RawRepresentable {
+    init?(rawValue: Int) {
+        switch rawValue {
+        case 0: self = .grounding
+        case 1: self = .breathing
+        case 2: self = .affirmations
+        case 3: self = .complete
+        default: return nil
+        }
+    }
+    var rawValue: Int {
+        switch self {
+        case .grounding: return 0
+        case .breathing: return 1
+        case .affirmations: return 2
+        case .complete: return 3
+        }
+    }
+    static var allCases: [PanicSOSView.SOSPhase] {
+        [.grounding, .breathing, .affirmations, .complete]
+    }
+}
+
+// MARK: - Anchor Bloom Complete View
+
+struct AnchorBloomCompleteView: View {
+    @Binding var intensityAfter: Int
+    let onClose: () -> Void
+
+    @State private var bloomScale: CGFloat = 0.2
+    @State private var bloomOpacity: Double = 0
+    @State private var ringScales: [CGFloat] = [1, 1, 1, 1, 1]
+    @State private var ringOpacities: [Double] = [1, 1, 1, 1, 1]
+    @State private var textAppeared = false
+
+    var body: some View {
+        VStack(spacing: 28) {
+            Spacer()
+
+            // Anchor bloom
+            ZStack {
+                // Expanding golden rings
+                ForEach(0..<5) { i in
+                    Circle()
+                        .stroke(
+                            LinearGradient(
+                                colors: [
+                                    AppConstants.Colors.sunsetGold.opacity(0.5 - Double(i) * 0.08),
+                                    AppConstants.Colors.roseGold.opacity(0.3 - Double(i) * 0.05)
+                                ],
+                                startPoint: .topLeading, endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                        .frame(width: 70 + CGFloat(i) * 40)
+                        .scaleEffect(ringScales[i])
+                        .opacity(ringOpacities[i])
+                }
+
+                // Glowing anchor core
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                AppConstants.Colors.sunsetGold.opacity(0.3),
+                                AppConstants.Colors.roseGold.opacity(0.1),
+                                Color.clear
+                            ],
+                            center: .center, startRadius: 0, endRadius: 55
+                        )
+                    )
+                    .frame(width: 120, height: 120)
+                    .scaleEffect(bloomScale)
+                    .opacity(bloomOpacity)
+
+                Image(systemName: "anchor")
+                    .font(.system(size: 58, weight: .semibold))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [AppConstants.Colors.sunsetGold, AppConstants.Colors.roseGoldBright],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .shadow(color: AppConstants.Colors.sunsetGold.opacity(0.6), radius: 20, y: 4)
+                    .scaleEffect(bloomScale)
+                    .opacity(bloomOpacity)
+            }
+            .onAppear { triggerBloom() }
+
+            VStack(spacing: 10) {
+                Text("You did it!")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+
+                Text("You navigated through the storm.\nEvery time you use these tools, you grow stronger.")
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.55))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+                    .lineSpacing(3)
+            }
+            .opacity(textAppeared ? 1 : 0)
+            .offset(y: textAppeared ? 0 : 14)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.5), value: textAppeared)
+
+            // Intensity rating
+            VStack(spacing: 12) {
+                Text("How intense is your anxiety now?")
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.65))
+
+                Slider(
+                    value: Binding(
+                        get: { Double(intensityAfter) },
+                        set: { intensityAfter = Int($0) }
+                    ),
+                    in: 1...10, step: 1
+                )
+                .tint(AppConstants.Colors.mintGreen)
+                .padding(.horizontal, 36)
+
+                Text("\(intensityAfter)/10")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppConstants.Colors.mintGreen)
+            }
+            .opacity(textAppeared ? 1 : 0)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.65), value: textAppeared)
+
+            Spacer()
+
+            Button(action: onClose) {
+                Text("Close & Return")
+                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 17)
+                    .background(AppConstants.Colors.calmBlue)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .shadow(color: AppConstants.Colors.calmBlue.opacity(0.45), radius: 12, y: 4)
+            }
+            .padding(.horizontal, 28)
+            .padding(.bottom, 50)
+            .opacity(textAppeared ? 1 : 0)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.8), value: textAppeared)
+        }
+    }
+
+    private func triggerBloom() {
+        // Anchor core springs in
+        withAnimation(.spring(response: 0.7, dampingFraction: 0.55)) {
+            bloomScale = 1.0
+            bloomOpacity = 1.0
+        }
+
+        // Rings expand outward
+        for i in 0..<5 {
+            withAnimation(.easeOut(duration: 1.8).delay(Double(i) * 0.14)) {
+                ringScales[i] = 2.2 + CGFloat(i) * 0.25
+                ringOpacities[i] = 0
+            }
+        }
+
+        // Re-pulse rings continuously
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            textAppeared = true
+        }
+    }
+}
+
+// MARK: - Grounding Row
 
 struct GroundingRow: View {
     let count: Int
@@ -333,19 +557,19 @@ struct GroundingRow: View {
         HStack(spacing: 14) {
             ZStack {
                 Circle()
-                    .fill(AppConstants.Colors.sereneTeal.opacity(0.2))
+                    .fill(AppConstants.Colors.electricTeal.opacity(0.15))
                     .frame(width: 40, height: 40)
                 Text("\(count)")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(AppConstants.Colors.sereneTeal)
+                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppConstants.Colors.electricTeal)
             }
-
             HStack(spacing: 8) {
                 Image(systemName: icon)
-                    .foregroundStyle(.white.opacity(0.6))
+                    .font(.system(size: 14))
+                    .foregroundStyle(.white.opacity(0.5))
                 Text(sense)
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.8))
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.75))
             }
         }
     }

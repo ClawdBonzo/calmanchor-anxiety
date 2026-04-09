@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		44F3D5782F87D7C0006C6DE8 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = AABB001122334455CCDD6677 /* RevenueCat */; };
 		A1B2C3D4E5F60718293A4B5C /* CalmAnchorWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F607182930A1B2C3 /* CalmAnchorWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				44F3D5782F87D7C0006C6DE8 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,15 +468,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F2A3B4C5D6E7F80910213243 /* Build configuration list for PBXProject "CalmAnchor" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A3B4C5D6E7F8091021324354 /* Debug */,
-				B4C5D6E7F809102132435465 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		8596A7B8C9D0E1F2A3B4C5D6 /* Build configuration list for PBXNativeTarget "CalmAnchor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -489,6 +482,15 @@
 			buildConfigurations = (
 				E7F809102132435465768798 /* Debug */,
 				F809102132435465768798A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F2A3B4C5D6E7F80910213243 /* Build configuration list for PBXProject "CalmAnchor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A3B4C5D6E7F8091021324354 /* Debug */,
+				B4C5D6E7F809102132435465 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

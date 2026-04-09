@@ -6,6 +6,7 @@ enum AppConstants {
     static let minMoodLevel = 1
 
     enum Colors {
+        // Original palette (kept for compatibility)
         static let calmBlue = Color(hex: "5B9BD5")
         static let deepNavy = Color(hex: "1B2838")
         static let softLavender = Color(hex: "B8A9C9")
@@ -16,6 +17,34 @@ enum AppConstants {
         static let cloudWhite = Color(hex: "F7F9FC")
         static let stormGray = Color(hex: "6B7B8D")
         static let sereneTeal = Color(hex: "6BBFAB")
+
+        // Premium brand palette — midnight navy → electric teal → warm rose-gold
+        static let midnightNavy   = Color(hex: "080E1C")   // deepest background
+        static let electricTeal   = Color(hex: "00C9B7")   // primary neon accent
+        static let roseGold       = Color(hex: "C09678")   // warm premium accent
+        static let roseGoldBright = Color(hex: "E8B49A")   // lighter rose-gold for text
+        static let neonTeal       = Color(hex: "00F0E0")   // brightest teal highlight
+        static let cardSurface    = Color(hex: "0F1E30")   // card backgrounds
+    }
+
+    // Brand gradient shorthand
+    enum Gradients {
+        static let brand = LinearGradient(
+            colors: [Color(hex: "00C9B7"), Color(hex: "5B9BD5"), Color(hex: "C09678")],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
+        static let cta = LinearGradient(
+            colors: [Color(hex: "4A90D9"), Color(hex: "00C9B7")],
+            startPoint: .leading, endPoint: .trailing
+        )
+        static let panicGrad = LinearGradient(
+            colors: [Color(hex: "E53E3E"), Color(hex: "C9456A")],
+            startPoint: .leading, endPoint: .trailing
+        )
+        static let goldGrad = LinearGradient(
+            colors: [Color(hex: "F5D76E"), Color(hex: "E8B49A")],
+            startPoint: .topLeading, endPoint: .bottomTrailing
+        )
     }
 
     enum Triggers: CaseIterable {
