@@ -4,44 +4,45 @@ struct TriggerQuizView: View {
     @Binding var selectedTriggers: Set<String>
     let onNext: () -> Void
 
-    @State private var headerOpacity: Double = 0
-    @State private var headerOffset: CGFloat = -16
-    @State private var gridOpacity: Double = 0
-    @State private var gridOffset: CGFloat = 20
-
+    @State private var appeared = false
     private let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer().frame(height: 72)
+            Spacer().frame(height: 60)
 
-            // Header
-            VStack(spacing: 10) {
-                ZStack {
-                    ForEach(0..<2) { i in
+            // Header with onboarding image
+            VStack(spacing: 14) {
+                Image("Onboarding-2")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 110, height: 110)
+                    .clipShape(Circle())
+                    .overlay(
                         Circle()
-                            .fill(AppConstants.Colors.gentleCoral.opacity(0.08 - Double(i) * 0.03))
-                            .frame(width: 64 + CGFloat(i) * 22)
-                    }
-                    Text("⚡")
-                        .font(.system(size: 36))
-                }
-                .frame(height: 80)
+                            .stroke(Color(hex: "00C9B7").opacity(0.5), lineWidth: 2)
+                    )
+                    .shadow(color: Color(hex: "00C9B7").opacity(0.4), radius: 16, y: 4)
+                    .scaleEffect(appeared ? 1.0 : 0.6)
+                    .opacity(appeared ? 1 : 0)
 
                 Text("What triggers\nyour anxiety?")
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .tracking(-0.3)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 12)
 
                 Text("Select all that apply — we'll personalize your plan")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundStyle(AppConstants.Colors.stormGray)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
+                    .opacity(appeared ? 1 : 0)
+                    .offset(y: appeared ? 0 : 8)
             }
-            .opacity(headerOpacity)
-            .offset(y: headerOffset)
+            .animation(.spring(response: 0.65, dampingFraction: 0.72).delay(0.1), value: appeared)
             .padding(.bottom, 20)
 
             // Trigger grid
@@ -65,12 +66,12 @@ struct TriggerQuizView: View {
                 .padding(.horizontal, 22)
                 .padding(.bottom, 8)
             }
-            .opacity(gridOpacity)
-            .offset(y: gridOffset)
+            .opacity(appeared ? 1 : 0)
+            .animation(.spring(response: 0.65, dampingFraction: 0.72).delay(0.25), value: appeared)
 
-            // Continue button
+            // CTA
             Button(action: onNext) {
-                HStack(spacing: 6) {
+                HStack(spacing: 8) {
                     Text(selectedTriggers.isEmpty ? "Skip" : "Continue (\(selectedTriggers.count) selected)")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                     if !selectedTriggers.isEmpty {
@@ -94,15 +95,10 @@ struct TriggerQuizView: View {
             .padding(.horizontal, 28)
             .padding(.top, 12)
             .padding(.bottom, 52)
+            .opacity(appeared ? 1 : 0)
+            .animation(.spring(response: 0.65, dampingFraction: 0.72).delay(0.35), value: appeared)
         }
-        .onAppear {
-            withAnimation(.spring(response: 0.65, dampingFraction: 0.75).delay(0.1)) {
-                headerOpacity = 1; headerOffset = 0
-            }
-            withAnimation(.spring(response: 0.65, dampingFraction: 0.75).delay(0.25)) {
-                gridOpacity = 1; gridOffset = 0
-            }
-        }
+        .onAppear { appeared = true }
     }
 }
 
@@ -134,7 +130,7 @@ struct TriggerChip: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 13)
-                    .stroke(isSelected ? AppConstants.Colors.sereneTeal : .clear, lineWidth: 1.5)
+                    .stroke(isSelected ? Color(hex: "00C9B7") : .clear, lineWidth: 1.5)
             )
             .scaleEffect(isSelected ? 1.02 : 1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.65), value: isSelected)

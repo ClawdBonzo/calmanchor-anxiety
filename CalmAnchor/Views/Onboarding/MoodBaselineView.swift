@@ -5,12 +5,11 @@ struct MoodBaselineView: View {
     let onNext: () -> Void
 
     @State private var appeared = false
-    @State private var emojiScale: CGFloat = 0.6
-    @State private var glowPulse = false
+    @State private var imageScale: CGFloat = 0.8
 
     private let moodEmojis = ["😰","😟","😔","😕","😐","🙂","😊","😌","😄","🌟"]
 
-    private var moodColor: Color {
+    private var trackColor: Color {
         switch baselineMood {
         case 1...3: return AppConstants.Colors.gentleCoral
         case 4...6: return AppConstants.Colors.calmBlue
@@ -22,22 +21,28 @@ struct MoodBaselineView: View {
         VStack(spacing: 0) {
             Spacer()
 
-            // Emoji with glow ring
-            ZStack {
-                Circle()
-                    .fill(moodColor.opacity(0.12))
-                    .frame(width: 120, height: 120)
-                    .scaleEffect(glowPulse ? 1.08 : 1.0)
-                    .animation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true), value: glowPulse)
+            // Hero image with mood emoji overlay
+            ZStack(alignment: .bottomTrailing) {
+                Image("Onboarding-3")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 130, height: 130)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(trackColor.opacity(0.6), lineWidth: 2.5))
+                    .shadow(color: trackColor.opacity(0.4), radius: 16, y: 4)
+                    .animation(.easeInOut(duration: 0.4), value: trackColor)
 
+                // Mood emoji badge
                 Text(moodEmojis[baselineMood - 1])
-                    .font(.system(size: 72))
-                    .scaleEffect(emojiScale)
-                    .contentTransition(.numericText())
-                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: baselineMood)
+                    .font(.system(size: 32))
+                    .padding(4)
+                    .background(Circle().fill(Color(hex: "0D2840")))
+                    .overlay(Circle().stroke(trackColor.opacity(0.4), lineWidth: 1.5))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: baselineMood)
             }
+            .scaleEffect(appeared ? 1.0 : 0.7)
             .opacity(appeared ? 1 : 0)
-            .offset(y: appeared ? 0 : -20)
+            .animation(.spring(response: 0.7, dampingFraction: 0.68).delay(0.1), value: appeared)
             .padding(.bottom, 28)
 
             // Text
@@ -54,10 +59,11 @@ struct MoodBaselineView: View {
             }
             .opacity(appeared ? 1 : 0)
             .offset(y: appeared ? 0 : 14)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.2), value: appeared)
 
             Spacer().frame(height: 36)
 
-            // Slider
+            // Slider section
             VStack(spacing: 14) {
                 HStack {
                     Text("Anxious")
@@ -67,7 +73,6 @@ struct MoodBaselineView: View {
                     Text("Level \(baselineMood) of 10")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundStyle(.white.opacity(0.75))
-                        .contentTransition(.numericText())
                     Spacer()
                     Text("Peaceful")
                         .font(.system(size: 13, weight: .semibold, design: .rounded))
@@ -81,6 +86,7 @@ struct MoodBaselineView: View {
             .padding(.horizontal, 36)
             .opacity(appeared ? 1 : 0)
             .offset(y: appeared ? 0 : 18)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.3), value: appeared)
 
             Spacer()
 
@@ -102,14 +108,9 @@ struct MoodBaselineView: View {
             .padding(.horizontal, 28)
             .padding(.bottom, 52)
             .opacity(appeared ? 1 : 0)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.4), value: appeared)
         }
-        .onAppear {
-            glowPulse = true
-            withAnimation(.spring(response: 0.7, dampingFraction: 0.68).delay(0.1)) {
-                appeared = true
-                emojiScale = 1.0
-            }
-        }
+        .onAppear { appeared = true }
     }
 }
 
@@ -125,12 +126,10 @@ struct CustomSlider: View {
             let thumbX = CGFloat(value - range.lowerBound) * stepWidth
 
             ZStack(alignment: .leading) {
-                // Track
                 RoundedRectangle(cornerRadius: 6)
                     .fill(.white.opacity(0.12))
                     .frame(height: 8)
 
-                // Filled track
                 RoundedRectangle(cornerRadius: 6)
                     .fill(
                         LinearGradient(
@@ -140,9 +139,8 @@ struct CustomSlider: View {
                             startPoint: .leading, endPoint: .trailing
                         )
                     )
-                    .frame(width: max(thumbX + 16, 16), height: 8)
+                    .frame(width: max(thumbX + 15, 15), height: 8)
 
-                // Thumb
                 Circle()
                     .fill(.white)
                     .frame(width: 30, height: 30)

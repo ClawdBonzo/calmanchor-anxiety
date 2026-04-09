@@ -5,34 +5,36 @@ struct NameInputView: View {
     let onNext: () -> Void
     @FocusState private var isFocused: Bool
 
-    @State private var iconScale: CGFloat = 0.5
-    @State private var iconOpacity: Double = 0
-    @State private var contentOpacity: Double = 0
-    @State private var contentOffset: CGFloat = 20
-    @State private var fieldGlow = false
+    @State private var appeared = false
+    @State private var pulseScale: CGFloat = 1.0
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
 
-            // Animated anchor icon — no logo repeat
+            // Icon — SF Symbol, guaranteed to render
             ZStack {
                 ForEach(0..<3) { i in
                     Circle()
-                        .fill(AppConstants.Colors.sereneTeal.opacity(0.08 - Double(i) * 0.025))
-                        .frame(width: 90 + CGFloat(i) * 28)
-                        .scaleEffect(fieldGlow ? 1.04 : 1.0)
+                        .fill(Color(hex: "00C9B7").opacity(0.10 - Double(i) * 0.03))
+                        .frame(width: 100 + CGFloat(i) * 30)
+                        .scaleEffect(pulseScale + CGFloat(i) * 0.01)
                 }
-                Text("✨")
-                    .font(.system(size: 52))
-                    .scaleEffect(iconScale)
-                    .opacity(iconOpacity)
+                Circle()
+                    .fill(Color(hex: "00C9B7").opacity(0.18))
+                    .frame(width: 88)
+                Image(systemName: "figure.mind.and.body")
+                    .font(.system(size: 42, weight: .medium))
+                    .foregroundStyle(Color(hex: "00C9B7"))
             }
-            .frame(height: 110)
-            .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: fieldGlow)
-            .padding(.bottom, 28)
+            .frame(height: 130)
+            .scaleEffect(appeared ? 1.0 : 0.6)
+            .opacity(appeared ? 1 : 0)
+            .animation(.spring(response: 0.65, dampingFraction: 0.65).delay(0.1), value: appeared)
+            .animation(.easeInOut(duration: 3.5).repeatForever(autoreverses: true), value: pulseScale)
+            .padding(.bottom, 32)
 
-            // Text content
+            // Heading
             VStack(spacing: 10) {
                 Text("What should we call\nyour calmest self?")
                     .font(.system(size: 30, weight: .bold, design: .rounded))
@@ -46,12 +48,13 @@ struct NameInputView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
             }
-            .opacity(contentOpacity)
-            .offset(y: contentOffset)
+            .opacity(appeared ? 1 : 0)
+            .offset(y: appeared ? 0 : 18)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.2), value: appeared)
 
-            Spacer().frame(height: 32)
+            Spacer().frame(height: 36)
 
-            // Text field with glow border
+            // Text field
             TextField("", text: $calmName,
                       prompt: Text("Your name…").foregroundStyle(.white.opacity(0.3)))
                 .font(.system(size: 26, weight: .semibold, design: .rounded))
@@ -64,54 +67,52 @@ struct NameInputView: View {
                 .overlay(
                     RoundedRectangle(cornerRadius: 18)
                         .stroke(
-                            isFocused
-                                ? AppConstants.Colors.sereneTeal
-                                : AppConstants.Colors.calmBlue.opacity(0.35),
+                            isFocused ? Color(hex: "00C9B7") : AppConstants.Colors.calmBlue.opacity(0.4),
                             lineWidth: isFocused ? 2 : 1
                         )
                 )
-                .shadow(color: isFocused ? AppConstants.Colors.sereneTeal.opacity(0.3) : .clear,
-                        radius: 12, y: 0)
-                .padding(.horizontal, 32)
+                .shadow(color: isFocused ? Color(hex: "00C9B7").opacity(0.3) : .clear, radius: 14)
+                .padding(.horizontal, 28)
                 .focused($isFocused)
-                .onSubmit { if !calmName.trimmingCharacters(in: .whitespaces).isEmpty { onNext() } }
-                .opacity(contentOpacity)
-                .offset(y: contentOffset)
+                .onSubmit { onNext() }
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 18)
+                .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.3), value: appeared)
                 .animation(.easeOut(duration: 0.2), value: isFocused)
 
             Spacer()
 
-            // Continue button
+            // CTA
             Button(action: onNext) {
-                Text(calmName.trimmingCharacters(in: .whitespaces).isEmpty ? "Continue as Friend" : "Continue as \(calmName)")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(
-                        LinearGradient(
-                            colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal],
-                            startPoint: .leading, endPoint: .trailing
-                        )
+                HStack(spacing: 8) {
+                    Text(calmName.trimmingCharacters(in: .whitespaces).isEmpty
+                         ? "Continue as Friend"
+                         : "Continue as \(calmName)")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                    Image(systemName: "arrow.right")
+                        .font(.system(size: 15, weight: .bold))
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 18)
+                .background(
+                    LinearGradient(
+                        colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal],
+                        startPoint: .leading, endPoint: .trailing
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(color: AppConstants.Colors.calmBlue.opacity(0.4), radius: 10, y: 4)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .shadow(color: AppConstants.Colors.calmBlue.opacity(0.45), radius: 12, y: 5)
             }
             .padding(.horizontal, 28)
             .padding(.bottom, 52)
-            .opacity(contentOpacity)
+            .opacity(appeared ? 1 : 0)
+            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.4), value: appeared)
         }
         .onAppear {
-            fieldGlow = true
-            withAnimation(.spring(response: 0.7, dampingFraction: 0.65).delay(0.1)) {
-                iconScale = 1.0
-                iconOpacity = 1.0
-            }
-            withAnimation(.spring(response: 0.65, dampingFraction: 0.75).delay(0.25)) {
-                contentOpacity = 1.0
-                contentOffset = 0
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { isFocused = true }
+            appeared = true
+            pulseScale = 1.05
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { isFocused = true }
         }
     }
 }

@@ -5,32 +5,28 @@ struct DailyMinutesView: View {
     let onNext: () -> Void
 
     @State private var appeared = false
-    @State private var iconRotate = false
     private let options = [5, 10, 15, 20, 30]
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
 
-            // Icon
-            ZStack {
-                ForEach(0..<3) { i in
+            // Icon header
+            VStack(spacing: 16) {
+                ZStack {
                     Circle()
-                        .fill(AppConstants.Colors.sunsetGold.opacity(0.07 - Double(i) * 0.02))
-                        .frame(width: 80 + CGFloat(i) * 24)
+                        .fill(AppConstants.Colors.sunsetGold.opacity(0.15))
+                        .frame(width: 96, height: 96)
+                    Circle()
+                        .fill(AppConstants.Colors.sunsetGold.opacity(0.08))
+                        .frame(width: 130, height: 130)
+                    Image(systemName: "clock.fill")
+                        .font(.system(size: 48, weight: .semibold))
+                        .foregroundStyle(AppConstants.Colors.sunsetGold)
+                        .symbolEffect(.pulse)
                 }
-                Image(systemName: "clock.fill")
-                    .font(.system(size: 52))
-                    .foregroundStyle(AppConstants.Colors.sunsetGold)
-                    .symbolEffect(.pulse)
-            }
-            .frame(height: 100)
-            .opacity(appeared ? 1 : 0)
-            .scaleEffect(appeared ? 1 : 0.6)
-            .padding(.bottom, 24)
+                .frame(height: 120)
 
-            // Text
-            VStack(spacing: 10) {
                 Text("How many minutes\nper day for healing?")
                     .font(.system(size: 30, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
@@ -43,8 +39,9 @@ struct DailyMinutesView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 36)
             }
+            .scaleEffect(appeared ? 1.0 : 0.85)
             .opacity(appeared ? 1 : 0)
-            .offset(y: appeared ? 0 : 16)
+            .animation(.spring(response: 0.65, dampingFraction: 0.7).delay(0.1), value: appeared)
 
             Spacer().frame(height: 28)
 
@@ -58,10 +55,10 @@ struct DailyMinutesView: View {
                                     .fill(dailyMinutes == minutes
                                           ? AppConstants.Colors.mintGreen
                                           : .white.opacity(0.12))
-                                    .frame(width: 24, height: 24)
+                                    .frame(width: 26, height: 26)
                                 if dailyMinutes == minutes {
                                     Image(systemName: "checkmark")
-                                        .font(.system(size: 11, weight: .bold))
+                                        .font(.system(size: 12, weight: .bold))
                                         .foregroundStyle(.white)
                                 }
                             }
@@ -102,6 +99,7 @@ struct DailyMinutesView: View {
             .padding(.horizontal, 28)
             .opacity(appeared ? 1 : 0)
             .offset(y: appeared ? 0 : 20)
+            .animation(.spring(response: 0.65, dampingFraction: 0.72).delay(0.25), value: appeared)
 
             Spacer()
 
@@ -123,10 +121,9 @@ struct DailyMinutesView: View {
             .padding(.horizontal, 28)
             .padding(.bottom, 52)
             .opacity(appeared ? 1 : 0)
+            .animation(.spring(response: 0.65, dampingFraction: 0.72).delay(0.35), value: appeared)
         }
-        .onAppear {
-            withAnimation(.spring(response: 0.7, dampingFraction: 0.68).delay(0.1)) { appeared = true }
-        }
+        .onAppear { appeared = true }
     }
 
     private func minuteLabel(_ m: Int) -> String {
