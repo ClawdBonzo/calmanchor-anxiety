@@ -4,6 +4,7 @@ import SwiftData
 struct PanicSOSView: View {
     @Binding var isPresented: Bool
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     @State private var currentPhase: SOSPhase = .grounding
     @State private var breathCount = 0
@@ -14,10 +15,12 @@ struct PanicSOSView: View {
     @State private var intensityAfter: Int = 5
     @State private var currentAffirmation = AppConstants.affirmations.first ?? ""
     @State private var affirmationIndex = 0
-    @State private var timer: Timer?
-    @State private var breathTimer: Timer?
 
-    // Entry flare animation
+    // Swift 6 / structured concurrency — Tasks replace Timer and DispatchQueue
+    @State private var sessionTimerTask: Task<Void, Never>?
+    @State private var breathingTask: Task<Void, Never>?
+
+    // Entry flare
     @State private var entryFlare = false
     @State private var flareOpacity: Double = 1
 
@@ -27,7 +30,7 @@ struct PanicSOSView: View {
 
     var body: some View {
         ZStack {
-            // Premium dark background (stormy → calming)
+            // Background
             ZStack {
                 LinearGradient(
                     colors: [Color(hex: "080E1C"), Color(hex: "0D1A2E"), Color(hex: "091828")],
@@ -42,10 +45,11 @@ struct PanicSOSView: View {
                     .blur(radius: 80)
                     .offset(y: -100)
                     .animation(.easeInOut(duration: 1.5), value: currentPhase)
+                    .allowsHitTesting(false)
             }
 
-            // Entry flare: expanding rings when SOS first opens
-            if flareOpacity > 0 {
+            // Entry flare (skip when reduce motion is on)
+            if !reduceMotion && flareOpacity > 0 {
                 ZStack {
                     ForEach(0..<5) { i in
                         Circle()
@@ -61,24 +65,30 @@ struct PanicSOSView: View {
                 }
                 .opacity(flareOpacity)
                 .allowsHitTesting(false)
+                .accessibilityHidden(true)
             }
 
             // Main content
             VStack(spacing: 0) {
-                // Header
+                // Header: phase dots + dismiss
                 HStack {
-                    // Phase indicator pills
                     HStack(spacing: 6) {
                         ForEach(SOSPhase.allCases, id: \.rawValue) { phase in
                             Circle()
                                 .fill(phase == currentPhase
                                       ? phaseGlowColor
                                       : .white.opacity(phaseIndex(phase) < phaseIndex(currentPhase) ? 0.35 : 0.12))
-                                .frame(width: phase == currentPhase ? 10 : 7,
-                                       height: phase == currentPhase ? 10 : 7)
-                                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: currentPhase)
+                                .frame(
+                                    width: phase == currentPhase ? 10 : 7,
+                                    height: phase == currentPhase ? 10 : 7
+                                )
+                                .animation(
+                                    reduceMotion ? nil : .spring(response: 0.3, dampingFraction: 0.7),
+                                    value: currentPhase
+                                )
                         }
                     }
+                    .accessibilityLabel("Step \(phaseIndex(currentPhase) + 1) of 4")
 
                     Spacer()
 
@@ -87,6 +97,7 @@ struct PanicSOSView: View {
                             .font(.system(size: 28))
                             .foregroundStyle(.white.opacity(0.35))
                     }
+                    .accessibilityLabel("Close panic support")
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
@@ -101,16 +112,19 @@ struct PanicSOSView: View {
             }
         }
         .onAppear {
-            startTimer()
-            // Trigger entry flare
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                withAnimation { entryFlare = true }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            startSessionTimer()
+            if !reduceMotion {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(50))
+                    withAnimation { entryFlare = true }
+                    try? await Task.sleep(for: .milliseconds(1400))
                     withAnimation(.easeOut(duration: 0.4)) { flareOpacity = 0 }
                 }
+            } else {
+                flareOpacity = 0  // skip flare immediately
             }
         }
-        .onDisappear { stopTimers() }
+        .onDisappear { stopAllTasks() }
     }
 
     // MARK: - Grounding (5-4-3-2-1)
@@ -135,8 +149,9 @@ struct PanicSOSView: View {
                         )
                     )
                     .shadow(color: AppConstants.Colors.electricTeal.opacity(0.5), radius: 16, y: 4)
-                    .symbolEffect(.breathe)
+                    .symbolEffect(.breathe, isActive: !reduceMotion)
             }
+            .accessibilityHidden(true)
 
             VStack(spacing: 6) {
                 Text("5-4-3-2-1 Grounding")
@@ -165,7 +180,7 @@ struct PanicSOSView: View {
         }
     }
 
-    // MARK: - Breathing
+    // MARK: - Breathing (box breathing 4-4-4)
 
     private var breathingView: some View {
         VStack(spacing: 28) {
@@ -174,16 +189,19 @@ struct PanicSOSView: View {
             Text(breathLabel)
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundStyle(.white.opacity(0.75))
-                .animation(.easeInOut(duration: 0.4), value: breathLabel)
+                .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: breathLabel)
+                .accessibilityLabel("Breathing instruction: \(breathLabel)")
 
             // Breathing orb
             ZStack {
-                ForEach(0..<4) { i in
-                    Circle()
-                        .fill(AppConstants.Colors.calmBlue.opacity(0.06 - Double(i) * 0.01))
-                        .frame(width: 180 + CGFloat(i) * 40)
-                        .scaleEffect(breathScale)
-                        .animation(.easeInOut(duration: 4), value: breathScale)
+                if !reduceMotion {
+                    ForEach(0..<4) { i in
+                        Circle()
+                            .fill(AppConstants.Colors.calmBlue.opacity(0.06 - Double(i) * 0.01))
+                            .frame(width: 180 + CGFloat(i) * 40)
+                            .scaleEffect(breathScale)
+                            .animation(.easeInOut(duration: 4), value: breathScale)
+                    }
                 }
                 Circle()
                     .fill(
@@ -197,16 +215,17 @@ struct PanicSOSView: View {
                         )
                     )
                     .frame(width: 140, height: 140)
-                    .scaleEffect(breathScale)
+                    .scaleEffect(reduceMotion ? 1.0 : breathScale)
                     .shadow(color: AppConstants.Colors.electricTeal.opacity(0.4), radius: 20, y: 4)
-                    .animation(.easeInOut(duration: 4), value: breathScale)
+                    .animation(reduceMotion ? nil : .easeInOut(duration: 4), value: breathScale)
 
                 Image(systemName: "wind")
                     .font(.system(size: 36, weight: .semibold))
                     .foregroundStyle(.white.opacity(0.7))
-                    .scaleEffect(breathScale)
-                    .animation(.easeInOut(duration: 4), value: breathScale)
+                    .scaleEffect(reduceMotion ? 1.0 : breathScale)
+                    .animation(reduceMotion ? nil : .easeInOut(duration: 4), value: breathScale)
             }
+            .accessibilityHidden(true)
 
             Text("Breath \(breathCount) of 6")
                 .font(.system(size: 15, weight: .medium, design: .rounded))
@@ -216,7 +235,7 @@ struct PanicSOSView: View {
 
             if breathCount >= 6 {
                 ctaButton(label: "Continue to Affirmations", color: AppConstants.Colors.calmBlue) {
-                    stopBreathTimer()
+                    breathingTask?.cancel()
                     withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .affirmations }
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -245,8 +264,9 @@ struct PanicSOSView: View {
                         )
                     )
                     .shadow(color: AppConstants.Colors.sunsetGold.opacity(0.5), radius: 16, y: 4)
-                    .symbolEffect(.variableColor)
+                    .symbolEffect(.variableColor, isActive: !reduceMotion)
             }
+            .accessibilityHidden(true)
 
             Text(currentAffirmation)
                 .font(.system(size: 24, weight: .bold, design: .serif))
@@ -254,6 +274,7 @@ struct PanicSOSView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 36)
                 .contentTransition(.opacity)
+                .accessibilityLabel("Affirmation: \(currentAffirmation)")
 
             Button(action: nextAffirmation) {
                 HStack(spacing: 6) {
@@ -264,6 +285,7 @@ struct PanicSOSView: View {
                 }
                 .foregroundStyle(.white.opacity(0.55))
             }
+            .accessibilityLabel("Show next affirmation")
 
             Spacer()
 
@@ -278,11 +300,12 @@ struct PanicSOSView: View {
     private var completeView: some View {
         AnchorBloomCompleteView(
             intensityAfter: $intensityAfter,
+            reduceMotion: reduceMotion,
             onClose: { completeSession() }
         )
     }
 
-    // MARK: - Shared CTA Button
+    // MARK: - Shared CTA button
 
     private func ctaButton(label: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
@@ -299,7 +322,7 @@ struct PanicSOSView: View {
         .padding(.bottom, 50)
     }
 
-    // MARK: - Phase Helpers
+    // MARK: - Phase helpers
 
     private var phaseGlowColor: Color {
         switch currentPhase {
@@ -312,46 +335,64 @@ struct PanicSOSView: View {
 
     private func phaseIndex(_ phase: SOSPhase) -> Int {
         switch phase {
-        case .grounding: return 0
-        case .breathing: return 1
-        case .affirmations: return 2
-        case .complete: return 3
+        case .grounding: return 0; case .breathing: return 1
+        case .affirmations: return 2; case .complete: return 3
         }
     }
 
-    // MARK: - Timer Logic
+    // MARK: - Structured-concurrency timer (replaces Timer + DispatchQueue)
 
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            Task { @MainActor in secondsElapsed += 1 }
+    private func startSessionTimer() {
+        sessionTimerTask?.cancel()
+        sessionTimerTask = Task { @MainActor in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(1))
+                guard !Task.isCancelled else { break }
+                secondsElapsed += 1
+            }
         }
     }
 
     private func startBreathing() {
         breathCount = 0
-        runBreathCycle()
-    }
-
-    private func runBreathCycle() {
-        guard breathCount < 6 else { return }
-        breathLabel = "Breathe In..."
-        withAnimation(.easeInOut(duration: 4)) { breathScale = 1.0 }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            breathLabel = "Hold..."
-            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                breathLabel = "Breathe Out..."
-                withAnimation(.easeInOut(duration: 4)) { breathScale = 0.6 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                    breathCount += 1
-                    if breathCount < 6 { runBreathCycle() }
-                    else { breathLabel = "Well done!" }
-                }
-            }
+        breathScale = 0.6
+        breathingTask?.cancel()
+        breathingTask = Task { @MainActor in
+            await runBreathCycle()
         }
     }
 
-    private func stopBreathTimer() { breathTimer?.invalidate(); breathTimer = nil }
-    private func stopTimers() { timer?.invalidate(); timer = nil; stopBreathTimer() }
+    @MainActor
+    private func runBreathCycle() async {
+        while breathCount < 6 {
+            guard !Task.isCancelled else { return }
+
+            breathLabel = "Breathe In..."
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 4)) { breathScale = 1.0 }
+            try? await Task.sleep(for: .seconds(4))
+            guard !Task.isCancelled else { return }
+
+            breathLabel = "Hold..."
+            try? await Task.sleep(for: .seconds(4))
+            guard !Task.isCancelled else { return }
+
+            breathLabel = "Breathe Out..."
+            withAnimation(reduceMotion ? nil : .easeInOut(duration: 4)) { breathScale = 0.6 }
+            try? await Task.sleep(for: .seconds(4))
+            guard !Task.isCancelled else { return }
+
+            breathCount += 1
+        }
+        breathLabel = "Well done!"
+    }
+
+    private func stopAllTasks() {
+        sessionTimerTask?.cancel(); sessionTimerTask = nil
+        breathingTask?.cancel(); breathingTask = nil
+    }
+
+    // Keep for API compatibility with breathing view's "Continue" button
+    private func stopBreathTimer() { breathingTask?.cancel(); breathingTask = nil }
 
     private func nextAffirmation() {
         affirmationIndex = (affirmationIndex + 1) % AppConstants.affirmations.count
@@ -369,29 +410,25 @@ struct PanicSOSView: View {
             resolved: true
         )
         modelContext.insert(event)
-        stopTimers()
+        stopAllTasks()
         withAnimation(.easeInOut(duration: 0.35)) { isPresented = false }
     }
 }
 
-// MARK: - SOSPhase CaseIterable (for progress dots)
+// MARK: - SOSPhase CaseIterable + RawRepresentable
 
 extension PanicSOSView.SOSPhase: CaseIterable, RawRepresentable {
     init?(rawValue: Int) {
         switch rawValue {
-        case 0: self = .grounding
-        case 1: self = .breathing
-        case 2: self = .affirmations
-        case 3: self = .complete
+        case 0: self = .grounding; case 1: self = .breathing
+        case 2: self = .affirmations; case 3: self = .complete
         default: return nil
         }
     }
     var rawValue: Int {
         switch self {
-        case .grounding: return 0
-        case .breathing: return 1
-        case .affirmations: return 2
-        case .complete: return 3
+        case .grounding: return 0; case .breathing: return 1
+        case .affirmations: return 2; case .complete: return 3
         }
     }
     static var allCases: [PanicSOSView.SOSPhase] {
@@ -403,6 +440,7 @@ extension PanicSOSView.SOSPhase: CaseIterable, RawRepresentable {
 
 struct AnchorBloomCompleteView: View {
     @Binding var intensityAfter: Int
+    let reduceMotion: Bool
     let onClose: () -> Void
 
     @State private var bloomScale: CGFloat = 0.2
@@ -417,25 +455,25 @@ struct AnchorBloomCompleteView: View {
 
             // Anchor bloom
             ZStack {
-                // Expanding golden rings
-                ForEach(0..<5) { i in
-                    Circle()
-                        .stroke(
-                            LinearGradient(
-                                colors: [
-                                    AppConstants.Colors.sunsetGold.opacity(0.5 - Double(i) * 0.08),
-                                    AppConstants.Colors.roseGold.opacity(0.3 - Double(i) * 0.05)
-                                ],
-                                startPoint: .topLeading, endPoint: .bottomTrailing
-                            ),
-                            lineWidth: 1.5
-                        )
-                        .frame(width: 70 + CGFloat(i) * 40)
-                        .scaleEffect(ringScales[i])
-                        .opacity(ringOpacities[i])
+                if !reduceMotion {
+                    ForEach(0..<5) { i in
+                        Circle()
+                            .stroke(
+                                LinearGradient(
+                                    colors: [
+                                        AppConstants.Colors.sunsetGold.opacity(max(0, 0.5 - Double(i) * 0.08)),
+                                        AppConstants.Colors.roseGold.opacity(max(0, 0.3 - Double(i) * 0.05))
+                                    ],
+                                    startPoint: .topLeading, endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1.5
+                            )
+                            .frame(width: 70 + CGFloat(i) * 40)
+                            .scaleEffect(ringScales[i])
+                            .opacity(ringOpacities[i])
+                    }
                 }
 
-                // Glowing anchor core
                 Circle()
                     .fill(
                         RadialGradient(
@@ -456,14 +494,14 @@ struct AnchorBloomCompleteView: View {
                     .foregroundStyle(
                         LinearGradient(
                             colors: [AppConstants.Colors.sunsetGold, AppConstants.Colors.roseGoldBright],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
+                            startPoint: .topLeading, endPoint: .bottomTrailing
                         )
                     )
                     .shadow(color: AppConstants.Colors.sunsetGold.opacity(0.6), radius: 20, y: 4)
                     .scaleEffect(bloomScale)
                     .opacity(bloomOpacity)
             }
+            .accessibilityLabel("Golden anchor — you made it through")
             .onAppear { triggerBloom() }
 
             VStack(spacing: 10) {
@@ -480,30 +518,28 @@ struct AnchorBloomCompleteView: View {
             }
             .opacity(textAppeared ? 1 : 0)
             .offset(y: textAppeared ? 0 : 14)
-            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.5), value: textAppeared)
+            .animation(reduceMotion ? nil : .spring(response: 0.6, dampingFraction: 0.75).delay(0.5), value: textAppeared)
 
-            // Intensity rating
             VStack(spacing: 12) {
                 Text("How intense is your anxiety now?")
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white.opacity(0.65))
 
                 Slider(
-                    value: Binding(
-                        get: { Double(intensityAfter) },
-                        set: { intensityAfter = Int($0) }
-                    ),
+                    value: Binding(get: { Double(intensityAfter) }, set: { intensityAfter = Int($0) }),
                     in: 1...10, step: 1
                 )
                 .tint(AppConstants.Colors.mintGreen)
                 .padding(.horizontal, 36)
+                .accessibilityLabel("Anxiety level after session")
+                .accessibilityValue("\(intensityAfter) out of 10")
 
                 Text("\(intensityAfter)/10")
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .foregroundStyle(AppConstants.Colors.mintGreen)
             }
             .opacity(textAppeared ? 1 : 0)
-            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.65), value: textAppeared)
+            .animation(reduceMotion ? nil : .spring(response: 0.6, dampingFraction: 0.75).delay(0.65), value: textAppeared)
 
             Spacer()
 
@@ -520,27 +556,28 @@ struct AnchorBloomCompleteView: View {
             .padding(.horizontal, 28)
             .padding(.bottom, 50)
             .opacity(textAppeared ? 1 : 0)
-            .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.8), value: textAppeared)
+            .animation(reduceMotion ? nil : .spring(response: 0.6, dampingFraction: 0.75).delay(0.8), value: textAppeared)
         }
     }
 
     private func triggerBloom() {
-        // Anchor core springs in
-        withAnimation(.spring(response: 0.7, dampingFraction: 0.55)) {
-            bloomScale = 1.0
-            bloomOpacity = 1.0
+        if reduceMotion {
+            // Instantly show final state — no animation
+            bloomScale = 1.0; bloomOpacity = 1.0; textAppeared = true
+            return
         }
-
-        // Rings expand outward
+        withAnimation(.spring(response: 0.7, dampingFraction: 0.55)) {
+            bloomScale = 1.0; bloomOpacity = 1.0
+        }
         for i in 0..<5 {
             withAnimation(.easeOut(duration: 1.8).delay(Double(i) * 0.14)) {
                 ringScales[i] = 2.2 + CGFloat(i) * 0.25
                 ringOpacities[i] = 0
             }
         }
-
-        // Re-pulse rings continuously
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        // Replace DispatchQueue with structured concurrency
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(1))
             textAppeared = true
         }
     }
@@ -572,5 +609,7 @@ struct GroundingRow: View {
                     .foregroundStyle(.white.opacity(0.75))
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Notice \(count) \(sense)")
     }
 }

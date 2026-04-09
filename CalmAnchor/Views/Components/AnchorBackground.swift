@@ -1,9 +1,12 @@
 import SwiftUI
 
-// MARK: - Shared ambient background used across all screens
-// Midnight navy base + slowly drifting teal/rose-gold blobs + anchor particle glows
+// MARK: - Shared ambient background — midnight navy + drifting teal/rose-gold blobs
+// Performance: composited via drawingGroup() so all blurs are rendered in a single pass.
+// Accessibility: all motion honours accessibilityReduceMotion.
 
 struct AnchorBackground: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var blob1 = false
     @State private var blob2 = false
     @State private var blob3 = false
@@ -11,32 +14,36 @@ struct AnchorBackground: View {
 
     var body: some View {
         ZStack {
-            // Base gradient
+            // Base gradient — always rendered, no animation needed
             LinearGradient(
-                colors: [
-                    Color(hex: "080E1C"),
-                    Color(hex: "0D1F35"),
-                    Color(hex: "091828")
-                ],
+                colors: [Color(hex: "080E1C"), Color(hex: "0D1F35"), Color(hex: "091828")],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
 
-            // Teal blob — top center
+            // ── Animated blobs (skipped when reduce motion is on) ────────
+
+            // Teal blob — top-center
             Ellipse()
                 .fill(AppConstants.Colors.electricTeal.opacity(0.09))
                 .frame(width: 380, height: 220)
                 .blur(radius: 70)
                 .offset(x: blob1 ? 20 : -20, y: blob1 ? -180 : -140)
-                .animation(.easeInOut(duration: 9).repeatForever(autoreverses: true), value: blob1)
+                .animation(
+                    reduceMotion ? nil : .easeInOut(duration: 9).repeatForever(autoreverses: true),
+                    value: blob1
+                )
 
-            // Rose-gold blob — bottom right
+            // Rose-gold blob — bottom-right
             Ellipse()
                 .fill(AppConstants.Colors.roseGold.opacity(0.07))
                 .frame(width: 320, height: 200)
                 .blur(radius: 65)
                 .offset(x: blob2 ? 80 : 40, y: blob2 ? 260 : 200)
-                .animation(.easeInOut(duration: 11).repeatForever(autoreverses: true).delay(1.5), value: blob2)
+                .animation(
+                    reduceMotion ? nil : .easeInOut(duration: 11).repeatForever(autoreverses: true).delay(1.5),
+                    value: blob2
+                )
 
             // Mid teal blob — left
             Ellipse()
@@ -44,28 +51,41 @@ struct AnchorBackground: View {
                 .frame(width: 260, height: 160)
                 .blur(radius: 55)
                 .offset(x: blob3 ? -100 : -60, y: blob3 ? 40 : 80)
-                .animation(.easeInOut(duration: 13).repeatForever(autoreverses: true).delay(3), value: blob3)
+                .animation(
+                    reduceMotion ? nil : .easeInOut(duration: 13).repeatForever(autoreverses: true).delay(3),
+                    value: blob3
+                )
 
-            // Anchor glow particle — subtle, top
+            // Anchor glow particle — top-right
             Circle()
                 .fill(AppConstants.Colors.electricTeal.opacity(0.04))
                 .frame(width: 120, height: 120)
                 .blur(radius: 30)
                 .scaleEffect(glowPulse ? 1.3 : 1.0)
                 .offset(x: 60, y: -80)
-                .animation(.easeInOut(duration: 4).repeatForever(autoreverses: true), value: glowPulse)
+                .animation(
+                    reduceMotion ? nil : .easeInOut(duration: 4).repeatForever(autoreverses: true),
+                    value: glowPulse
+                )
 
-            // Rose-gold accent particle — bottom left
+            // Rose-gold accent particle — bottom-left
             Circle()
                 .fill(AppConstants.Colors.roseGold.opacity(0.05))
                 .frame(width: 90, height: 90)
                 .blur(radius: 25)
                 .scaleEffect(glowPulse ? 1.2 : 0.9)
                 .offset(x: -80, y: 160)
-                .animation(.easeInOut(duration: 5).repeatForever(autoreverses: true).delay(2), value: glowPulse)
+                .animation(
+                    reduceMotion ? nil : .easeInOut(duration: 5).repeatForever(autoreverses: true).delay(2),
+                    value: glowPulse
+                )
         }
+        // drawingGroup() composites all children into a single Metal texture before blur —
+        // avoids per-layer compositing overhead on older devices.
+        .drawingGroup()
         .ignoresSafeArea()
         .onAppear {
+            guard !reduceMotion else { return }
             blob1 = true
             blob2 = true
             blob3 = true
@@ -74,7 +94,7 @@ struct AnchorBackground: View {
     }
 }
 
-// MARK: - View modifier for consistent dark card styling
+// MARK: - GlassCard modifier
 
 struct GlassCard: ViewModifier {
     var glow: Color = .clear

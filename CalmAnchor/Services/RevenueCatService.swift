@@ -2,10 +2,13 @@ import Foundation
 import RevenueCat
 
 @MainActor
-class RevenueCatService: NSObject, ObservableObject {
+final class RevenueCatService: NSObject, ObservableObject {
     static let shared = RevenueCatService()
-    // TODO: Replace with live key before App Store release
-    static let apiKey = "test_AFpuFmRxwiYCSJV0rgzxFqKjZDa"
+
+    // TODO: Replace with your live pk_live_... key before App Store submission.
+    // Generate it at app.revenuecat.com → Project Settings → API Keys.
+    // Do NOT ship the test key (test_AFpuFmRxwiYCSJV0rgzxFqKjZDa) to production.
+    static let apiKey = "pk_live_REPLACE_WITH_YOUR_LIVE_KEY"
     static let entitlementID = "pro"
 
     @Published var isPremium = false
@@ -13,10 +16,11 @@ class RevenueCatService: NSObject, ObservableObject {
     @Published var currentOffering: Offering?
 
     func configure() {
+        Purchases.logLevel = .warn          // suppress verbose sandbox logs in production
         Purchases.configure(withAPIKey: Self.apiKey)
         Purchases.shared.delegate = self
 
-        Task {
+        Task { @MainActor in
             await checkSubscriptionStatus()
             await fetchOfferings()
         }
@@ -27,17 +31,17 @@ class RevenueCatService: NSObject, ObservableObject {
             let customerInfo = try await Purchases.shared.customerInfo()
             isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         } catch {
-            print("RevenueCat: Error checking subscription: \(error)")
+            print("RevenueCat: subscription check failed — \(error.localizedDescription)")
         }
     }
 
     func fetchOfferings() async {
         do {
-            let fetchedOfferings = try await Purchases.shared.offerings()
-            offerings = fetchedOfferings
-            currentOffering = fetchedOfferings.current
+            let fetched = try await Purchases.shared.offerings()
+            offerings = fetched
+            currentOffering = fetched.current
         } catch {
-            print("RevenueCat: Error fetching offerings: \(error)")
+            print("RevenueCat: offerings fetch failed — \(error.localizedDescription)")
         }
     }
 

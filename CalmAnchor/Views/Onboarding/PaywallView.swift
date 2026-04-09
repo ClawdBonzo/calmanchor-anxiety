@@ -66,7 +66,7 @@ struct PaywallView: View {
     // Whether we're using live packages or fallback
     private var useLive: Bool { !sortedPackages.isEmpty }
 
-    private var features: [(String, String)] = [
+    private let features: [(String, String)] = [
         ("brain.head.profile",       "30-Day Peace Plan"),
         ("bolt.heart.fill",          "Instant Panic SOS"),
         ("chart.line.uptrend.xyaxis","Anxiety Tracking"),
@@ -129,7 +129,10 @@ struct PaywallView: View {
         }
         .onAppear {
             headerAppeared = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { contentAppeared = true }
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(120))
+                contentAppeared = true
+            }
             // Default selection: prefer monthly (index 1)
             if useLive {
                 selectedIndex = sortedPackages.firstIndex(where: { $0.packageType == .monthly }) ?? 1
@@ -553,6 +556,8 @@ struct PremiumPlanCard: View {
             .animation(.spring(response: 0.28, dampingFraction: 0.65), value: isSelected)
         }
         .sensoryFeedback(.selection, trigger: isSelected)
+        .accessibilityLabel("\(name) plan, \(price)\(hasTrial ? ", \(trialLabel)" : "")\(isBestValue ? ", Best Value" : "")")
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
 

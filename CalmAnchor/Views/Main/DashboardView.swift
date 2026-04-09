@@ -15,6 +15,7 @@ struct DashboardView: View {
     @State private var todayPrompt: String = AppConstants.journalPrompts.randomElement() ?? ""
     @State private var panicPulse = false
     @State private var streakGlow = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var profile: UserProfile? { profiles.first }
     private var gameStats: GameStats? { gameStatsArray.first }
@@ -64,6 +65,7 @@ struct DashboardView: View {
             }
         }
         .onAppear {
+            guard !reduceMotion else { return }
             withAnimation(.easeOut(duration: 1.2).repeatForever(autoreverses: false)) {
                 panicPulse = true
             }
@@ -191,6 +193,7 @@ struct DashboardView: View {
             )
         }
         .sensoryFeedback(.impact(weight: .medium), trigger: showPanicMode)
+        .accessibilityLabel("SOS Panic Button — open breathing and grounding support")
     }
 
     // MARK: - "I Stayed Calm Today" Viral Card
@@ -249,6 +252,7 @@ struct DashboardView: View {
             .shadow(color: AppConstants.Colors.electricTeal.opacity(0.12), radius: 10, y: 3)
         }
         .sensoryFeedback(.selection, trigger: showCalmCard)
+        .accessibilityLabel("I Stayed Calm Today — share your progress")
     }
 
     // MARK: - Today's Mood Card

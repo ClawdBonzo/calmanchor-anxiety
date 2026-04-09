@@ -59,10 +59,10 @@ struct RootView: View {
             }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
-                withAnimation(.easeOut(duration: 0.5)) {
-                    showSplash = false
-                }
+            // Structured concurrency replaces DispatchQueue.main.asyncAfter
+            Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(2200))
+                withAnimation(.easeOut(duration: 0.5)) { showSplash = false }
             }
         }
     }
