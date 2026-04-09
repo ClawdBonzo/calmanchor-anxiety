@@ -4,64 +4,104 @@ struct DailyMinutesView: View {
     @Binding var dailyMinutes: Int
     let onNext: () -> Void
 
+    @State private var appeared = false
+    @State private var iconRotate = false
     private let options = [5, 10, 15, 20, 30]
 
     var body: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 0) {
             Spacer()
 
-            VStack(spacing: 16) {
+            // Icon
+            ZStack {
+                ForEach(0..<3) { i in
+                    Circle()
+                        .fill(AppConstants.Colors.sunsetGold.opacity(0.07 - Double(i) * 0.02))
+                        .frame(width: 80 + CGFloat(i) * 24)
+                }
                 Image(systemName: "clock.fill")
-                    .font(.system(size: 56))
+                    .font(.system(size: 52))
                     .foregroundStyle(AppConstants.Colors.sunsetGold)
                     .symbolEffect(.pulse)
+            }
+            .frame(height: 100)
+            .opacity(appeared ? 1 : 0)
+            .scaleEffect(appeared ? 1 : 0.6)
+            .padding(.bottom, 24)
 
+            // Text
+            VStack(spacing: 10) {
                 Text("How many minutes\nper day for healing?")
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
+                    .tracking(-0.3)
 
                 Text("Even 5 minutes daily can transform your anxiety")
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(AppConstants.Colors.stormGray)
                     .multilineTextAlignment(.center)
+                    .padding(.horizontal, 36)
             }
+            .opacity(appeared ? 1 : 0)
+            .offset(y: appeared ? 0 : 16)
 
-            VStack(spacing: 12) {
+            Spacer().frame(height: 28)
+
+            // Options
+            VStack(spacing: 10) {
                 ForEach(options, id: \.self) { minutes in
                     Button(action: { dailyMinutes = minutes }) {
-                        HStack {
-                            Image(systemName: dailyMinutes == minutes ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(
-                                    dailyMinutes == minutes ? AppConstants.Colors.mintGreen : .white.opacity(0.4)
-                                )
-                                .font(.system(size: 22))
+                        HStack(spacing: 12) {
+                            ZStack {
+                                Circle()
+                                    .fill(dailyMinutes == minutes
+                                          ? AppConstants.Colors.mintGreen
+                                          : .white.opacity(0.12))
+                                    .frame(width: 24, height: 24)
+                                if dailyMinutes == minutes {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 11, weight: .bold))
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                            .animation(.spring(response: 0.3, dampingFraction: 0.65), value: dailyMinutes)
 
                             Text("\(minutes) minutes")
-                                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                .font(.system(size: 17, weight: .semibold, design: .rounded))
                                 .foregroundStyle(.white)
 
                             Spacer()
 
                             Text(minuteLabel(minutes))
-                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                .foregroundStyle(AppConstants.Colors.stormGray)
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundStyle(dailyMinutes == minutes
+                                                 ? AppConstants.Colors.mintGreen
+                                                 : AppConstants.Colors.stormGray)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 16)
+                        .padding(.horizontal, 18)
+                        .padding(.vertical, 15)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
-                                .fill(dailyMinutes == minutes ? AppConstants.Colors.calmBlue.opacity(0.2) : .white.opacity(0.06))
+                                .fill(dailyMinutes == minutes
+                                      ? AppConstants.Colors.calmBlue.opacity(0.2)
+                                      : .white.opacity(0.06))
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 14)
-                                .stroke(dailyMinutes == minutes ? AppConstants.Colors.calmBlue.opacity(0.5) : .clear, lineWidth: 1.5)
+                                .stroke(dailyMinutes == minutes
+                                        ? AppConstants.Colors.calmBlue.opacity(0.6)
+                                        : .clear, lineWidth: 1.5)
                         )
+                        .scaleEffect(dailyMinutes == minutes ? 1.01 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.65), value: dailyMinutes)
                     }
                     .sensoryFeedback(.selection, trigger: dailyMinutes)
                 }
             }
-            .padding(.horizontal, 32)
+            .padding(.horizontal, 28)
+            .opacity(appeared ? 1 : 0)
+            .offset(y: appeared ? 0 : 20)
 
             Spacer()
 
@@ -74,20 +114,24 @@ struct DailyMinutesView: View {
                     .background(
                         LinearGradient(
                             colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal],
-                            startPoint: .leading,
-                            endPoint: .trailing
+                            startPoint: .leading, endPoint: .trailing
                         )
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .shadow(color: AppConstants.Colors.calmBlue.opacity(0.4), radius: 10, y: 4)
             }
-            .padding(.horizontal, 32)
-            .padding(.bottom, 60)
+            .padding(.horizontal, 28)
+            .padding(.bottom, 52)
+            .opacity(appeared ? 1 : 0)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.68).delay(0.1)) { appeared = true }
         }
     }
 
     private func minuteLabel(_ m: Int) -> String {
         switch m {
-        case 5: return "Quick & gentle"
+        case 5:  return "Quick & gentle"
         case 10: return "Recommended"
         case 15: return "Balanced"
         case 20: return "Deep work"

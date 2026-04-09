@@ -7,169 +7,183 @@ struct PaywallView: View {
     let onRestore: () -> Void
 
     @EnvironmentObject private var revenueCat: RevenueCatService
-    @State private var selectedIndex = 1 // default to monthly (BEST VALUE)
+    @State private var selectedIndex = 1
     @State private var isPurchasing = false
     @State private var errorMessage: String?
-
-    private var packages: [Package] {
-        revenueCat.currentOffering?.availablePackages ?? []
-    }
+    @State private var anchorPulse = false
+    @State private var headerAppeared = false
+    @State private var contentAppeared = false
+    @State private var plansAppeared = false
 
     private var sortedPackages: [Package] {
         let order: [PackageType] = [.weekly, .monthly, .annual, .lifetime]
-        return packages.sorted { a, b in
-            let ai = order.firstIndex(of: a.packageType) ?? 99
-            let bi = order.firstIndex(of: b.packageType) ?? 99
-            return ai < bi
+        return (revenueCat.currentOffering?.availablePackages ?? []).sorted { a, b in
+            (order.firstIndex(of: a.packageType) ?? 99) < (order.firstIndex(of: b.packageType) ?? 99)
         }
     }
 
+    private let features: [(String, String)] = [
+        ("brain.head.profile", "30-Day Peace Plan"),
+        ("bolt.heart.fill", "Instant Panic SOS"),
+        ("chart.line.uptrend.xyaxis", "Anxiety Tracking"),
+        ("flame.fill", "Healing Streaks")
+    ]
+
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                Spacer().frame(height: 30)
+        VStack(spacing: 0) {
 
-                // Paywall header illustration
-                Image("Onboarding-5")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 160)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .padding(.horizontal, 20)
+            // ── HEADER ──────────────────────────────────────────────────
+            VStack(spacing: 6) {
+                ZStack {
+                    ForEach(0..<3) { i in
+                        Circle()
+                            .stroke(AppConstants.Colors.sereneTeal.opacity(0.25 - Double(i) * 0.07), lineWidth: 1.5)
+                            .frame(width: 54 + CGFloat(i) * 18)
+                            .scaleEffect(anchorPulse ? 1.08 : 1.0)
+                    }
+                    Text("⚓")
+                        .font(.system(size: 32))
+                        .scaleEffect(anchorPulse ? 1.04 : 1.0)
+                }
+                .frame(height: 64)
+                .animation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true), value: anchorPulse)
 
-                // Before / After teaser
-                VStack(spacing: 20) {
-                    Text("Your Calm Transformation")
-                        .font(.system(size: 26, weight: .bold, design: .rounded))
-                        .foregroundStyle(.white)
+                Text("Unlock Your Calm")
+                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
 
-                    HStack(spacing: 20) {
-                        TransformCard(
-                            title: "Before",
-                            items: ["Racing thoughts", "Panic attacks", "Sleepless nights", "Constant worry"],
-                            color: AppConstants.Colors.gentleCoral,
-                            icon: "cloud.rain.fill"
-                        )
+                Text("Everything you need to manage anxiety — in one place.")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(AppConstants.Colors.softLavender)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+            .padding(.top, 20)
+            .padding(.bottom, 14)
+            .opacity(headerAppeared ? 1 : 0)
+            .offset(y: headerAppeared ? 0 : -16)
 
-                        Image(systemName: "arrow.right")
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(AppConstants.Colors.sunsetGold)
+            // ── FEATURE GRID ─────────────────────────────────────────────
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                ForEach(features, id: \.0) { icon, text in
+                    HStack(spacing: 8) {
+                        Image(systemName: icon)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(AppConstants.Colors.mintGreen)
+                            .frame(width: 18)
+                        Text(text)
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.88))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.75)
+                        Spacer()
+                    }
+                    .padding(.horizontal, 11)
+                    .padding(.vertical, 10)
+                    .background(.white.opacity(0.07))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+            }
+            .padding(.horizontal, 22)
+            .padding(.bottom, 12)
+            .opacity(contentAppeared ? 1 : 0)
+            .offset(y: contentAppeared ? 0 : 12)
 
-                        TransformCard(
-                            title: "After",
-                            items: ["Inner peace", "Coping skills", "Restful sleep", "Confident calm"],
-                            color: AppConstants.Colors.mintGreen,
-                            icon: "sun.max.fill"
+            // ── PLAN CARDS ───────────────────────────────────────────────
+            VStack(spacing: 7) {
+                if sortedPackages.isEmpty {
+                    ForEach(0..<4) { i in
+                        let f = fallbackPlans[i]
+                        CompactPlanCard(name: f.0, price: f.1, badge: f.2, trial: f.3,
+                                        isSelected: selectedIndex == i,
+                                        action: { selectedIndex = i })
+                    }
+                } else {
+                    ForEach(Array(sortedPackages.enumerated()), id: \.element.id) { i, pkg in
+                        CompactPlanCard(
+                            name: packageName(pkg),
+                            price: pkg.localizedPriceString + priceSuffix(pkg),
+                            badge: packageBadge(pkg),
+                            trial: packageTrial(pkg),
+                            isSelected: selectedIndex == i,
+                            action: { selectedIndex = i }
                         )
                     }
-                    .padding(.horizontal, 20)
                 }
+            }
+            .padding(.horizontal, 22)
+            .opacity(plansAppeared ? 1 : 0)
+            .offset(y: plansAppeared ? 0 : 16)
 
-                // Features
-                VStack(spacing: 12) {
-                    PaywallFeatureRow(icon: "brain.head.profile", text: "Personalized 30-day Peace Plan")
-                    PaywallFeatureRow(icon: "bolt.heart.fill", text: "Instant Panic SOS button")
-                    PaywallFeatureRow(icon: "chart.line.uptrend.xyaxis", text: "Anxiety trend tracking")
-                    PaywallFeatureRow(icon: "book.fill", text: "Unlimited journal entries")
-                    PaywallFeatureRow(icon: "flame.fill", text: "Healing streaks & motivation")
-                }
-                .padding(.horizontal, 24)
+            // ── ERROR ────────────────────────────────────────────────────
+            if let msg = errorMessage {
+                Text(msg)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundStyle(.red.opacity(0.9))
+                    .padding(.horizontal, 22)
+                    .padding(.top, 6)
+                    .transition(.opacity)
+            }
 
-                // Plan selection - live from RevenueCat
-                VStack(spacing: 10) {
-                    if sortedPackages.isEmpty {
-                        // Fallback static plans while loading
-                        ForEach(0..<4) { index in
-                            let fallback = fallbackPlans[index]
-                            PlanCard(
-                                name: fallback.0,
-                                price: fallback.1,
-                                badge: fallback.2,
-                                trial: fallback.3,
-                                isSelected: selectedIndex == index,
-                                action: { selectedIndex = index }
-                            )
-                        }
+            Spacer(minLength: 8)
+
+            // ── CTA BUTTON ───────────────────────────────────────────────
+            Button(action: { Task { await purchaseSelected() } }) {
+                Group {
+                    if isPurchasing {
+                        ProgressView().tint(.white).scaleEffect(1.1)
                     } else {
-                        ForEach(Array(sortedPackages.enumerated()), id: \.element.id) { index, package in
-                            PlanCard(
-                                name: packageName(package),
-                                price: package.localizedPriceString + priceSuffix(package),
-                                badge: packageBadge(package),
-                                trial: packageTrial(package),
-                                isSelected: selectedIndex == index,
-                                action: { selectedIndex = index }
-                            )
-                        }
-                    }
-                }
-                .padding(.horizontal, 24)
-
-                // Error message
-                if let errorMessage {
-                    Text(errorMessage)
-                        .font(.system(size: 13, weight: .medium))
-                        .foregroundStyle(.red)
-                        .padding(.horizontal, 24)
-                }
-
-                // CTA
-                Button(action: { Task { await purchaseSelected() } }) {
-                    Group {
-                        if isPurchasing {
-                            ProgressView()
-                                .tint(.white)
-                        } else {
-                            VStack(spacing: 4) {
-                                Text(ctaTitle)
-                                    .font(.system(size: 20, weight: .bold, design: .rounded))
-                                if let subtitle = ctaSubtitle {
-                                    Text(subtitle)
-                                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                                        .opacity(0.8)
-                                }
+                        VStack(spacing: 2) {
+                            Text(ctaTitle)
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                            if let sub = ctaSubtitle {
+                                Text(sub)
+                                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                                    .opacity(0.8)
                             }
                         }
                     }
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 18)
-                    .background(
-                        LinearGradient(
-                            colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(
+                    LinearGradient(
+                        colors: [AppConstants.Colors.calmBlue, AppConstants.Colors.sereneTeal],
+                        startPoint: .leading, endPoint: .trailing
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(color: AppConstants.Colors.calmBlue.opacity(0.4), radius: 12, y: 6)
-                }
-                .disabled(isPurchasing)
-                .padding(.horizontal, 24)
-
-                // Restore + skip
-                HStack(spacing: 24) {
-                    Button("Restore Purchase") {
-                        Task { await restore() }
-                    }
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.5))
-
-                    Button("Skip for now") { onContinue() }
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundStyle(.white.opacity(0.5))
-                }
-                .padding(.bottom, 20)
-
-                Text("Cancel anytime. Terms & Privacy apply.")
-                    .font(.system(size: 12))
-                    .foregroundStyle(.white.opacity(0.3))
-                    .padding(.bottom, 40)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .shadow(color: AppConstants.Colors.calmBlue.opacity(0.5), radius: 12, y: 5)
             }
+            .disabled(isPurchasing)
+            .padding(.horizontal, 22)
+            .opacity(plansAppeared ? 1 : 0)
+
+            // ── FOOTER ───────────────────────────────────────────────────
+            HStack(spacing: 20) {
+                Button("Restore Purchase") { Task { await restore() } }
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.4))
+                Rectangle()
+                    .fill(.white.opacity(0.2))
+                    .frame(width: 1, height: 12)
+                Button("Skip for now") { onContinue() }
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
+            .padding(.vertical, 10)
+
+            Text("Cancel anytime · Terms & Privacy apply.")
+                .font(.system(size: 11))
+                .foregroundStyle(.white.opacity(0.22))
+                .padding(.bottom, 14)
         }
-        .scrollIndicators(.hidden)
         .onAppear {
-            // Default select monthly (index 1)
+            anchorPulse = true
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.05)) { headerAppeared = true }
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.2))  { contentAppeared = true }
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.35)) { plansAppeared = true }
             if !sortedPackages.isEmpty {
                 selectedIndex = sortedPackages.firstIndex(where: { $0.packageType == .monthly }) ?? 1
             }
@@ -179,17 +193,11 @@ struct PaywallView: View {
     // MARK: - Purchase Logic
 
     private func purchaseSelected() async {
-        guard !sortedPackages.isEmpty else {
-            onContinue()
-            return
-        }
-        let index = min(selectedIndex, sortedPackages.count - 1)
-        let package = sortedPackages[index]
-        isPurchasing = true
-        errorMessage = nil
-
+        guard !sortedPackages.isEmpty else { onContinue(); return }
+        let pkg = sortedPackages[min(selectedIndex, sortedPackages.count - 1)]
+        isPurchasing = true; errorMessage = nil
         do {
-            let success = try await revenueCat.purchase(package)
+            let success = try await revenueCat.purchase(pkg)
             isPurchasing = false
             if success { onContinue() }
         } catch {
@@ -199,13 +207,11 @@ struct PaywallView: View {
     }
 
     private func restore() async {
-        isPurchasing = true
-        errorMessage = nil
+        isPurchasing = true; errorMessage = nil
         do {
             let success = try await revenueCat.restorePurchases()
             isPurchasing = false
-            if success { onContinue() }
-            else { errorMessage = "No active subscription found." }
+            if success { onContinue() } else { errorMessage = "No active subscription found." }
         } catch {
             isPurchasing = false
             errorMessage = error.localizedDescription
@@ -215,55 +221,53 @@ struct PaywallView: View {
     // MARK: - Helpers
 
     private let fallbackPlans: [(String, String, String, String)] = [
-        ("Weekly", "$4.99/wk", "Flexible", ""),
-        ("Monthly", "$9.99/mo", "BEST VALUE", "3-Day Free Trial"),
-        ("Yearly", "$49.99/yr", "Save 58%", ""),
-        ("Lifetime", "$79.99", "One-Time", "")
+        ("Weekly",   "$4.99/wk",  "Flexible",  ""),
+        ("Monthly",  "$9.99/mo",  "BEST VALUE","3-Day Free Trial"),
+        ("Yearly",   "$49.99/yr", "Save 58%",  ""),
+        ("Lifetime", "$79.99",    "One-Time",  "")
     ]
 
     private var ctaTitle: String {
         if sortedPackages.isEmpty { return "Continue" }
         let pkg = sortedPackages[min(selectedIndex, sortedPackages.count - 1)]
-        if pkg.storeProduct.introductoryDiscount != nil { return "Start Free Trial" }
-        return "Subscribe Now"
+        return pkg.storeProduct.introductoryDiscount != nil ? "Start Free Trial" : "Subscribe Now"
     }
 
     private var ctaSubtitle: String? {
         if sortedPackages.isEmpty { return nil }
         let pkg = sortedPackages[min(selectedIndex, sortedPackages.count - 1)]
         if let intro = pkg.storeProduct.introductoryDiscount {
-            let days = intro.subscriptionPeriod.value
-            return "\(days) days free, then \(pkg.localizedPriceString)\(priceSuffix(pkg))"
+            return "\(intro.subscriptionPeriod.value) days free, then \(pkg.localizedPriceString)\(priceSuffix(pkg))"
         }
         return nil
     }
 
     private func packageName(_ pkg: Package) -> String {
         switch pkg.packageType {
-        case .weekly: return "Weekly"
-        case .monthly: return "Monthly"
-        case .annual: return "Yearly"
+        case .weekly:   return "Weekly"
+        case .monthly:  return "Monthly"
+        case .annual:   return "Yearly"
         case .lifetime: return "Lifetime"
-        default: return pkg.storeProduct.localizedTitle
+        default:        return pkg.storeProduct.localizedTitle
         }
     }
 
     private func priceSuffix(_ pkg: Package) -> String {
         switch pkg.packageType {
-        case .weekly: return "/wk"
+        case .weekly:  return "/wk"
         case .monthly: return "/mo"
-        case .annual: return "/yr"
-        default: return ""
+        case .annual:  return "/yr"
+        default:       return ""
         }
     }
 
     private func packageBadge(_ pkg: Package) -> String {
         switch pkg.packageType {
-        case .monthly: return "BEST VALUE"
-        case .annual: return "Save 58%"
-        case .weekly: return "Flexible"
+        case .monthly:  return "BEST VALUE"
+        case .annual:   return "Save 58%"
+        case .weekly:   return "Flexible"
         case .lifetime: return "One-Time"
-        default: return ""
+        default:        return ""
         }
     }
 
@@ -275,55 +279,9 @@ struct PaywallView: View {
     }
 }
 
-struct TransformCard: View {
-    let title: String
-    let items: [String]
-    let color: Color
-    let icon: String
+// MARK: - Compact Plan Card
 
-    var body: some View {
-        VStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 28))
-                .foregroundStyle(color)
-
-            Text(title)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(color)
-
-            ForEach(items, id: \.self) { item in
-                Text(item)
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.7))
-            }
-        }
-        .padding(.vertical, 16)
-        .padding(.horizontal, 12)
-        .frame(maxWidth: .infinity)
-        .background(color.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-    }
-}
-
-struct PaywallFeatureRow: View {
-    let icon: String
-    let text: String
-
-    var body: some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.system(size: 18))
-                .foregroundStyle(AppConstants.Colors.mintGreen)
-                .frame(width: 28)
-            Text(text)
-                .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.9))
-            Spacer()
-        }
-    }
-}
-
-struct PlanCard: View {
+struct CompactPlanCard: View {
     let name: String
     let price: String
     let badge: String
@@ -333,32 +291,29 @@ struct PlanCard: View {
 
     var body: some View {
         Button(action: action) {
-            HStack {
+            HStack(spacing: 10) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 22))
+                    .font(.system(size: 20))
                     .foregroundStyle(isSelected ? AppConstants.Colors.mintGreen : .white.opacity(0.3))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSelected)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: 1) {
+                    HStack(spacing: 6) {
                         Text(name)
-                            .font(.system(size: 17, weight: .bold, design: .rounded))
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
-
                         if !badge.isEmpty {
                             Text(badge)
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .font(.system(size: 10, weight: .bold, design: .rounded))
                                 .foregroundStyle(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(
-                                    AppConstants.Colors.sunsetGold.opacity(0.8)
-                                )
+                                .padding(.horizontal, 6).padding(.vertical, 2)
+                                .background(AppConstants.Colors.sunsetGold.opacity(0.85))
                                 .clipShape(Capsule())
                         }
                     }
                     if !trial.isEmpty {
                         Text(trial)
-                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(AppConstants.Colors.mintGreen)
                     }
                 }
@@ -366,19 +321,37 @@ struct PlanCard: View {
                 Spacer()
 
                 Text(price)
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            .padding(.horizontal, 14).padding(.vertical, 11)
             .background(
-                RoundedRectangle(cornerRadius: 14)
+                RoundedRectangle(cornerRadius: 12)
                     .fill(isSelected ? AppConstants.Colors.calmBlue.opacity(0.2) : .white.opacity(0.05))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? AppConstants.Colors.calmBlue : .white.opacity(0.1), lineWidth: isSelected ? 2 : 1)
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? AppConstants.Colors.calmBlue : .white.opacity(0.1),
+                            lineWidth: isSelected ? 2 : 1)
             )
+            .scaleEffect(isSelected ? 1.01 : 1.0)
+            .animation(.spring(response: 0.3, dampingFraction: 0.65), value: isSelected)
         }
+        .sensoryFeedback(.selection, trigger: isSelected)
     }
+}
+
+// Keep legacy subviews so they compile (used nowhere else now)
+struct TransformCard: View {
+    let title: String; let items: [String]; let color: Color; let icon: String
+    var body: some View { EmptyView() }
+}
+struct PaywallFeatureRow: View {
+    let icon: String; let text: String
+    var body: some View { EmptyView() }
+}
+struct PlanCard: View {
+    let name: String; let price: String; let badge: String; let trial: String
+    let isSelected: Bool; let action: () -> Void
+    var body: some View { EmptyView() }
 }

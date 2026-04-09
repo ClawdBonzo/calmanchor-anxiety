@@ -12,7 +12,11 @@ struct CalmAnchorApp: App {
             MoodEntry.self,
             JournalEntry.self,
             PanicEvent.self,
-            HealingTask.self
+            HealingTask.self,
+            GameStats.self,
+            Quest.self,
+            Badge.self,
+            XPEvent.self
         ])
         let config = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
@@ -74,17 +78,15 @@ struct SplashScreenView: View {
 
     var body: some View {
         ZStack {
-            // Background - use splash image
+            // Background
             Image(colorScheme == .dark ? "Splash-Dark" : "Splash-Light")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .ignoresSafeArea()
 
-            // Fallback gradient underneath
             LinearGradient(
                 colors: [Color(hex: "0A1428"), Color(hex: "0D3B4F")],
-                startPoint: .top,
-                endPoint: .bottom
+                startPoint: .top, endPoint: .bottom
             )
             .ignoresSafeArea()
             .zIndex(-1)
@@ -93,19 +95,14 @@ struct SplashScreenView: View {
                 Spacer()
 
                 ZStack {
-                    // Glow rings
                     ForEach(0..<3) { i in
                         Circle()
-                            .stroke(
-                                Color(hex: "00C9B7").opacity(0.15 - Double(i) * 0.04),
-                                lineWidth: 2
-                            )
+                            .stroke(Color(hex: "00C9B7").opacity(0.15 - Double(i) * 0.04), lineWidth: 2)
                             .frame(width: 160 + CGFloat(i) * 50)
                             .scaleEffect(ringScale)
                             .opacity(ringOpacity)
                     }
 
-                    // Brand icon
                     Image("BrandIcon")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -133,16 +130,12 @@ struct SplashScreenView: View {
         }
         .onAppear {
             withAnimation(.spring(response: 0.8, dampingFraction: 0.6).delay(0.1)) {
-                logoScale = 1.0
-                logoOpacity = 1.0
+                logoScale = 1.0; logoOpacity = 1.0
             }
             withAnimation(.easeOut(duration: 1.0).delay(0.3)) {
-                ringScale = 1.0
-                ringOpacity = 1.0
+                ringScale = 1.0; ringOpacity = 1.0
             }
-            withAnimation(.easeOut(duration: 0.6).delay(0.6)) {
-                titleOpacity = 1.0
-            }
+            withAnimation(.easeOut(duration: 0.6).delay(0.6)) { titleOpacity = 1.0 }
         }
     }
 }

@@ -9,19 +9,20 @@ struct OnboardingContainerView: View {
     @State private var selectedTriggers: Set<String> = []
     @State private var baselineMood: Int = 5
     @State private var dailyMinutes: Int = 10
-    @State private var showPaywall = false
 
     private let totalSteps = 7
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
+            // Background gradient
             LinearGradient(
-                colors: [AppConstants.Colors.deepNavy, Color(hex: "2A3F5F")],
-                startPoint: .top,
-                endPoint: .bottom
+                colors: [Color(hex: "0A1428"), Color(hex: "1B2838"), Color(hex: "0D3B4F")],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
+            // Page content
             TabView(selection: $currentStep) {
                 SplashOnboardingView(onNext: nextStep)
                     .tag(0)
@@ -50,25 +51,33 @@ struct OnboardingContainerView: View {
                 PaywallView(
                     calmName: calmName,
                     onContinue: { completeOnboarding() },
-                    onRestore: { completeOnboarding() }
+                    onRestore:  { completeOnboarding() }
                 )
                 .tag(6)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .animation(.easeInOut(duration: 0.3), value: currentStep)
             .ignoresSafeArea()
+
+            // Progress dots — visible only on steps 1–5
+            if currentStep >= 1 && currentStep <= 5 {
+                StepProgressDots(current: currentStep - 1, total: 5)
+                    .padding(.top, 56)
+                    .transition(.opacity)
+                    .animation(.easeInOut(duration: 0.3), value: currentStep)
+            }
         }
+        .animation(.easeInOut(duration: 0.3), value: currentStep)
     }
 
     private func nextStep() {
-        withAnimation {
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.78)) {
             currentStep = min(currentStep + 1, totalSteps - 1)
         }
     }
 
     private func createProfile() {
         let profile = UserProfile(
-            calmName: calmName.isEmpty ? "Friend" : calmName,
+            calmName: calmName.trimmingCharacters(in: .whitespaces).isEmpty ? "Friend" : calmName,
             triggers: Array(selectedTriggers),
             baselineMood: baselineMood,
             dailyMinutes: dailyMinutes
@@ -79,5 +88,25 @@ struct OnboardingContainerView: View {
 
     private func completeOnboarding() {
         hasCompletedOnboarding = true
+    }
+}
+
+// MARK: - Step Progress Dots
+
+struct StepProgressDots: View {
+    let current: Int   // 0-based
+    let total: Int
+
+    var body: some View {
+        HStack(spacing: 7) {
+            ForEach(0..<total, id: \.self) { i in
+                Capsule()
+                    .fill(i == current
+                          ? Color(hex: "00C9B7")
+                          : Color.white.opacity(i < current ? 0.45 : 0.18))
+                    .frame(width: i == current ? 22 : 7, height: 7)
+                    .animation(.spring(response: 0.4, dampingFraction: 0.7), value: current)
+            }
+        }
     }
 }
