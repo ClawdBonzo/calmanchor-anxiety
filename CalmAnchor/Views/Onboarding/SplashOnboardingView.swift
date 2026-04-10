@@ -11,6 +11,7 @@ struct SplashOnboardingView: View {
     @State private var buttonOpacity: Double = 0
     @State private var buttonOffset: CGFloat = 28
     @State private var breatheScale: CGFloat = 1.0
+    @State private var beginTap = false
     @State private var particle1Offset: CGSize = .zero
     @State private var particle2Offset: CGSize = .zero
     @State private var particle3Offset: CGSize = .zero
@@ -69,7 +70,7 @@ struct SplashOnboardingView: View {
                 Spacer()
 
                 // CTA button
-                Button(action: onNext) {
+                Button(action: { beginTap.toggle(); onNext() }) {
                     HStack(spacing: 10) {
                         Text("Begin Your Calm Journey")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -88,6 +89,7 @@ struct SplashOnboardingView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 18))
                     .shadow(color: Color(hex: "00C9B7").opacity(0.5), radius: 16, y: 6)
                 }
+                .sensoryFeedback(.impact(weight: .medium), trigger: beginTap)
                 .opacity(buttonOpacity)
                 .offset(y: buttonOffset)
                 .padding(.horizontal, 28)

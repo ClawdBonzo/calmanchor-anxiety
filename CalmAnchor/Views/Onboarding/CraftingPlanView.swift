@@ -122,6 +122,7 @@ struct CraftingPlanView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(color: AppConstants.Colors.mintGreen.opacity(0.45), radius: 14, y: 5)
                 }
+                .sensoryFeedback(.success, trigger: showComplete)
                 .padding(.horizontal, 28)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }

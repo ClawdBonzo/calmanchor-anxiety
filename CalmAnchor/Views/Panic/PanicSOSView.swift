@@ -97,6 +97,7 @@ struct PanicSOSView: View {
                             .font(.system(size: 28))
                             .foregroundStyle(.white.opacity(0.35))
                     }
+                    .sensoryFeedback(.impact(weight: .light), trigger: isPresented)
                     .accessibilityLabel("Close panic support")
                 }
                 .padding(.horizontal, 24)
@@ -177,6 +178,7 @@ struct PanicSOSView: View {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .breathing }
                 startBreathing()
             }
+            .sensoryFeedback(.impact(weight: .medium), trigger: currentPhase)
         }
     }
 
@@ -238,6 +240,7 @@ struct PanicSOSView: View {
                     breathingTask?.cancel()
                     withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .affirmations }
                 }
+                .sensoryFeedback(.success, trigger: breathCount)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
@@ -285,6 +288,7 @@ struct PanicSOSView: View {
                 }
                 .foregroundStyle(.white.opacity(0.55))
             }
+            .sensoryFeedback(.selection, trigger: affirmationIndex)
             .accessibilityLabel("Show next affirmation")
 
             Spacer()
@@ -292,6 +296,7 @@ struct PanicSOSView: View {
             ctaButton(label: "I Feel Calmer Now", color: AppConstants.Colors.mintGreen) {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) { currentPhase = .complete }
             }
+            .sensoryFeedback(.success, trigger: currentPhase)
         }
     }
 
@@ -448,6 +453,7 @@ struct AnchorBloomCompleteView: View {
     @State private var ringScales: [CGFloat] = [1, 1, 1, 1, 1]
     @State private var ringOpacities: [Double] = [1, 1, 1, 1, 1]
     @State private var textAppeared = false
+    @State private var closeTap = false
 
     var body: some View {
         VStack(spacing: 28) {
@@ -530,6 +536,7 @@ struct AnchorBloomCompleteView: View {
                     in: 1...10, step: 1
                 )
                 .tint(AppConstants.Colors.mintGreen)
+                .sensoryFeedback(.selection, trigger: intensityAfter)
                 .padding(.horizontal, 36)
                 .accessibilityLabel("Anxiety level after session")
                 .accessibilityValue("\(intensityAfter) out of 10")
@@ -543,7 +550,7 @@ struct AnchorBloomCompleteView: View {
 
             Spacer()
 
-            Button(action: onClose) {
+            Button(action: { closeTap.toggle(); onClose() }) {
                 Text("Close & Return")
                     .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
@@ -553,6 +560,7 @@ struct AnchorBloomCompleteView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 15))
                     .shadow(color: AppConstants.Colors.calmBlue.opacity(0.45), radius: 12, y: 4)
             }
+            .sensoryFeedback(.success, trigger: closeTap)
             .padding(.horizontal, 28)
             .padding(.bottom, 50)
             .opacity(textAppeared ? 1 : 0)

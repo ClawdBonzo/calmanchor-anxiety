@@ -109,6 +109,7 @@ struct NameInputView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 16))
                 .shadow(color: AppConstants.Colors.calmBlue.opacity(0.45), radius: 12, y: 5)
             }
+            .sensoryFeedback(.selection, trigger: calmName)
             .padding(.horizontal, 28)
             .padding(.bottom, 52)
             .opacity(appeared ? 1 : 0)

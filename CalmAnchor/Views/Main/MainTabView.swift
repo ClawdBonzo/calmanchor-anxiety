@@ -48,6 +48,7 @@ struct MainTabView: View {
                     .tag(4)
             }
             .tint(Color(hex: "00C9B7"))
+            .sensoryFeedback(.selection, trigger: selectedTab)
 
             if showPanicMode {
                 PanicSOSView(isPresented: $showPanicMode)

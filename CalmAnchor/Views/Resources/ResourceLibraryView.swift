@@ -21,7 +21,7 @@ struct ResourceLibraryView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(ResourceCategory.allCases, id: \.self) { category in
-                                Button(action: { selectedCategory = category }) {
+                                Button(action: { withAnimation { selectedCategory = category } }) {
                                     Text(category.rawValue)
                                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                                         .padding(.horizontal, 16)
@@ -35,6 +35,7 @@ struct ResourceLibraryView: View {
                         }
                         .padding(.horizontal, 20)
                     }
+                    .sensoryFeedback(.selection, trigger: selectedCategory)
 
                     // Resource cards
                     LazyVStack(spacing: 14) {
@@ -270,6 +271,7 @@ struct ResourceCardView: View {
                 .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
+        .sensoryFeedback(.selection, trigger: isExpanded)
         .padding(16)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))

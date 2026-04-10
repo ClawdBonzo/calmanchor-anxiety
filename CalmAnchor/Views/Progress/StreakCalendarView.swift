@@ -105,6 +105,7 @@ struct StreakCalendarView: View {
                 }
             }
         }
+        .sensoryFeedback(.selection, trigger: selectedMonth)
         .padding(16)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
@@ -140,6 +141,7 @@ struct StreakCalendarView: View {
             withAnimation { selectedMonth = newMonth }
         }
     }
+
 
     private func calendarDays() -> [Date?] {
         let calendar = Calendar.current

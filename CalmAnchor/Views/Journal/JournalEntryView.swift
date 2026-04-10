@@ -16,6 +16,7 @@ struct JournalEntryView: View {
     @State private var freeWrite = ""
     @State private var selectedCoping: Set<String> = []
     @State private var currentPage = 0
+    @State private var saveTap = false
 
     var body: some View {
         NavigationStack {
@@ -34,8 +35,9 @@ struct JournalEntryView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     if currentPage == 3 {
-                        Button("Save") { saveJournal() }
+                        Button("Save") { saveTap.toggle(); saveJournal() }
                             .bold()
+                            .sensoryFeedback(.success, trigger: saveTap)
                     }
                 }
             }
@@ -72,8 +74,9 @@ struct JournalEntryView: View {
 
                     FlowLayout(spacing: 8) {
                         ForEach(AppConstants.CopingTechniques.allCases, id: \.label) { technique in
+                            let isSelected = selectedCoping.contains(technique.label)
                             Button(action: {
-                                if selectedCoping.contains(technique.label) {
+                                if isSelected {
                                     selectedCoping.remove(technique.label)
                                 } else {
                                     selectedCoping.insert(technique.label)
@@ -93,6 +96,7 @@ struct JournalEntryView: View {
                                     AppConstants.Colors.calmBlue : .primary)
                                 .clipShape(Capsule())
                             }
+                            .sensoryFeedback(.selection, trigger: isSelected)
                         }
                     }
                 }
@@ -108,8 +112,9 @@ struct JournalEntryView: View {
 
                 FlowLayout(spacing: 8) {
                     ForEach(AppConstants.Triggers.allCases, id: \.label) { trigger in
+                        let isSelected = selectedTriggers.contains(trigger.label)
                         Button(action: {
-                            if selectedTriggers.contains(trigger.label) {
+                            if isSelected {
                                 selectedTriggers.remove(trigger.label)
                             } else {
                                 selectedTriggers.insert(trigger.label)
@@ -129,6 +134,7 @@ struct JournalEntryView: View {
                                 AppConstants.Colors.warmPeach : .primary)
                             .clipShape(Capsule())
                         }
+                        .sensoryFeedback(.selection, trigger: isSelected)
                     }
                 }
             }
@@ -167,6 +173,7 @@ struct JournalEntryView: View {
                     Button("Shuffle Affirmation") {
                         withAnimation { affirmation = AppConstants.affirmations.randomElement() ?? affirmation }
                     }
+                    .sensoryFeedback(.impact(weight: .light), trigger: affirmation)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(AppConstants.Colors.calmBlue)
                 }

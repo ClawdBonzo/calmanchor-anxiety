@@ -10,6 +10,8 @@ struct ViralShareCardView: View {
     @State private var cardAppeared = false
     @State private var glowPulse = false
     @State private var ringScale: CGFloat = 0.85
+    @State private var dismissTap = false
+    @State private var shareTap = false
 
     // MARK: - Subview helpers (extracted to help type-checker)
 
@@ -53,11 +55,12 @@ struct ViralShareCardView: View {
             VStack(spacing: 0) {
                 // ── Navigation bar ───────────────────────────────────────
                 HStack {
-                    Button(action: { dismiss() }) {
+                    Button(action: { dismissTap.toggle(); dismiss() }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 28))
                             .foregroundStyle(.white.opacity(0.35))
                     }
+                    .sensoryFeedback(.impact(weight: .light), trigger: dismissTap)
                     .accessibilityLabel("Close")
 
                     Spacer()
@@ -195,7 +198,9 @@ struct ViralShareCardView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 14))
                         .shadow(color: AppConstants.Colors.electricTeal.opacity(0.4), radius: 14, y: 5)
                     }
+                    .sensoryFeedback(.success, trigger: shareTap)
                     .accessibilityLabel("Share your calm moment with others")
+                    .simultaneousGesture(TapGesture().onEnded { shareTap.toggle() })
 
                     Text("Inspire others to find their anchor")
                         .font(.system(size: 12, weight: .medium, design: .rounded))
