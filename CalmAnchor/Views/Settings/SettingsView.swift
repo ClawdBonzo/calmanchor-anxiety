@@ -1,12 +1,18 @@
 import SwiftUI
 import SwiftData
+import StoreKit
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.requestReview) private var requestReview
+    @EnvironmentObject private var revenueCat: RevenueCatService
     @Query private var profiles: [UserProfile]
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = true
     @State private var showResetAlert = false
     @State private var showResourceLibrary = false
+    @State private var showPaywall = false
+    @State private var isRestoring = false
+    @State private var restoreMessage: String?
 
     private var profile: UserProfile? { profiles.first }
 
@@ -51,6 +57,40 @@ struct SettingsView: View {
                     }
                 }
 
+                // Subscription
+                Section("Subscription") {
+                    HStack {
+                        Label("Plan", systemImage: "star.fill")
+                        Spacer()
+                        Text(revenueCat.isPremium ? "Premium" : "Free")
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if !revenueCat.isPremium {
+                        Button(action: { showPaywall = true }) {
+                            Label("Upgrade to Premium", systemImage: "crown.fill")
+                                .foregroundStyle(AppConstants.Colors.sunsetGold)
+                        }
+                    }
+
+                    Button(action: { Task { await restorePurchases() } }) {
+                        HStack {
+                            Label("Restore Purchases", systemImage: "arrow.clockwise")
+                            if isRestoring {
+                                Spacer()
+                                ProgressView().scaleEffect(0.8)
+                            }
+                        }
+                    }
+                    .disabled(isRestoring)
+
+                    if let msg = restoreMessage {
+                        Text(msg)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 // Resources
                 Section("Resources") {
                     Button(action: { showResourceLibrary = true }) {
@@ -59,20 +99,6 @@ struct SettingsView: View {
 
                     Label("Crisis Hotline: 988", systemImage: "phone.fill")
                         .foregroundStyle(.red)
-                }
-
-                // Subscription
-                Section("Subscription") {
-                    HStack {
-                        Label("Plan", systemImage: "star.fill")
-                        Spacer()
-                        Text(profile?.isPremium == true ? "Premium" : "Free")
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Button(action: { /* RevenueCat restore */ }) {
-                        Label("Restore Purchases", systemImage: "arrow.clockwise")
-                    }
                 }
 
                 // Data
@@ -88,6 +114,10 @@ struct SettingsView: View {
 
                 // About
                 Section("About") {
+                    Button(action: { requestReview() }) {
+                        Label("Rate CalmAnchor", systemImage: "star.bubble.fill")
+                    }
+
                     HStack {
                         Label("Version", systemImage: "info.circle.fill")
                         Spacer()
@@ -114,6 +144,27 @@ struct SettingsView: View {
             } message: {
                 Text("This will delete all your journal entries, mood logs, and progress. This cannot be undone.")
             }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    calmName: profile?.calmName ?? "Friend",
+                    onContinue: { showPaywall = false },
+                    onRestore: { showPaywall = false }
+                )
+                .environmentObject(revenueCat)
+            }
+        }
+    }
+
+    private func restorePurchases() async {
+        isRestoring = true
+        restoreMessage = nil
+        do {
+            let success = try await revenueCat.restorePurchases()
+            isRestoring = false
+            restoreMessage = success ? "Premium restored!" : "No active subscription found."
+        } catch {
+            isRestoring = false
+            restoreMessage = error.localizedDescription
         }
     }
 

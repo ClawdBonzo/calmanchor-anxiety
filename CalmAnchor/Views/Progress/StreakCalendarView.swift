@@ -3,11 +3,13 @@ import SwiftData
 
 struct StreakCalendarView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var revenueCat: RevenueCatService
     @Query private var profiles: [UserProfile]
     @Query(sort: \JournalEntry.date) private var journals: [JournalEntry]
     @Query(sort: \MoodEntry.date) private var moods: [MoodEntry]
     @Query(sort: \HealingTask.sortOrder) private var allTasks: [HealingTask]
     @State private var selectedMonth = Date()
+    @State private var showPaywall = false
 
     private var profile: UserProfile? { profiles.first }
     private var activeDates: Set<DateComponents> {
@@ -16,23 +18,35 @@ struct StreakCalendarView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Streak Summary
-                    streakSummary
-
-                    // Calendar
-                    calendarView
-
-                    // Today's Healing Plan
-                    todayPlanSection
-
-                    Spacer().frame(height: 80)
+            Group {
+                if !revenueCat.isPremium {
+                    PremiumGateView(
+                        feature: "Healing Streaks",
+                        icon: "flame.fill",
+                        description: "Track your daily streak, view your healing calendar, and follow your personalized plan."
+                    ) { showPaywall = true }
+                } else {
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            streakSummary
+                            calendarView
+                            todayPlanSection
+                            Spacer().frame(height: 80)
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                    .background(Color(hex: "080E1C"))
                 }
-                .padding(.horizontal, 20)
             }
-            .background(Color(.systemGroupedBackground))
             .navigationTitle("Healing Streaks")
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    calmName: "",
+                    onContinue: { showPaywall = false },
+                    onRestore: { showPaywall = false }
+                )
+                .environmentObject(revenueCat)
+            }
         }
     }
 
@@ -107,7 +121,7 @@ struct StreakCalendarView: View {
         }
         .sensoryFeedback(.selection, trigger: selectedMonth)
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -132,7 +146,7 @@ struct StreakCalendarView: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -186,7 +200,7 @@ struct StreakBadge: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }

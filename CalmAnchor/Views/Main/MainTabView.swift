@@ -9,41 +9,31 @@ struct MainTabView: View {
             TabView(selection: $selectedTab) {
                 DashboardView(showPanicMode: $showPanicMode)
                     .tabItem {
-                        Image("Tab-Dashboard")
-                            .renderingMode(.template)
-                        Text("Home")
+                        Label("Home", systemImage: "house.fill")
                     }
                     .tag(0)
 
                 JournalListView()
                     .tabItem {
-                        Image("Tab-Journal")
-                            .renderingMode(.template)
-                        Text("Journal")
+                        Label("Journal", systemImage: "book.fill")
                     }
                     .tag(1)
 
                 StreakCalendarView()
                     .tabItem {
-                        Image("Tab-Streaks")
-                            .renderingMode(.template)
-                        Text("Streaks")
+                        Label("Streaks", systemImage: "flame.fill")
                     }
                     .tag(2)
 
                 ProgressChartsView()
                     .tabItem {
-                        Image("Tab-SOS")
-                            .renderingMode(.template)
-                        Text("Progress")
+                        Label("Progress", systemImage: "chart.line.uptrend.xyaxis")
                     }
                     .tag(3)
 
                 SettingsView()
                     .tabItem {
-                        Image("Tab-Settings")
-                            .renderingMode(.template)
-                        Text("Settings")
+                        Label("Settings", systemImage: "gearshape.fill")
                     }
                     .tag(4)
             }

@@ -31,6 +31,7 @@ struct CalmAnchorApp: App {
             RootView(hasCompletedOnboarding: $hasCompletedOnboarding)
                 .modelContainer(sharedModelContainer)
                 .environmentObject(revenueCat)
+                .preferredColorScheme(.dark)
                 .onAppear {
                     revenueCat.configure()
                 }
@@ -69,7 +70,6 @@ struct RootView: View {
 }
 
 struct SplashScreenView: View {
-    @Environment(\.colorScheme) private var colorScheme
     @State private var logoScale: CGFloat = 0.5
     @State private var logoOpacity: Double = 0
     @State private var titleOpacity: Double = 0
@@ -78,18 +78,12 @@ struct SplashScreenView: View {
 
     var body: some View {
         ZStack {
-            // Background
-            Image(colorScheme == .dark ? "Splash-Dark" : "Splash-Light")
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .ignoresSafeArea()
-
+            // Background — gradient only (no splash image to avoid duplicate logo)
             LinearGradient(
-                colors: [Color(hex: "0A1428"), Color(hex: "0D3B4F")],
-                startPoint: .top, endPoint: .bottom
+                colors: [Color(hex: "0A1428"), Color(hex: "1B2838"), Color(hex: "0D3B4F")],
+                startPoint: .topLeading, endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            .zIndex(-1)
 
             VStack(spacing: 24) {
                 Spacer()

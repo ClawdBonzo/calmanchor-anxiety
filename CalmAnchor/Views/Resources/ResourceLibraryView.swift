@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ResourceLibraryView: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var searchText = ""
     @State private var selectedCategory: ResourceCategory = .all
 
@@ -48,9 +49,14 @@ struct ResourceLibraryView: View {
                     Spacer().frame(height: 80)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Color(hex: "080E1C"))
             .navigationTitle("Resources")
             .searchable(text: $searchText, prompt: "Search techniques...")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
         }
     }
 
@@ -273,7 +279,7 @@ struct ResourceCardView: View {
         }
         .sensoryFeedback(.selection, trigger: isExpanded)
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }

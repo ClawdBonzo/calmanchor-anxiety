@@ -16,7 +16,7 @@ struct QuickMoodLogView: View {
             VStack(spacing: 28) {
                 Text(moodEmojis[moodLevel - 1])
                     .font(.system(size: 64))
-                    .contentTransition(.numericText())
+                    .animation(.easeInOut(duration: 0.2), value: moodLevel)
 
                 VStack(spacing: 16) {
                     VStack(spacing: 8) {

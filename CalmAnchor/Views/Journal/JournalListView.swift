@@ -3,13 +3,21 @@ import SwiftData
 
 struct JournalListView: View {
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var revenueCat: RevenueCatService
     @Query(sort: \JournalEntry.date, order: .reverse) private var entries: [JournalEntry]
     @State private var showNewEntry = false
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
             Group {
-                if entries.isEmpty {
+                if !revenueCat.isPremium {
+                    PremiumGateView(
+                        feature: "Daily Journal",
+                        icon: "book.fill",
+                        description: "Track your healing journey with guided entries, gratitude prompts, and mood insights."
+                    ) { showPaywall = true }
+                } else if entries.isEmpty {
                     emptyState
                 } else {
                     List {
@@ -23,14 +31,24 @@ struct JournalListView: View {
             }
             .navigationTitle("Journal")
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: { showNewEntry = true }) {
-                        Image(systemName: "square.and.pencil")
+                if revenueCat.isPremium {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button(action: { showNewEntry = true }) {
+                            Image(systemName: "square.and.pencil")
+                        }
                     }
                 }
             }
             .sheet(isPresented: $showNewEntry) {
                 JournalEntryView()
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    calmName: "",
+                    onContinue: { showPaywall = false },
+                    onRestore: { showPaywall = false }
+                )
+                .environmentObject(revenueCat)
             }
         }
     }

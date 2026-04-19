@@ -3,10 +3,12 @@ import SwiftData
 import Charts
 
 struct ProgressChartsView: View {
+    @EnvironmentObject private var revenueCat: RevenueCatService
     @Query(sort: \MoodEntry.date) private var moods: [MoodEntry]
     @Query(sort: \JournalEntry.date) private var journals: [JournalEntry]
     @Query(sort: \PanicEvent.date) private var panicEvents: [PanicEvent]
     @State private var timeRange: TimeRange = .week
+    @State private var showPaywall = false
 
     enum TimeRange: String, CaseIterable {
         case week = "7 Days"
@@ -34,37 +36,43 @@ struct ProgressChartsView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 24) {
-                    // Time range picker
-                    Picker("Time Range", selection: $timeRange) {
-                        ForEach(TimeRange.allCases, id: \.self) { range in
-                            Text(range.rawValue).tag(range)
+            Group {
+                if !revenueCat.isPremium {
+                    PremiumGateView(
+                        feature: "Progress Analytics",
+                        icon: "chart.line.uptrend.xyaxis",
+                        description: "See mood trends, anxiety patterns, journaling impact, and personalized insights."
+                    ) { showPaywall = true }
+                } else {
+                    ScrollView {
+                        VStack(spacing: 24) {
+                            Picker("Time Range", selection: $timeRange) {
+                                ForEach(TimeRange.allCases, id: \.self) { range in
+                                    Text(range.rawValue).tag(range)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            moodTrendChart
+                            anxietyTrendChart
+                            journalImpactChart
+                            panicSummary
+                            insightsSection
+                            Spacer().frame(height: 80)
                         }
+                        .padding(.horizontal, 20)
                     }
-                    .pickerStyle(.segmented)
-
-                    // Mood trend chart
-                    moodTrendChart
-
-                    // Anxiety trend chart
-                    anxietyTrendChart
-
-                    // Journal mood impact
-                    journalImpactChart
-
-                    // Panic events summary
-                    panicSummary
-
-                    // Insights
-                    insightsSection
-
-                    Spacer().frame(height: 80)
+                    .background(Color(hex: "080E1C"))
                 }
-                .padding(.horizontal, 20)
             }
-            .background(Color(.systemGroupedBackground))
             .navigationTitle("Progress")
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    calmName: "",
+                    onContinue: { showPaywall = false },
+                    onRestore: { showPaywall = false }
+                )
+                .environmentObject(revenueCat)
+            }
         }
     }
 
@@ -102,7 +110,7 @@ struct ProgressChartsView: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -144,7 +152,7 @@ struct ProgressChartsView: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -186,7 +194,7 @@ struct ProgressChartsView: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -217,7 +225,7 @@ struct ProgressChartsView: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 
@@ -254,7 +262,7 @@ struct ProgressChartsView: View {
             }
         }
         .padding(16)
-        .background(.white)
+        .background(.white.opacity(0.07))
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 

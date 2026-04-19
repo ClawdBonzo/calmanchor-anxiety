@@ -9,10 +9,10 @@ struct PlanInfo {
     let name: String
     let price: String
     let priceSuffix: String
-    let badge: String          // gold badge text
+    let badge: String
     let hasTrial: Bool
     let trialLabel: String
-    let savingsNote: String    // e.g. "Save 58%"
+    let savingsNote: String
 }
 
 // MARK: - PaywallView
@@ -28,14 +28,15 @@ struct PaywallView: View {
         self.onRestore = onRestore
     }
 
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var revenueCat: RevenueCatService
-    @State private var selectedIndex = 1          // default: Monthly
+    @State private var selectedIndex = 1
     @State private var isPurchasing = false
     @State private var errorMessage: String?
     @State private var headerAppeared = false
     @State private var contentAppeared = false
 
-    // MARK: Fallback plan data (used when RevenueCat products unavailable)
+    // MARK: Fallback plan data
     private let fallbackPlans: [PlanInfo] = [
         PlanInfo(packageType: .weekly,   productID: "com.clawdbonzo.calmanchor.weekly",
                  name: "Weekly",   price: "$4.99",  priceSuffix: "/wk",
@@ -55,7 +56,6 @@ struct PaywallView: View {
                  savingsNote: "Pay once, use forever")
     ]
 
-    // Sorted live packages from RevenueCat
     private var sortedPackages: [Package] {
         let order: [PackageType] = [.weekly, .monthly, .annual, .lifetime]
         return (revenueCat.currentOffering?.availablePackages ?? []).sorted {
@@ -63,77 +63,89 @@ struct PaywallView: View {
         }
     }
 
-    // Whether we're using live packages or fallback
     private var useLive: Bool { !sortedPackages.isEmpty }
 
-    private let features: [(String, String)] = [
-        ("brain.head.profile",       "30-Day Peace Plan"),
-        ("bolt.heart.fill",          "Instant Panic SOS"),
-        ("chart.line.uptrend.xyaxis","Anxiety Tracking"),
-        ("flame.fill",               "Healing Streaks")
+    private let features: [(icon: String, text: String)] = [
+        ("brain.head.profile",        "Personalized 30-Day Peace Plan"),
+        ("bolt.heart.fill",           "Instant Panic SOS & breathing tools"),
+        ("chart.line.uptrend.xyaxis", "Advanced mood & anxiety analytics"),
+        ("flame.fill",                "Healing streaks & daily journal")
     ]
 
     // MARK: - Body
 
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            // Dark background — always dark regardless of system appearance
+            LinearGradient(
+                colors: [Color(hex: "080E1C"), Color(hex: "0F1A2E"), Color(hex: "0D2B3F")],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
 
-            // ── COMPACT HEADER ───────────────────────────────────────────
-            compactHeader
-                .padding(.top, 16)
-                .padding(.bottom, 14)
-
-            // ── FEATURE CHIPS ────────────────────────────────────────────
-            featureChips
+            VStack(spacing: 0) {
+                // ── DISMISS (when presented as sheet) ───────────────
+                HStack {
+                    Spacer()
+                    Button(action: { dismiss(); onContinue() }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundStyle(.white.opacity(0.3))
+                    }
+                }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 10)
-                .opacity(contentAppeared ? 1 : 0)
-                .offset(y: contentAppeared ? 0 : 10)
-                .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.15), value: contentAppeared)
+                .padding(.top, 12)
 
-            // ── PLAN CARDS ───────────────────────────────────────────────
-            planCards
-                .padding(.horizontal, 20)
-                .opacity(contentAppeared ? 1 : 0)
-                .offset(y: contentAppeared ? 0 : 16)
-                .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.28), value: contentAppeared)
+                // ── HERO ────────────────────────────────────────────
+                heroSection
+                    .padding(.bottom, 20)
 
-            // ── ERROR ────────────────────────────────────────────────────
-            if let msg = errorMessage {
-                Text(msg)
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundStyle(AppConstants.Colors.gentleCoral)
-                    .multilineTextAlignment(.center)
+                // ── FEATURES ────────────────────────────────────────
+                featureRows
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 18)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .offset(y: contentAppeared ? 0 : 10)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.15), value: contentAppeared)
+
+                // ── PLAN CARDS ──────────────────────────────────────
+                planCards
                     .padding(.horizontal, 20)
-                    .padding(.top, 6)
-                    .transition(.opacity)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .offset(y: contentAppeared ? 0 : 16)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.28), value: contentAppeared)
+
+                // ── ERROR ───────────────────────────────────────────
+                if let msg = errorMessage {
+                    Text(msg)
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(AppConstants.Colors.gentleCoral)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 6)
+                        .transition(.opacity)
+                }
+
+                Spacer()
+
+                // ── CTA BUTTON ──────────────────────────────────────
+                ctaButton
+                    .padding(.horizontal, 20)
+                    .opacity(contentAppeared ? 1 : 0)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.4), value: contentAppeared)
+
+                // ── FOOTER ──────────────────────────────────────────
+                footerSection
+                    .padding(.bottom, 16)
             }
-
-            Spacer(minLength: 10)
-
-            // ── CTA BUTTON ───────────────────────────────────────────────
-            ctaButton
-                .padding(.horizontal, 20)
-                .opacity(contentAppeared ? 1 : 0)
-                .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.4), value: contentAppeared)
-
-            // ── FOOTER ───────────────────────────────────────────────────
-            footer
-
-            Text("Cancel anytime · Subscriptions auto-renew · Terms & Privacy apply.")
-                .font(.system(size: 10))
-                .foregroundStyle(.white.opacity(0.2))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 28)
-                .padding(.bottom, 14)
         }
+        .preferredColorScheme(.dark)
         .onAppear {
             headerAppeared = true
             Task { @MainActor in
                 try? await Task.sleep(for: .milliseconds(120))
                 contentAppeared = true
             }
-            // Default selection: prefer monthly (index 1)
             if useLive {
                 selectedIndex = sortedPackages.firstIndex(where: { $0.packageType == .monthly }) ?? 1
             } else {
@@ -142,98 +154,63 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Header
+    // MARK: - Hero
 
     @ViewBuilder
-    private var compactHeader: some View {
-        HStack(spacing: 14) {
-            // Compact circular image with glow
-            ZStack {
-                Circle()
-                    .fill(AppConstants.Colors.sereneTeal.opacity(0.18))
-                    .frame(width: 76, height: 76)
-                Circle()
-                    .fill(AppConstants.Colors.sereneTeal.opacity(0.08))
-                    .frame(width: 96, height: 96)
-                Image("Onboarding-5")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 64, height: 64)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(
-                                LinearGradient(
-                                    colors: [AppConstants.Colors.sereneTeal, AppConstants.Colors.sunsetGold.opacity(0.8)],
-                                    startPoint: .topLeading, endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 2
-                            )
-                    )
-                    .shadow(color: AppConstants.Colors.sereneTeal.opacity(0.6), radius: 12, y: 2)
-            }
-            .frame(width: 64, height: 64)
+    private var heroSection: some View {
+        VStack(spacing: 10) {
+            // Brand icon
+            Image("BrandIcon")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 80, height: 80)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .shadow(color: AppConstants.Colors.electricTeal.opacity(0.4), radius: 16, y: 4)
             .scaleEffect(headerAppeared ? 1.0 : 0.5)
             .opacity(headerAppeared ? 1 : 0)
             .animation(.spring(response: 0.65, dampingFraction: 0.68).delay(0.05), value: headerAppeared)
 
-            // Title stack
-            VStack(alignment: .leading, spacing: 3) {
-                Text("Unlock Your Calm")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
-
-                Text("Everything you need to heal, daily.")
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(AppConstants.Colors.softLavender)
-                    .lineLimit(1)
-
-                // Trust badge
-                HStack(spacing: 4) {
-                    Image(systemName: "lock.shield.fill")
-                        .font(.system(size: 10, weight: .semibold))
-                        .foregroundStyle(AppConstants.Colors.mintGreen)
-                    Text("Private · No ads · Cancel anytime")
-                        .font(.system(size: 10, weight: .medium, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.45))
-                }
-                .padding(.top, 1)
+            VStack(spacing: 2) {
+                Text("Unlock Your")
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppConstants.Colors.electricTeal)
+                Text("Full Calm")
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppConstants.Colors.sunsetGold)
             }
+            .multilineTextAlignment(.center)
             .opacity(headerAppeared ? 1 : 0)
-            .offset(x: headerAppeared ? 0 : -10)
             .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.12), value: headerAppeared)
-
-            Spacer()
         }
-        .padding(.horizontal, 20)
     }
 
-    // MARK: - Feature Chips
+    // MARK: - Feature Rows
 
     @ViewBuilder
-    private var featureChips: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 7) {
-            ForEach(features, id: \.0) { icon, text in
-                HStack(spacing: 7) {
-                    Image(systemName: icon)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(AppConstants.Colors.mintGreen)
-                        .frame(width: 16)
-                    Text(text)
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+    private var featureRows: some View {
+        VStack(spacing: 12) {
+            ForEach(features, id: \.icon) { feature in
+                HStack(spacing: 14) {
+                    // Icon in rounded rect
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.white.opacity(0.08))
+                            .frame(width: 38, height: 38)
+                        Image(systemName: feature.icon)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(AppConstants.Colors.electricTeal)
+                    }
+
+                    Text(feature.text)
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundStyle(.white.opacity(0.85))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+
                     Spacer()
+
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(AppConstants.Colors.electricTeal)
                 }
-                .padding(.horizontal, 10)
-                .padding(.vertical, 9)
-                .background(.white.opacity(0.06))
-                .clipShape(RoundedRectangle(cornerRadius: 9))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 9)
-                        .stroke(.white.opacity(0.08), lineWidth: 1)
-                )
             }
         }
     }
@@ -242,14 +219,15 @@ struct PaywallView: View {
 
     @ViewBuilder
     private var planCards: some View {
-        VStack(spacing: 7) {
+        VStack(spacing: 8) {
             if useLive {
                 ForEach(Array(sortedPackages.enumerated()), id: \.element.id) { i, pkg in
                     let info = liveInfo(for: pkg)
                     PremiumPlanCard(
                         index: i,
                         name: info.name,
-                        price: pkg.localizedPriceString + info.priceSuffix,
+                        price: pkg.localizedPriceString,
+                        priceSuffix: info.priceSuffix,
                         badge: info.badge,
                         hasTrial: info.hasTrial,
                         trialLabel: info.trialLabel,
@@ -264,7 +242,8 @@ struct PaywallView: View {
                     PremiumPlanCard(
                         index: i,
                         name: plan.name,
-                        price: plan.price + plan.priceSuffix,
+                        price: plan.price,
+                        priceSuffix: plan.priceSuffix,
                         badge: plan.badge,
                         hasTrial: plan.hasTrial,
                         trialLabel: plan.trialLabel,
@@ -287,28 +266,20 @@ struct PaywallView: View {
                 if isPurchasing {
                     ProgressView().tint(.white).scaleEffect(1.1)
                 } else {
-                    VStack(spacing: 2) {
+                    HStack(spacing: 8) {
                         Text(ctaTitle)
-                            .font(.system(size: 17, weight: .bold, design: .rounded))
-                        if let sub = ctaSubtitle {
-                            Text(sub)
-                                .font(.system(size: 11, weight: .medium, design: .rounded))
-                                .opacity(0.82)
-                        }
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 15, weight: .bold))
                     }
                 }
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(Color(hex: "0A1428"))
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(
-                LinearGradient(
-                    colors: [Color(hex: "4A90D9"), AppConstants.Colors.sereneTeal],
-                    startPoint: .leading, endPoint: .trailing
-                )
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 15))
-            .shadow(color: Color(hex: "4A90D9").opacity(0.5), radius: 14, y: 5)
+            .padding(.vertical, 18)
+            .background(AppConstants.Colors.electricTeal)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .shadow(color: AppConstants.Colors.electricTeal.opacity(0.4), radius: 16, y: 5)
         }
         .disabled(isPurchasing)
     }
@@ -316,23 +287,35 @@ struct PaywallView: View {
     // MARK: - Footer
 
     @ViewBuilder
-    private var footer: some View {
-        HStack(spacing: 0) {
-            Button("Restore Purchase") { Task { await restore() } }
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.38))
-                .frame(maxWidth: .infinity)
+    private var footerSection: some View {
+        VStack(spacing: 6) {
+            if let sub = ctaSubtitle {
+                Text(sub)
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.4))
+            }
 
-            Rectangle()
-                .fill(.white.opacity(0.18))
-                .frame(width: 1, height: 11)
+            HStack(spacing: 0) {
+                Button("Restore Purchase") { Task { await restore() } }
+                    .font(.system(size: 11, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.35))
+                    .frame(maxWidth: .infinity)
 
-            Button("Skip for now") { onContinue() }
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.38))
-                .frame(maxWidth: .infinity)
+                Text("·").foregroundStyle(.white.opacity(0.2))
+
+                Button("Terms") {}
+                    .font(.system(size: 11, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.35))
+                    .frame(maxWidth: .infinity)
+
+                Text("·").foregroundStyle(.white.opacity(0.2))
+
+                Button("Privacy") {}
+                    .font(.system(size: 11, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.35))
+                    .frame(maxWidth: .infinity)
+            }
         }
-        .padding(.vertical, 9)
     }
 
     // MARK: - Purchase Logic
@@ -374,7 +357,7 @@ struct PaywallView: View {
             : fallbackPlans[safe: selectedIndex]
 
         if let plan = selectedPlan {
-            if plan.hasTrial { return "Start 3-Day Free Trial" }
+            if plan.hasTrial { return "Start Free Trial" }
             if plan.packageType == .lifetime { return "Get Lifetime Access" }
         }
         return "Subscribe Now"
@@ -388,14 +371,13 @@ struct PaywallView: View {
         guard let plan = selectedPlan else { return nil }
 
         if plan.hasTrial {
-            // e.g. "Then $9.99/mo · Cancel anytime"
             let priceStr: String
             if useLive, let pkg = sortedPackages[safe: selectedIndex] {
-                priceStr = pkg.localizedPriceString + plan.priceSuffix
+                priceStr = pkg.localizedPriceString
             } else {
-                priceStr = plan.price + plan.priceSuffix
+                priceStr = plan.price
             }
-            return "Then \(priceStr) · Cancel anytime"
+            return "3-day free trial, then \(priceStr)\(plan.priceSuffix). Cancel anytime."
         }
         return nil
     }
@@ -408,24 +390,23 @@ struct PaywallView: View {
     }
 
     private func liveInfo(for pkg: Package) -> PlanInfo {
-        // Check RevenueCat introductory discount first, then fall back to hardcoded rules
         let rcHasTrial = pkg.storeProduct.introductoryDiscount != nil
-        let rcTrialDays = pkg.storeProduct.introductoryDiscount.map { "\($0.subscriptionPeriod.value)-Day Free Trial" }
+        let rcTrialDays = pkg.storeProduct.introductoryDiscount.map { "\($0.subscriptionPeriod.value)-day free trial" }
 
         switch pkg.packageType {
         case .weekly:
             return PlanInfo(packageType: .weekly, productID: "com.clawdbonzo.calmanchor.weekly",
                             name: "Weekly", price: pkg.localizedPriceString, priceSuffix: "/wk",
-                            badge: "Flexible", hasTrial: false, trialLabel: "",
+                            badge: "", hasTrial: false, trialLabel: "",
                             savingsNote: "")
         case .monthly:
-            let trial = rcHasTrial ? (rcTrialDays ?? "3-Day Free Trial") : "3-Day Free Trial"
+            let trial = rcHasTrial ? (rcTrialDays ?? "3-day free trial") : "3-day free trial"
             return PlanInfo(packageType: .monthly, productID: "com.clawdbonzo.calmanchor.monthly",
                             name: "Monthly", price: pkg.localizedPriceString, priceSuffix: "/mo",
                             badge: "BEST VALUE", hasTrial: true, trialLabel: trial,
                             savingsNote: "")
         case .annual:
-            let trial = rcHasTrial ? (rcTrialDays ?? "3-Day Free Trial") : "3-Day Free Trial"
+            let trial = rcHasTrial ? (rcTrialDays ?? "3-day free trial") : "3-day free trial"
             return PlanInfo(packageType: .annual, productID: "com.clawdbonzo.calmanchor.yearly",
                             name: "Yearly", price: pkg.localizedPriceString, priceSuffix: "/yr",
                             badge: "Save 58%", hasTrial: true, trialLabel: trial,
@@ -450,6 +431,7 @@ struct PremiumPlanCard: View {
     let index: Int
     let name: String
     let price: String
+    let priceSuffix: String
     let badge: String
     let hasTrial: Bool
     let trialLabel: String
@@ -458,26 +440,27 @@ struct PremiumPlanCard: View {
     let isSelected: Bool
     let action: () -> Void
 
-    // Best Value always glows teal; other selected cards glow blue
+    private var accentColor: Color {
+        if isBestValue { return AppConstants.Colors.sunsetGold }
+        return AppConstants.Colors.electricTeal
+    }
+
     private var borderColor: Color {
-        if isBestValue { return AppConstants.Colors.sereneTeal }
-        if isSelected  { return AppConstants.Colors.calmBlue }
+        if isBestValue && isSelected { return AppConstants.Colors.sunsetGold }
+        if isSelected { return AppConstants.Colors.electricTeal }
         return .white.opacity(0.1)
     }
-    private var borderWidth: CGFloat { (isBestValue || isSelected) ? 2 : 1 }
 
     private var cardBackground: Color {
-        if isBestValue && isSelected { return AppConstants.Colors.sereneTeal.opacity(0.18) }
-        if isBestValue               { return AppConstants.Colors.sereneTeal.opacity(0.10) }
-        if isSelected                { return AppConstants.Colors.calmBlue.opacity(0.18) }
-        return .white.opacity(0.05)
+        if isBestValue && isSelected { return AppConstants.Colors.sunsetGold.opacity(0.10) }
+        if isSelected { return AppConstants.Colors.electricTeal.opacity(0.08) }
+        return .white.opacity(0.04)
     }
 
     private var badgeColor: Color {
         switch badge {
         case "BEST VALUE":  return AppConstants.Colors.sunsetGold
         case "Save 58%":    return Color(hex: "E8A545")
-        case "Flexible":    return AppConstants.Colors.calmBlue.opacity(0.85)
         case "One-Time":    return AppConstants.Colors.softLavender.opacity(0.85)
         default:            return AppConstants.Colors.stormGray
         }
@@ -485,78 +468,71 @@ struct PremiumPlanCard: View {
 
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 10) {
-                // Selection indicator
-                ZStack {
-                    Circle()
-                        .fill(isSelected ? borderColor : .white.opacity(0.12))
-                        .frame(width: 22, height: 22)
-                    if isSelected {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-                .animation(.spring(response: 0.28, dampingFraction: 0.62), value: isSelected)
-
-                // Name + trial
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 6) {
+            HStack(spacing: 12) {
+                // Left: name + badge + trial
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 8) {
                         Text(name)
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
 
                         if !badge.isEmpty {
                             Text(badge)
                                 .font(.system(size: 9, weight: .black, design: .rounded))
                                 .foregroundStyle(.white)
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 2)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 3)
                                 .background(badgeColor)
                                 .clipShape(Capsule())
                         }
                     }
 
                     if hasTrial && !trialLabel.isEmpty {
-                        HStack(spacing: 3) {
+                        HStack(spacing: 4) {
                             Image(systemName: "gift.fill")
                                 .font(.system(size: 9, weight: .semibold))
                             Text(trialLabel)
-                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                                .font(.system(size: 11, weight: .semibold, design: .rounded))
                         }
                         .foregroundStyle(AppConstants.Colors.mintGreen)
                     } else if !savingsNote.isEmpty {
                         Text(savingsNote)
-                            .font(.system(size: 10, weight: .medium, design: .rounded))
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundStyle(.white.opacity(0.45))
                     }
                 }
 
                 Spacer()
 
-                // Price
-                Text(price)
-                    .font(.system(size: 14, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                // Right: price
+                VStack(alignment: .trailing, spacing: 1) {
+                    Text(price)
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundStyle(isBestValue && isSelected ? AppConstants.Colors.sunsetGold : .white)
+                    if !priceSuffix.isEmpty {
+                        Text(priceSuffix)
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.45))
+                    }
+                }
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, isBestValue ? 13 : 11)
+            .padding(.horizontal, 16)
+            .padding(.vertical, isBestValue ? 16 : 13)
             .background(cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(borderColor, lineWidth: borderWidth)
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(borderColor, lineWidth: isSelected || isBestValue ? 2 : 1)
             )
-            // Glow effect for best value / selected
             .shadow(
-                color: isBestValue ? AppConstants.Colors.sereneTeal.opacity(isSelected ? 0.35 : 0.18) : .clear,
-                radius: 8, y: 2
+                color: isBestValue && isSelected ? AppConstants.Colors.sunsetGold.opacity(0.25) : .clear,
+                radius: 10, y: 2
             )
-            .scaleEffect(isSelected ? 1.015 : 1.0)
+            .scaleEffect(isSelected ? 1.01 : 1.0)
             .animation(.spring(response: 0.28, dampingFraction: 0.65), value: isSelected)
         }
         .sensoryFeedback(.selection, trigger: isSelected)
-        .accessibilityLabel("\(name) plan, \(price)\(hasTrial ? ", \(trialLabel)" : "")\(isBestValue ? ", Best Value" : "")")
+        .accessibilityLabel("\(name) plan, \(price)\(priceSuffix)\(hasTrial ? ", \(trialLabel)" : "")\(isBestValue ? ", Best Value" : "")")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 }
@@ -567,24 +543,4 @@ private extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil
     }
-}
-
-// MARK: - Legacy stubs (compile compatibility)
-struct TransformCard: View {
-    let title: String; let items: [String]; let color: Color; let icon: String
-    var body: some View { EmptyView() }
-}
-struct PaywallFeatureRow: View {
-    let icon: String; let text: String
-    var body: some View { EmptyView() }
-}
-struct PlanCard: View {
-    let name: String; let price: String; let badge: String; let trial: String
-    let isSelected: Bool; let action: () -> Void
-    var body: some View { EmptyView() }
-}
-struct CompactPlanCard: View {
-    let name: String; let price: String; let badge: String; let trial: String
-    let isSelected: Bool; let action: () -> Void
-    var body: some View { EmptyView() }
 }

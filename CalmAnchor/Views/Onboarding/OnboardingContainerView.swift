@@ -56,6 +56,7 @@ struct OnboardingContainerView: View {
                 .tag(6)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
+            .scrollDismissesKeyboard(.immediately)
             .ignoresSafeArea()
 
             // Progress dots — visible only on steps 1–5

@@ -4,6 +4,7 @@ import SwiftData
 struct DashboardView: View {
     @Binding var showPanicMode: Bool
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var revenueCat: RevenueCatService
     @Query private var profiles: [UserProfile]
     @Query(sort: \MoodEntry.date, order: .reverse) private var moods: [MoodEntry]
     @Query(sort: \JournalEntry.date, order: .reverse) private var journals: [JournalEntry]
@@ -12,6 +13,7 @@ struct DashboardView: View {
     @State private var showQuickMood = false
     @State private var showJournal = false
     @State private var showCalmCard = false
+    @State private var showPaywall = false
     @State private var todayPrompt: String = AppConstants.journalPrompts.randomElement() ?? ""
     @State private var panicPulse = false
     @State private var streakGlow = false
@@ -35,27 +37,32 @@ struct DashboardView: View {
                         greetingSection
                             .padding(.top, 12)
                         panicButton
-                        stayedCalmCard
+                        if revenueCat.isPremium { stayedCalmCard }
                         todayMoodCard
-                        promptCard
-                        streakCard
-                        healingTasksCard
+                        if revenueCat.isPremium { promptCard }
+                        if revenueCat.isPremium { streakCard }
+                        if revenueCat.isPremium { healingTasksCard }
                         quickActionsRow
                     }
                     .padding(.horizontal, 20)
                     .padding(.bottom, 110)
                 }
             }
-            .toolbarBackground(Color(hex: "080E1C"), for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .navigationTitle("CalmAnchor")
+            .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showQuickMood) {
                 QuickMoodLogView()
                     .presentationDetents([.medium])
             }
             .sheet(isPresented: $showJournal) {
                 JournalEntryView()
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(
+                    calmName: profile?.calmName ?? "Friend",
+                    onContinue: { showPaywall = false },
+                    onRestore: { showPaywall = false }
+                )
+                .environmentObject(revenueCat)
             }
             .fullScreenCover(isPresented: $showCalmCard) {
                 ViralShareCardView(
@@ -431,7 +438,7 @@ struct DashboardView: View {
                 showPanicMode = true
             }
             PremiumQuickAction(title: "Journal", icon: "book.fill", color: AppConstants.Colors.calmBlue) {
-                showJournal = true
+                if revenueCat.isPremium { showJournal = true } else { showPaywall = true }
             }
             PremiumQuickAction(title: "Mood", icon: "face.smiling", color: AppConstants.Colors.sunsetGold) {
                 showQuickMood = true

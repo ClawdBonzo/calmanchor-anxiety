@@ -88,7 +88,7 @@ struct NameInputView: View {
             Spacer()
 
             // CTA
-            Button(action: onNext) {
+            Button(action: { isFocused = false; onNext() }) {
                 HStack(spacing: 8) {
                     Text(calmName.trimmingCharacters(in: .whitespaces).isEmpty
                          ? "Continue as Friend"
@@ -115,6 +115,7 @@ struct NameInputView: View {
             .opacity(appeared ? 1 : 0)
             .animation(.spring(response: 0.6, dampingFraction: 0.75).delay(0.4), value: appeared)
         }
+        .onTapGesture { isFocused = false }
         .onAppear {
             appeared = true
             if !reduceMotion { pulseScale = 1.05 }
@@ -123,5 +124,6 @@ struct NameInputView: View {
                 isFocused = true
             }
         }
+        .onDisappear { isFocused = false }
     }
 }
