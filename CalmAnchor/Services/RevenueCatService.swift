@@ -5,7 +5,7 @@ import RevenueCat
 final class RevenueCatService: NSObject, ObservableObject {
     static let shared = RevenueCatService()
 
-    static let apiKey = "appl_AGsFPBLcaFBhjTQueWPvKdIhDMj"
+    static let apiKey = "appl_VMiYhGiOrGYXvqiXCXOLPeIRumH"
     static let entitlementID = "CalmAnchor Pro"
 
     @Published var isPremium = false
