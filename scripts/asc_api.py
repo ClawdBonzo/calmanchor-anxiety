@@ -104,10 +104,6 @@ def push_metadata(tok, dry):
     ver = editable_version(tok); vid = ver["id"]
     print(f"editable version {ver['attributes']['versionString']} ({ver['attributes']['appStoreState']})")
     info = app_info(tok); iid = info["id"]
-    ver_locs = {l["attributes"]["locale"]: l["id"]
-                for l in get_all(f"/v1/appStoreVersions/{vid}/appStoreVersionLocalizations", tok)}
-    info_locs = {l["attributes"]["locale"]: l["id"]
-                 for l in get_all(f"/v1/appInfos/{iid}/appInfoLocalizations", tok)}
     for loc in SCREENSHOT_DIRS:
         m = read_meta(loc)
         if not m:
@@ -115,6 +111,12 @@ def push_metadata(tok, dry):
         print(f"[{loc}] {m['name']!r} / {m['subtitle']!r}")
         if dry:
             continue
+        # refetch per-locale: creating an appInfoLocalization auto-creates the
+        # matching appStoreVersionLocalization, so cached maps go stale.
+        ver_locs = {l["attributes"]["locale"]: l["id"]
+                    for l in get_all(f"/v1/appStoreVersions/{vid}/appStoreVersionLocalizations", tok)}
+        info_locs = {l["attributes"]["locale"]: l["id"]
+                     for l in get_all(f"/v1/appInfos/{iid}/appInfoLocalizations", tok)}
         # --- app info localization (name + subtitle) ---
         ia = {"name": m["name"], "subtitle": m["subtitle"]}
         if loc in info_locs:
@@ -125,6 +127,9 @@ def push_metadata(tok, dry):
                 "type": "appInfoLocalizations", "attributes": {**ia, "locale": loc},
                 "relationships": {"appInfo": {"data": {"type": "appInfos", "id": iid}}}}})
         # --- version localization (description, keywords, promo) ---
+        # refetch: the appInfo create above may have auto-created this locale
+        ver_locs = {l["attributes"]["locale"]: l["id"]
+                    for l in get_all(f"/v1/appStoreVersions/{vid}/appStoreVersionLocalizations", tok)}
         va = {"description": m["description"], "keywords": m["keywords"],
               "promotionalText": m["promotionalText"]}
         if loc in ver_locs:
