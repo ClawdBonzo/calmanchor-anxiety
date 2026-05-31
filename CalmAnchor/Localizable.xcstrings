@@ -4219,6 +4219,34 @@
         }
       }
     },
+    "Journaling": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journaling"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tagebuch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journal"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ジャーナリング"
+          }
+        }
+      }
+    },
     "Journaling Impact": {
       "localizations": {
         "de": {
@@ -4865,6 +4893,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "ふくらはぎ、太もも、お腹へ移ります"
+          }
+        }
+      }
+    },
+    "Movement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movement"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewegung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mouvement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "運動"
           }
         }
       }

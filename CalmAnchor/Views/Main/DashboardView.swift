@@ -537,7 +537,7 @@ struct HealingTaskRow: View {
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .strikethrough(task.isCompleted)
                     .foregroundStyle(task.isCompleted ? .white.opacity(0.35) : .white.opacity(0.88))
-                Text("\(task.durationMinutes) min · \(task.category.capitalized)")
+                Text("\(task.durationMinutes) min · \(String(localized: String.LocalizationValue(task.category.capitalized)))")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.35))
             }
