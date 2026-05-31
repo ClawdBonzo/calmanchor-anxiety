@@ -5,11 +5,8 @@ import RevenueCat
 final class RevenueCatService: NSObject, ObservableObject {
     static let shared = RevenueCatService()
 
-    // TODO: Replace with live appl_... key before App Store submission.
-    // Generate it at app.revenuecat.com → Project Settings → API Keys.
-    // Do NOT ship the test key (test_AFpuFmRxwiYCSJV0rgzxFqKjZDa) to production.
-    static let apiKey = "appl_REPLACE_WITH_YOUR_LIVE_KEY"
-    static let entitlementID = "pro"
+    static let apiKey = "appl_AGsFPBLcaFBhjTQueWPvKdIhDMj"
+    static let entitlementID = "CalmAnchor Pro"
 
     @Published var isPremium = false
     @Published var offerings: Offerings?

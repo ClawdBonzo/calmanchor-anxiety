@@ -38,19 +38,19 @@ struct PaywallView: View {
 
     // MARK: Fallback plan data
     private let fallbackPlans: [PlanInfo] = [
-        PlanInfo(packageType: .weekly,   productID: "com.clawdbonzo.calmanchor.weekly",
+        PlanInfo(packageType: .weekly,   productID: "calm_weekly",
                  name: "Weekly",   price: "$4.99",  priceSuffix: "/wk",
                  badge: "",          hasTrial: false, trialLabel: "",
                  savingsNote: ""),
-        PlanInfo(packageType: .monthly,  productID: "com.clawdbonzo.calmanchor.monthly",
+        PlanInfo(packageType: .monthly,  productID: "calm_monthly",
                  name: "Monthly",  price: "$9.99",  priceSuffix: "/mo",
                  badge: "BEST VALUE", hasTrial: true,  trialLabel: "3-Day Free Trial",
                  savingsNote: ""),
-        PlanInfo(packageType: .annual,   productID: "com.clawdbonzo.calmanchor.yearly",
+        PlanInfo(packageType: .annual,   productID: "calm_yearly",
                  name: "Yearly",   price: "$49.99", priceSuffix: "/yr",
                  badge: "Save 58%",  hasTrial: true,  trialLabel: "3-Day Free Trial",
                  savingsNote: "Save 58% vs monthly"),
-        PlanInfo(packageType: .lifetime, productID: "com.clawdbonzo.calmanchor.lifetime",
+        PlanInfo(packageType: .lifetime, productID: "calm_lifetime",
                  name: "Lifetime", price: "$79.99", priceSuffix: "",
                  badge: "One-Time",  hasTrial: false, trialLabel: "",
                  savingsNote: "Pay once, use forever")
@@ -395,24 +395,24 @@ struct PaywallView: View {
 
         switch pkg.packageType {
         case .weekly:
-            return PlanInfo(packageType: .weekly, productID: "com.clawdbonzo.calmanchor.weekly",
+            return PlanInfo(packageType: .weekly, productID: "calm_weekly",
                             name: "Weekly", price: pkg.localizedPriceString, priceSuffix: "/wk",
                             badge: "", hasTrial: false, trialLabel: "",
                             savingsNote: "")
         case .monthly:
             let trial = rcHasTrial ? (rcTrialDays ?? "3-day free trial") : "3-day free trial"
-            return PlanInfo(packageType: .monthly, productID: "com.clawdbonzo.calmanchor.monthly",
+            return PlanInfo(packageType: .monthly, productID: "calm_monthly",
                             name: "Monthly", price: pkg.localizedPriceString, priceSuffix: "/mo",
                             badge: "BEST VALUE", hasTrial: true, trialLabel: trial,
                             savingsNote: "")
         case .annual:
             let trial = rcHasTrial ? (rcTrialDays ?? "3-day free trial") : "3-day free trial"
-            return PlanInfo(packageType: .annual, productID: "com.clawdbonzo.calmanchor.yearly",
+            return PlanInfo(packageType: .annual, productID: "calm_yearly",
                             name: "Yearly", price: pkg.localizedPriceString, priceSuffix: "/yr",
                             badge: "Save 58%", hasTrial: true, trialLabel: trial,
                             savingsNote: "vs $119.88/yr billed monthly")
         case .lifetime:
-            return PlanInfo(packageType: .lifetime, productID: "com.clawdbonzo.calmanchor.lifetime",
+            return PlanInfo(packageType: .lifetime, productID: "calm_lifetime",
                             name: "Lifetime", price: pkg.localizedPriceString, priceSuffix: "",
                             badge: "One-Time", hasTrial: false, trialLabel: "",
                             savingsNote: "Pay once, use forever")

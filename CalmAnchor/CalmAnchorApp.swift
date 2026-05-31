@@ -33,7 +33,21 @@ struct CalmAnchorApp: App {
                 .environmentObject(revenueCat)
                 .preferredColorScheme(.dark)
                 .onAppear {
+                    #if DEBUG
+                    if DemoSeeder.shouldSeed {
+                        DemoSeeder.seed(into: sharedModelContainer.mainContext)
+                        hasCompletedOnboarding = true
+                    }
+                    if DemoSeeder.forcePremium {
+                        // Force entitlement for screenshot capture and skip RC
+                        // configure() so its async status check can't reset it.
+                        revenueCat.isPremium = true
+                    } else {
+                        revenueCat.configure()
+                    }
+                    #else
                     revenueCat.configure()
+                    #endif
                 }
         }
     }
