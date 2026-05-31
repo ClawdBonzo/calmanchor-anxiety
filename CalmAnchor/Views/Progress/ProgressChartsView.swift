@@ -284,7 +284,7 @@ struct ProgressChartsView: View {
 }
 
 struct PanicStat: View {
-    let label: String
+    let label: LocalizedStringKey
     let value: String
     let icon: String
 

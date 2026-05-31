@@ -178,7 +178,7 @@ struct StreakCalendarView: View {
 
 struct StreakBadge: View {
     let value: Int
-    let label: String
+    let label: LocalizedStringKey
     let icon: String
     let color: Color
 

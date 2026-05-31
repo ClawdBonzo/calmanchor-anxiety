@@ -307,7 +307,7 @@ struct DashboardView: View {
                         VStack(spacing: 5) {
                             Text(moodEmoji(mood.moodLevel))
                                 .font(.system(size: 28))
-                            Text(mood.timeOfDay.capitalized)
+                            Text(LocalizedStringKey(mood.timeOfDay.capitalized))
                                 .font(.system(size: 10, weight: .medium, design: .rounded))
                                 .foregroundStyle(.white.opacity(0.45))
                         }
@@ -333,7 +333,7 @@ struct DashboardView: View {
                     .foregroundStyle(.white)
             }
 
-            Text(todayPrompt)
+            Text(LocalizedStringKey(todayPrompt))
                 .font(.system(size: 14, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.55))
                 .italic()
@@ -451,10 +451,10 @@ struct DashboardView: View {
     private var greetingText: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
-        case 5..<12: return "Good morning"
-        case 12..<17: return "Good afternoon"
-        case 17..<21: return "Good evening"
-        default: return "Good night"
+        case 5..<12: return String(localized: "Good morning")
+        case 12..<17: return String(localized: "Good afternoon")
+        case 17..<21: return String(localized: "Good evening")
+        default: return String(localized: "Good night")
         }
     }
 
@@ -468,7 +468,7 @@ struct DashboardView: View {
 
 struct PremiumStatItem: View {
     let value: String
-    let label: String
+    let label: LocalizedStringKey
     let icon: String
     let color: Color
 
@@ -575,7 +575,7 @@ struct HealingTaskRow: View {
 // MARK: - Legacy structs kept for compile compatibility
 
 struct StreakStatItem: View {
-    let value: String; let label: String; let icon: String; let color: Color
+    let value: String; let label: LocalizedStringKey; let icon: String; let color: Color
     var body: some View {
         VStack(spacing: 6) {
             Image(systemName: icon).font(.system(size: 20)).foregroundStyle(color)

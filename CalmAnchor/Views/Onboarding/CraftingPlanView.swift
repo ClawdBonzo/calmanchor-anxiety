@@ -158,7 +158,7 @@ struct CraftingPlanView: View {
 }
 
 struct ProgressBarRow: View {
-    let label: String
+    let label: LocalizedStringKey
     let progress: CGFloat
     let icon: String
 
