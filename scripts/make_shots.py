@@ -182,6 +182,9 @@ if __name__ == "__main__":
     p.add_argument("--desc", required=True); p.add_argument("--shot", required=True)
     p.add_argument("--out", required=True)
     p.add_argument("--breakout", help="y0,y1 fractions e.g. 0.40,0.56")
+    p.add_argument("--font", help="override headline font path (e.g. CJK font)")
     a = p.parse_args()
+    if a.font:
+        globals()["FONT"] = a.font
     bo = tuple(float(x) for x in a.breakout.split(",")) if a.breakout else None
     compose(a.bg, a.verb, a.desc, a.shot, a.out, bo)
