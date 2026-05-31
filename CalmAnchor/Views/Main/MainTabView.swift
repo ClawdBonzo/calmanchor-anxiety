@@ -1,8 +1,27 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @State private var selectedTab = 0
-    @State private var showPanicMode = false
+    @State private var selectedTab = MainTabView.initialTab
+    @State private var showPanicMode = MainTabView.initialPanic
+
+    // DEBUG-only: allow screenshot capture to jump to a specific tab / panic screen
+    // via launch args -demoTab <0-4> and -demoPanic. No effect in Release.
+    private static var initialTab: Int {
+        #if DEBUG
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "-demoTab"), i + 1 < args.count, let t = Int(args[i + 1]) {
+            return t
+        }
+        #endif
+        return 0
+    }
+    private static var initialPanic: Bool {
+        #if DEBUG
+        return ProcessInfo.processInfo.arguments.contains("-demoPanic")
+        #else
+        return false
+        #endif
+    }
 
     var body: some View {
         ZStack {
