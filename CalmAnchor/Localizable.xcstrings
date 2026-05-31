@@ -180,6 +180,62 @@
         }
       }
     },
+    "4 counts in, hold, out, hold": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 counts in, hold, out, hold"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 ein, halten, aus, halten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4 temps inspirez, retenez, expirez, retenez"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4秒吸って、止めて、吐いて、止める"
+          }
+        }
+      }
+    },
+    "4-7-8 Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-7-8 Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-7-8-Atmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration 4-7-8"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-7-8呼吸法"
+          }
+        }
+      }
+    },
     "5-4-3-2-1 Grounding": {
       "localizations": {
         "de": {
@@ -202,6 +258,62 @@
         }
       }
     },
+    "988 Suicide & Crisis Lifeline: Call or text 988": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "988 Suicide & Crisis Lifeline: Call or text 988"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TelefonSeelsorge: 0800 111 0 111 oder 0800 111 0 222 (kostenlos, 24/7)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3114 — Numéro national de prévention du suicide (24h/24, gratuit)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いのちの電話：0570-783-556（ナビダイヤル・24時間）"
+          }
+        }
+      }
+    },
+    "A natural tranquilizer for the nervous system": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A natural tranquilizer for the nervous system"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein natürliches Beruhigungsmittel für das Nervensystem"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un tranquillisant naturel pour le système nerveux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "神経系のための自然な鎮静法"
+          }
+        }
+      }
+    },
     "About": {
       "localizations": {
         "de": {
@@ -220,6 +332,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "アプリについて"
+          }
+        }
+      }
+    },
+    "Acknowledge your healing journey progress": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acknowledge your healing journey progress"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Würdige die Fortschritte auf deinem Heilungsweg"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reconnaissez les progrès de votre guérison"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回復の歩みの進歩を認めます"
+          }
+        }
+      }
+    },
+    "Activate the dive reflex to calm your nervous system": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activate the dive reflex to calm your nervous system"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiviere den Tauchreflex, um dein Nervensystem zu beruhigen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activez le réflexe de plongée pour calmer le système nerveux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "潜水反射を使って神経系を落ち着かせます"
+          }
+        }
+      }
+    },
+    "Affirmation Practice": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affirmation Practice"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affirmations-Übung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pratique d'affirmation"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アファメーション練習"
           }
         }
       }
@@ -296,6 +492,34 @@
         }
       }
     },
+    "All": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tout"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべて"
+          }
+        }
+      }
+    },
     "All data stored locally on device": {
       "localizations": {
         "de": {
@@ -314,6 +538,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "すべてのデータは端末内にローカル保存されます"
+          }
+        }
+      }
+    },
+    "Alternatively, hold ice cubes in your hands": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alternatively, hold ice cubes in your hands"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alternativ halte Eiswürfel in den Händen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sinon, tenez des glaçons dans vos mains"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "代わりに、氷を手に握っても構いません"
+          }
+        }
+      }
+    },
+    "Anchor Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anchor Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anker-Atmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration d'ancrage"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アンカー呼吸"
           }
         }
       }
@@ -340,6 +620,34 @@
         }
       }
     },
+    "Anchor yourself in the present moment using your senses": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anchor yourself in the present moment using your senses"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verankere dich mit deinen Sinnen im gegenwärtigen Moment"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancrez-vous dans le présent grâce à vos sens"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "五感を使って今この瞬間に錨を下ろします"
+          }
+        }
+      }
+    },
     "Anxiety": {
       "localizations": {
         "de": {
@@ -358,6 +666,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "不安"
+          }
+        }
+      }
+    },
+    "Anxiety Exposure": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anxiety Exposure"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Angst-Exposition"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exposition à l'anxiété"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不安エクスポージャー"
           }
         }
       }
@@ -650,6 +986,90 @@
         }
       }
     },
+    "Body Scan": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body Scan"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body-Scan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Scan corporel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボディスキャン"
+          }
+        }
+      }
+    },
+    "Body Scan Meditation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body Scan Meditation"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Body-Scan-Meditation"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Méditation du scan corporel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボディスキャン瞑想"
+          }
+        }
+      }
+    },
+    "Box Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Box Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Box-Atmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration carrée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボックス呼吸"
+          }
+        }
+      }
+    },
     "Breath %lld of 6": {
       "localizations": {
         "de": {
@@ -668,6 +1088,174 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 回目／全6回"
+          }
+        }
+      }
+    },
+    "Breath Counting": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breath Counting"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atemzählen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comptage des respirations"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "呼吸を数える"
+          }
+        }
+      }
+    },
+    "Breathe In": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathe In"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einatmen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspirez"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "吸って"
+          }
+        }
+      }
+    },
+    "Breathe In...": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathe In..."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einatmen …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspirez…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "吸って…"
+          }
+        }
+      }
+    },
+    "Breathe Out...": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathe Out..."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausatmen …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expirez…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "吐いて…"
+          }
+        }
+      }
+    },
+    "Breathe into areas of tension and release": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathe into areas of tension and release"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme in verspannte Bereiche hinein und lass los"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respirez vers les zones de tension et relâchez"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊張した部分へ息を送り、緩めます"
+          }
+        }
+      }
+    },
+    "Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "呼吸"
           }
         }
       }
@@ -722,6 +1310,34 @@
         }
       }
     },
+    "CBT Tools": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CBT Tools"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "KVT-Werkzeuge"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outils TCC"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "認知行動療法ツール"
+          }
+        }
+      }
+    },
     "CalmAnchor": {},
     "Cancel": {
       "localizations": {
@@ -741,6 +1357,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "キャンセル"
+          }
+        }
+      }
+    },
+    "Celebration": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Celebration"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feiern"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Célébration"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お祝い"
+          }
+        }
+      }
+    },
+    "Challenge anxious thoughts with evidence": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Challenge anxious thoughts with evidence"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinterfrage ängstliche Gedanken mit Belegen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remettez en question les pensées anxieuses avec des faits"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "証拠をもとに不安な考えを見直します"
           }
         }
       }
@@ -807,6 +1479,118 @@
           "stringUnit": {
             "state": "translated",
             "value": "パニックサポートを閉じる"
+          }
+        }
+      }
+    },
+    "Close your mouth and inhale through your nose for 4 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close your mouth and inhale through your nose for 4 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließe den Mund und atme 4 Sekunden durch die Nase ein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fermez la bouche et inspirez par le nez pendant 4 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "口を閉じ、鼻から4秒かけて吸います"
+          }
+        }
+      }
+    },
+    "Cognitive Defusion": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cognitive Defusion"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kognitive Defusion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Défusion cognitive"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "認知的脱フュージョン"
+          }
+        }
+      }
+    },
+    "Cold Exposure": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cold Exposure"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kältereiz"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exposition au froid"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "冷たさへの刺激"
+          }
+        }
+      }
+    },
+    "Cold Water Technique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cold Water Technique"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaltwasser-Technik"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Technique de l'eau froide"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "冷水テクニック"
           }
         }
       }
@@ -899,6 +1683,62 @@
         }
       }
     },
+    "Continue through chest, arms, hands": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue through chest, arms, hands"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mache weiter mit Brust, Armen, Händen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuez avec la poitrine, les bras, les mains"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "胸、腕、手へと続けます"
+          }
+        }
+      }
+    },
+    "Continue to Affirmations": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue to Affirmations"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiter zu den Affirmationen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passer aux affirmations"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アファメーションへ進む"
+          }
+        }
+      }
+    },
     "Coping Techniques Library": {
       "localizations": {
         "de": {
@@ -943,6 +1783,34 @@
         }
       }
     },
+    "Count breaths to 10, then restart": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Count breaths to 10, then restart"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zähle Atemzüge bis 10 und beginne neu"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comptez les respirations jusqu'à 10, puis recommencez"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "呼吸を10まで数え、また始めます"
+          }
+        }
+      }
+    },
     "Crafting your personalized\nPeace Plan%@…": {
       "localizations": {
         "de": {
@@ -965,6 +1833,118 @@
         }
       }
     },
+    "Create a balanced alternative thought": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a balanced alternative thought"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formuliere einen ausgewogenen Alternativgedanken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formulez une pensée alternative équilibrée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バランスのとれた別の考えをつくります"
+          }
+        }
+      }
+    },
+    "Create a calming bedtime routine": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a calming bedtime routine"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schaffe eine beruhigende Abendroutine"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créez un rituel de coucher apaisant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "落ち着く就寝前の習慣をつくります"
+          }
+        }
+      }
+    },
+    "Create distance between you and anxious thoughts": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create distance between you and anxious thoughts"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schaffe Abstand zwischen dir und ängstlichen Gedanken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Créez de la distance entre vous et les pensées anxieuses"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不安な考えと自分のあいだに距離をつくります"
+          }
+        }
+      }
+    },
+    "Crisis": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisis"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krise"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crise"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊急時"
+          }
+        }
+      }
+    },
     "Crisis Hotline: 988": {
       "localizations": {
         "de": {
@@ -983,6 +1963,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "いのちの電話：0570-783-556"
+          }
+        }
+      }
+    },
+    "Crisis Resources": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisis Resources"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krisen-Hilfen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ressources de crise"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊急時のリソース"
+          }
+        }
+      }
+    },
+    "Crisis Text Line: Text HOME to 741741": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crisis Text Line: Text HOME to 741741"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "krisenchat: kostenloser Chat unter krisenchat.de"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SOS Amitié : 09 72 39 40 50 (24h/24)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よりそいホットライン：0120-279-338（24時間・通話無料）"
+          }
+        }
+      }
+    },
+    "Crowds / Spaces": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crowds / Spaces"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menschenmengen / Räume"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Foules / Espaces"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人混み・空間"
           }
         }
       }
@@ -1081,6 +2145,34 @@
         }
       }
     },
+    "Dance or move freely to release energy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dance or move freely to release energy"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanze oder bewege dich frei, um Energie freizusetzen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dansez ou bougez librement pour libérer l'énergie"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "踊ったり自由に動いてエネルギーを発散します"
+          }
+        }
+      }
+    },
     "Data & Privacy": {
       "localizations": {
         "de": {
@@ -1143,6 +2235,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 日連続"
+          }
+        }
+      }
+    },
+    "Deep Belly Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deep Belly Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiefe Bauchatmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration abdominale profonde"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深い腹式呼吸"
           }
         }
       }
@@ -1231,6 +2351,62 @@
         }
       }
     },
+    "Designate time to address worries, then let go": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Designate time to address worries, then let go"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plane Zeit für Sorgen ein und lass dann los"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réservez un temps pour vos soucis, puis lâchez prise"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心配する時間を決め、その後手放します"
+          }
+        }
+      }
+    },
+    "Diaphragmatic breathing for calm": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diaphragmatic breathing for calm"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwerchfellatmung für Ruhe"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration diaphragmatique pour le calme"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "落ち着くための横隔膜呼吸"
+          }
+        }
+      }
+    },
     "Done": {
       "localizations": {
         "de": {
@@ -1249,6 +2425,146 @@
           "stringUnit": {
             "state": "translated",
             "value": "完了"
+          }
+        }
+      }
+    },
+    "Each breath brings me closer to calm.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each breath brings me closer to calm."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeder Atemzug bringt mich der Ruhe näher."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chaque respiration me rapproche du calme."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ひと呼吸ごとに、落ち着きへ近づきます。"
+          }
+        }
+      }
+    },
+    "Eat one meal with full attention": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eat one meal with full attention"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Iss eine Mahlzeit mit voller Aufmerksamkeit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mangez un repas en pleine conscience"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一食を完全に集中して食べます"
+          }
+        }
+      }
+    },
+    "Emergency: 911": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emergency: 911"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notruf: 112"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urgences : 112 (ou 15)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊急時：119（救急）／110（警察）"
+          }
+        }
+      }
+    },
+    "Engage all five senses to ground yourself": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engage all five senses to ground yourself"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutze alle fünf Sinne zur Erdung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobilisez vos cinq sens pour vous ancrer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "五感をすべて使って自分を落ち着かせます"
+          }
+        }
+      }
+    },
+    "Engage comforting textures, scents, sounds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engage comforting textures, scents, sounds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutze beruhigende Texturen, Düfte und Klänge"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mobilisez des textures, odeurs et sons réconfortants"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心地よい手触り・香り・音に触れます"
           }
         }
       }
@@ -1303,6 +2619,34 @@
         }
       }
     },
+    "Evening Reflection": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Evening Reflection"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abendliche Reflexion"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réflexion du soir"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "夜のふり返り"
+          }
+        }
+      }
+    },
     "Events": {
       "localizations": {
         "en": {
@@ -1331,6 +2675,202 @@
         }
       }
     },
+    "Exhale completely through your mouth": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exhale completely through your mouth"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme vollständig durch den Mund aus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expirez complètement par la bouche"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "口から完全に息を吐き切ります"
+          }
+        }
+      }
+    },
+    "Exhale completely through your mouth for 8 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exhale completely through your mouth for 8 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme 8 Sekunden lang vollständig durch den Mund aus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expirez complètement par la bouche pendant 8 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "口から8秒かけて完全に吐きます"
+          }
+        }
+      }
+    },
+    "Exhale slowly for 4 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exhale slowly for 4 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme 4 Sekunden lang langsam aus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expirez lentement pendant 4 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4秒かけてゆっくり吐きます"
+          }
+        }
+      }
+    },
+    "Fill a bowl with cold water and ice": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill a bowl with cold water and ice"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fülle eine Schüssel mit kaltem Wasser und Eis"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remplissez un bol d'eau froide et de glace"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ボウルに冷水と氷を入れます"
+          }
+        }
+      }
+    },
+    "Financial Concerns": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Financial Concerns"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finanzielle Sorgen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soucis financiers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お金の心配"
+          }
+        }
+      }
+    },
+    "Finish with shoulders, neck, face": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finish with shoulders, neck, face"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließe mit Schultern, Nacken, Gesicht ab"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminez par les épaules, le cou, le visage"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "肩、首、顔で締めくくります"
+          }
+        }
+      }
+    },
+    "Focus on breath as your anchor": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Focus on breath as your anchor"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konzentriere dich auf den Atem als deinen Anker"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Concentrez-vous sur la respiration, votre ancre"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "呼吸を錨として意識を向けます"
+          }
+        }
+      }
+    },
     "Free": {
       "localizations": {
         "de": {
@@ -1353,6 +2893,34 @@
         }
       }
     },
+    "Free Movement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free Movement"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freie Bewegung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mouvement libre"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自由な動き"
+          }
+        }
+      }
+    },
     "Full Calm": {
       "localizations": {
         "de": {
@@ -1371,6 +2939,62 @@
           "stringUnit": {
             "state": "translated",
             "value": "完全な落ち着き"
+          }
+        }
+      }
+    },
+    "Gentle Stretching": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gentle Stretching"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sanftes Dehnen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Étirements doux"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "やさしいストレッチ"
+          }
+        }
+      }
+    },
+    "Gently face a small fear with support": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gently face a small fear with support"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stelle dich behutsam einer kleinen Angst – mit Unterstützung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Affrontez doucement une petite peur, avec du soutien"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支えのもと、小さな恐れにそっと向き合います"
           }
         }
       }
@@ -1531,6 +3155,62 @@
         }
       }
     },
+    "Gratitude Check-in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gratitude Check-in"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dankbarkeits-Check"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point gratitude"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "感謝のチェックイン"
+          }
+        }
+      }
+    },
+    "Grounding": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grounding"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erdung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ancrage"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "グラウンディング"
+          }
+        }
+      }
+    },
     "Healing Plan": {
       "localizations": {
         "de": {
@@ -1575,6 +3255,34 @@
         }
       }
     },
+    "Health Worries": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Health Worries"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesundheitssorgen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inquiétudes de santé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "健康の不安"
+          }
+        }
+      }
+    },
     "Hey, %@": {
       "localizations": {
         "de": {
@@ -1593,6 +3301,118 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ さん、こんにちは"
+          }
+        }
+      }
+    },
+    "Hold again for 4 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold again for 4 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte erneut 4 Sekunden lang an"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retenez à nouveau pendant 4 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "もう一度4秒止めます"
+          }
+        }
+      }
+    },
+    "Hold your breath for 4 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold your breath for 4 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte den Atem 4 Sekunden lang an"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retenez votre souffle pendant 4 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4秒間、息を止めます"
+          }
+        }
+      }
+    },
+    "Hold your breath for 7 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold your breath for 7 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte den Atem 7 Sekunden lang an"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retenez votre souffle pendant 7 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "7秒間、息を止めます"
+          }
+        }
+      }
+    },
+    "Hold...": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hold..."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halten …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retenez…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "止めて…"
           }
         }
       }
@@ -1713,6 +3533,34 @@
         }
       }
     },
+    "I Feel Calmer Now": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I Feel Calmer Now"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich fühle mich jetzt ruhiger"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je me sens plus calme"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "落ち着いてきました"
+          }
+        }
+      }
+    },
     "I Stayed Calm Today": {
       "localizations": {
         "de": {
@@ -1757,6 +3605,370 @@
         }
       }
     },
+    "I am anchored in the present moment.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am anchored in the present moment."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich bin im gegenwärtigen Moment verankert."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je suis ancré dans le moment présent."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私は今この瞬間に錨を下ろしています。"
+          }
+        }
+      }
+    },
+    "I am building resilience with every breath.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am building resilience with every breath."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mit jedem Atemzug baue ich Widerstandskraft auf."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je développe ma résilience à chaque respiration."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ひと呼吸ごとに、回復する力を育てています。"
+          }
+        }
+      }
+    },
+    "I am learning to befriend my nervous system.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am learning to befriend my nervous system."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich lerne, mich mit meinem Nervensystem anzufreunden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J'apprends à apprivoiser mon système nerveux."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分の神経系と仲良くなることを学んでいます。"
+          }
+        }
+      }
+    },
+    "I am not my anxious thoughts.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am not my anxious thoughts."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich bin nicht meine ängstlichen Gedanken."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je ne suis pas mes pensées anxieuses."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私は、不安な考えそのものではありません。"
+          }
+        }
+      }
+    },
+    "I am safe in this moment.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am safe in this moment."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich bin in diesem Moment sicher."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je suis en sécurité en cet instant."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私は今、安全です。"
+          }
+        }
+      }
+    },
+    "I am stronger than my anxiety.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am stronger than my anxiety."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich bin stärker als meine Angst."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je suis plus fort que mon anxiété."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私は不安よりも強い。"
+          }
+        }
+      }
+    },
+    "I am worthy of calm and peace.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I am worthy of calm and peace."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich verdiene Ruhe und Frieden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je mérite le calme et la paix."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私は穏やかさと平和に値します。"
+          }
+        }
+      }
+    },
+    "I choose peace over worry.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I choose peace over worry."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich wähle Frieden statt Sorge."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je choisis la paix plutôt que l'inquiétude."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私は心配ではなく、平穏を選びます。"
+          }
+        }
+      }
+    },
+    "I give myself permission to feel and heal.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I give myself permission to feel and heal."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich erlaube mir zu fühlen und zu heilen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je m'autorise à ressentir et à guérir."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "感じ、癒えることを自分に許します。"
+          }
+        }
+      }
+    },
+    "I have survived every difficult moment so far.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have survived every difficult moment so far."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich habe bisher jeden schwierigen Moment überstanden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J'ai surmonté chaque moment difficile jusqu'ici."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私はこれまで、つらい瞬間をすべて乗り越えてきました。"
+          }
+        }
+      }
+    },
+    "I release what I cannot control.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I release what I cannot control."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich lasse los, was ich nicht kontrollieren kann."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je lâche prise sur ce que je ne peux pas contrôler."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コントロールできないことは手放します。"
+          }
+        }
+      }
+    },
+    "I trust myself to handle what comes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I trust myself to handle what comes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich vertraue darauf, mit dem umzugehen, was kommt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je me fais confiance pour gérer ce qui vient."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "これから起こることに対処できると信じています。"
+          }
+        }
+      }
+    },
+    "I welcome calm into my body and mind.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I welcome calm into my body and mind."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich heiße Ruhe in Körper und Geist willkommen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "J'accueille le calme dans mon corps et mon esprit."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心と体に、落ち着きを迎え入れます。"
+          }
+        }
+      }
+    },
     "I'm grateful for...": {
       "localizations": {
         "de": {
@@ -1775,6 +3987,118 @@
           "stringUnit": {
             "state": "translated",
             "value": "感謝していること…"
+          }
+        }
+      }
+    },
+    "I'm grounded. Next: Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I'm grounded. Next: Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ich bin geerdet. Weiter: Atmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Je suis ancré. Ensuite : respiration"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "落ち着きました。次へ：呼吸"
+          }
+        }
+      }
+    },
+    "Identify and plan for your triggers": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identify and plan for your triggers"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkenne deine Auslöser und plane dafür"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Identifiez vos déclencheurs et anticipez-les"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トリガーを特定し、備えます"
+          }
+        }
+      }
+    },
+    "Important contacts when you need immediate help": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Important contacts when you need immediate help"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wichtige Kontakte, wenn du sofort Hilfe brauchst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contacts importants en cas de besoin d'aide immédiate"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すぐに助けが必要なときの大切な連絡先"
+          }
+        }
+      }
+    },
+    "Inhale slowly for 4 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inhale slowly for 4 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme 4 Sekunden lang langsam ein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inspirez lentement pendant 4 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4秒かけてゆっくり吸います"
           }
         }
       }
@@ -1867,6 +4191,34 @@
         }
       }
     },
+    "Journal about your day and wins": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Journal about your day and wins"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibe über deinen Tag und deine Erfolge"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrivez sur votre journée et vos réussites"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日の出来事と良かったことを書きましょう"
+          }
+        }
+      }
+    },
     "Journaling Impact": {
       "localizations": {
         "de": {
@@ -1935,6 +4287,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "レベル %lld／10"
+          }
+        }
+      }
+    },
+    "Lie down or sit comfortably": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lie down or sit comfortably"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege oder setze dich bequem hin"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Allongez-vous ou asseyez-vous confortablement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "横になるか、楽な姿勢で座ります"
+          }
+        }
+      }
+    },
+    "List evidence AGAINST the thought": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List evidence AGAINST the thought"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liste Belege GEGEN den Gedanken auf"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listez les preuves CONTRE la pensée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その考えに反する根拠を挙げます"
+          }
+        }
+      }
+    },
+    "List evidence FOR the thought": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "List evidence FOR the thought"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liste Belege FÜR den Gedanken auf"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listez les preuves POUR la pensée"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その考えを支持する根拠を挙げます"
           }
         }
       }
@@ -2011,6 +4447,62 @@
         }
       }
     },
+    "Loneliness": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loneliness"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einsamkeit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solitude"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "孤独"
+          }
+        }
+      }
+    },
+    "Loving-Kindness": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loving-Kindness"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liebende Güte"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bienveillance"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "慈悲の瞑想"
+          }
+        }
+      }
+    },
     "Lv %lld": {
       "localizations": {
         "de": {
@@ -2051,6 +4543,90 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ から利用"
+          }
+        }
+      }
+    },
+    "Mindful Eating": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mindful Eating"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achtsames Essen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alimentation consciente"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マインドフルな食事"
+          }
+        }
+      }
+    },
+    "Mindful Walk": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mindful Walk"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achtsamer Spaziergang"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marche en pleine conscience"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マインドフルな散歩"
+          }
+        }
+      }
+    },
+    "Mindfulness": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mindfulness"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Achtsamkeit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pleine conscience"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "マインドフルネス"
           }
         }
       }
@@ -2237,6 +4813,370 @@
         }
       }
     },
+    "Morning Breathing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morning Breathing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morgendliche Atmung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respiration du matin"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "朝の呼吸"
+          }
+        }
+      }
+    },
+    "Move to calves, thighs, abdomen": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to calves, thighs, abdomen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geh weiter zu Waden, Oberschenkeln, Bauch"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passez aux mollets, cuisses, abdomen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ふくらはぎ、太もも、お腹へ移ります"
+          }
+        }
+      }
+    },
+    "Movement Break": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Movement Break"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewegungspause"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause mouvement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体を動かす休憩"
+          }
+        }
+      }
+    },
+    "My anxiety does not define me.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My anxiety does not define me."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meine Angst definiert mich nicht."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon anxiété ne me définit pas."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不安が私を決めるのではありません。"
+          }
+        }
+      }
+    },
+    "My breath is my anchor.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My breath is my anchor."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mein Atem ist mein Anker."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ma respiration est mon ancre."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "呼吸が私の錨です。"
+          }
+        }
+      }
+    },
+    "My courage is greater than my fear.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My courage is greater than my fear."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mein Mut ist größer als meine Angst."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mon courage est plus grand que ma peur."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "私の勇気は、恐れよりも大きい。"
+          }
+        }
+      }
+    },
+    "NAMI Helpline: 1-800-950-NAMI": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NAMI Helpline: 1-800-950-NAMI"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Info-Telefon Depression: 0800 33 44 533"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fil Santé Jeunes : 0 800 235 236"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "こころの健康相談統一ダイヤル：0570-064-556"
+          }
+        }
+      }
+    },
+    "Name 1 thing you can TASTE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name 1 thing you can TASTE"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenne 1 Ding, das du SCHMECKEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nommez 1 chose que vous pouvez GOÛTER"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "味わえるものを1つ挙げます"
+          }
+        }
+      }
+    },
+    "Name 2 things you can SMELL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name 2 things you can SMELL"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenne 2 Dinge, die du RIECHEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nommez 2 choses que vous pouvez SENTIR"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "においを感じるものを2つ挙げます"
+          }
+        }
+      }
+    },
+    "Name 3 things you can HEAR": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name 3 things you can HEAR"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenne 3 Dinge, die du HÖREN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nommez 3 choses que vous pouvez ENTENDRE"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "聞こえるものを3つ挙げます"
+          }
+        }
+      }
+    },
+    "Name 4 things you can TOUCH": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name 4 things you can TOUCH"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenne 4 Dinge, die du FÜHLEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nommez 4 choses que vous pouvez TOUCHER"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "触れられるものを4つ挙げます"
+          }
+        }
+      }
+    },
+    "Name 5 things you can SEE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name 5 things you can SEE"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenne 5 Dinge, die du SEHEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nommez 5 choses que vous pouvez VOIR"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "見えるものを5つ挙げます"
+          }
+        }
+      }
+    },
+    "Nature Connection": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nature Connection"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindung zur Natur"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connexion à la nature"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自然とのつながり"
+          }
+        }
+      }
+    },
     "Next Affirmation": {
       "localizations": {
         "de": {
@@ -2381,6 +5321,90 @@
         }
       }
     },
+    "Notice tension without judgment": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notice tension without judgment"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bemerke Spannung ohne zu urteilen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remarquez les tensions sans jugement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緊張を評価せずに気づきます"
+          }
+        }
+      }
+    },
+    "Notice the anxious thought": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notice the anxious thought"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bemerke den ängstlichen Gedanken"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remarquez la pensée anxieuse"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不安な考えに気づきます"
+          }
+        }
+      }
+    },
+    "Notice the shift in your body's response": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notice the shift in your body's response"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bemerke die Veränderung der Reaktion deines Körpers"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remarquez le changement dans la réaction de votre corps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体の反応の変化に気づきます"
+          }
+        }
+      }
+    },
     "Panic Events": {
       "localizations": {
         "de": {
@@ -2399,6 +5423,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "パニックの記録"
+          }
+        }
+      }
+    },
+    "Peace flows through me like a gentle stream.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peace flows through me like a gentle stream."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frieden fließt durch mich wie ein sanfter Bach."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La paix coule en moi comme un doux ruisseau."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "穏やかさが、優しいせせらぎのように私を満たします。"
           }
         }
       }
@@ -2425,6 +5477,62 @@
         }
       }
     },
+    "Perfectionism": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfectionism"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfektionismus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perfectionnisme"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完璧主義"
+          }
+        }
+      }
+    },
+    "Picture your peaceful place in detail": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Picture your peaceful place in detail"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stelle dir deinen Ort der Ruhe im Detail vor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imaginez en détail votre lieu de paix"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "安らげる場所を細部まで思い描きます"
+          }
+        }
+      }
+    },
     "Plan": {
       "localizations": {
         "de": {
@@ -2443,6 +5551,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "プラン"
+          }
+        }
+      }
+    },
+    "Prefix it with 'I notice I'm having the thought that...'": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prefix it with 'I notice I'm having the thought that...'"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stelle voran: „Ich bemerke, dass ich den Gedanken habe, dass …“"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Précédez-la de « Je remarque que j'ai la pensée que… »"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「〜という考えがあると気づいている」と前に付けます"
           }
         }
       }
@@ -2535,6 +5671,90 @@
         }
       }
     },
+    "Progressive Muscle Relaxation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressive Muscle Relaxation"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressive Muskelentspannung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relaxation musculaire progressive"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "漸進的筋弛緩法"
+          }
+        }
+      }
+    },
+    "Progressive Relaxation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressive Relaxation"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressive Entspannung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relaxation progressive"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "漸進的リラクゼーション"
+          }
+        }
+      }
+    },
+    "Progressive relaxation from head to toe": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressive relaxation from head to toe"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progressive Entspannung von Kopf bis Fuß"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relaxation progressive de la tête aux pieds"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "頭からつま先まで順に緩めます"
+          }
+        }
+      }
+    },
     "Quick Mood Check": {
       "localizations": {
         "de": {
@@ -2597,6 +5817,230 @@
           "stringUnit": {
             "state": "translated",
             "value": "CalmAnchor を評価"
+          }
+        }
+      }
+    },
+    "Rate your belief in it (0-100%)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate your belief in it (0-100%)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewerte, wie stark du daran glaubst (0–100 %)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évaluez votre croyance en elle (0-100 %)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "それをどれだけ信じているか評価します（0〜100%）"
+          }
+        }
+      }
+    },
+    "Re-rate your belief": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re-rate your belief"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bewerte deinen Glauben erneut"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réévaluez votre croyance"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "信じる度合いを評価し直します"
+          }
+        }
+      }
+    },
+    "Relationship Issues": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relationship Issues"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beziehungsprobleme"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Problèmes relationnels"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人間関係の悩み"
+          }
+        }
+      }
+    },
+    "Release and notice the difference": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Release and notice the difference"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lass los und bemerke den Unterschied"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relâchez et remarquez la différence"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "緩めて、その違いに気づきます"
+          }
+        }
+      }
+    },
+    "Release tension with mindful movement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Release tension with mindful movement"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Löse Spannungen mit achtsamer Bewegung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relâchez les tensions par un mouvement conscient"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "意識した動きで緊張をほぐします"
+          }
+        }
+      }
+    },
+    "Repeat 3-4 times": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat 3-4 times"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederhole 3- bis 4-mal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répétez 3 à 4 fois"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3〜4回繰り返します"
+          }
+        }
+      }
+    },
+    "Repeat 4-6 times": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat 4-6 times"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederhole 4- bis 6-mal"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répétez 4 à 6 fois"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4〜6回繰り返します"
+          }
+        }
+      }
+    },
+    "Repeat calming affirmations with intention": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Repeat calming affirmations with intention"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wiederhole beruhigende Affirmationen mit Absicht"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Répétez des affirmations apaisantes avec intention"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "落ち着くアファメーションを心を込めて繰り返します"
           }
         }
       }
@@ -2689,6 +6133,34 @@
         }
       }
     },
+    "Rest and notice full-body relaxation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rest and notice full-body relaxation"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruhe und bemerke die Entspannung des ganzen Körpers"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reposez-vous et ressentez la détente du corps entier"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "休んで、全身のリラックスを感じます"
+          }
+        }
+      }
+    },
     "Rest day - no tasks scheduled.": {
       "localizations": {
         "de": {
@@ -2751,6 +6223,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "購入を復元"
+          }
+        }
+      }
+    },
+    "SAMHSA Helpline: 1-800-662-4357": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SAMHSA Helpline: 1-800-662-4357"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sucht- & Drogen-Hotline: 01806 313 031"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drogues Info Service : 0 800 23 13 13"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "精神保健福祉センター（お住まいの地域の窓口）"
           }
         }
       }
@@ -2821,6 +6321,34 @@
         }
       }
     },
+    "Say it in a silly voice internally": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Say it in a silly voice internally"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sag ihn innerlich mit einer albernen Stimme"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dites-la intérieurement d'une voix amusante"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心の中でおどけた声で言ってみます"
+          }
+        }
+      }
+    },
     "Search techniques...": {
       "localizations": {
         "de": {
@@ -2887,6 +6415,90 @@
         }
       }
     },
+    "Self-Compassion Letter": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Self-Compassion Letter"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brief der Selbstmitgefühls"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lettre d'auto-compassion"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分への思いやりの手紙"
+          }
+        }
+      }
+    },
+    "Send compassion to yourself and others": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Send compassion to yourself and others"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sende dir selbst und anderen Mitgefühl"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envoyez de la compassion à vous-même et aux autres"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分と他者へ思いやりを送ります"
+          }
+        }
+      }
+    },
+    "Sensory Soothing": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sensory Soothing"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sinnliche Beruhigung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apaisement sensoriel"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "五感で落ち着く"
+          }
+        }
+      }
+    },
     "Sessions": {
       "localizations": {
         "en": {
@@ -2933,6 +6545,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "設定"
+          }
+        }
+      }
+    },
+    "Shake out tension with full-body movement": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shake out tension with full-body movement"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schüttle Spannung mit Ganzkörperbewegung ab"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Évacuez les tensions en bougeant tout le corps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全身を動かして緊張を振り払います"
           }
         }
       }
@@ -3069,6 +6709,230 @@
         }
       }
     },
+    "Sleep Problems": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep Problems"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlafprobleme"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troubles du sommeil"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "睡眠の問題"
+          }
+        }
+      }
+    },
+    "Sleep Wind-Down": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sleep Wind-Down"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schlaf-Routine"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rituel de coucher"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "就寝前のリラックス"
+          }
+        }
+      }
+    },
+    "Slowly move attention down through each body part": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Slowly move attention down through each body part"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wandere langsam mit der Aufmerksamkeit durch jeden Körperteil"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Déplacez lentement votre attention sur chaque partie du corps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "意識を体の各部位へ順に下ろしていきます"
+          }
+        }
+      }
+    },
+    "Social Situations": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Social Situations"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soziale Situationen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Situations sociales"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "社交的な場面"
+          }
+        }
+      }
+    },
+    "Spend time noticing natural elements": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spend time noticing natural elements"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nimm dir Zeit, natürliche Elemente wahrzunehmen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenez le temps d'observer les éléments naturels"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自然の要素に気づく時間を持ちます"
+          }
+        }
+      }
+    },
+    "Splash cold water for vagus nerve activation": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Splash cold water for vagus nerve activation"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spritze kaltes Wasser zur Aktivierung des Vagusnervs"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspergez-vous d'eau froide pour activer le nerf vague"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "冷たい水で迷走神経を刺激します"
+          }
+        }
+      }
+    },
+    "Start at the top of your head": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start at the top of your head"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beginne am Scheitel deines Kopfes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencez par le sommet de la tête"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "頭のてっぺんから始めます"
+          }
+        }
+      }
+    },
+    "Start with your feet - tense for 5 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start with your feet - tense for 5 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beginne mit den Füßen – spanne 5 Sekunden an"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencez par les pieds – contractez 5 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "足から始め、5秒間緊張させます"
+          }
+        }
+      }
+    },
     "Start writing to track your healing journey": {
       "localizations": {
         "de": {
@@ -3087,6 +6951,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "書き始めて、回復の歩みを記録しましょう"
+          }
+        }
+      }
+    },
+    "Start your day with 4-7-8 breathing technique": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start your day with 4-7-8 breathing technique"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beginne den Tag mit der 4-7-8-Atemtechnik"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Commencez la journée avec la technique 4-7-8"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4-7-8呼吸法で一日を始めましょう"
           }
         }
       }
@@ -3163,6 +7055,34 @@
         }
       }
     },
+    "Submerge your face for 15-30 seconds": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Submerge your face for 15-30 seconds"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tauche dein Gesicht 15–30 Sekunden ein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Immergez votre visage 15 à 30 secondes"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "顔を15〜30秒間つけます"
+          }
+        }
+      }
+    },
     "Subscription": {
       "localizations": {
         "de": {
@@ -3181,6 +7101,118 @@
           "stringUnit": {
             "state": "translated",
             "value": "サブスクリプション"
+          }
+        }
+      }
+    },
+    "Systematically relax each part of your body": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systematically relax each part of your body"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entspanne systematisch jeden Teil deines Körpers"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Détendez méthodiquement chaque partie du corps"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "体の各部位を順に緩めていきます"
+          }
+        }
+      }
+    },
+    "Take a deep breath": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take a deep breath"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme tief ein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenez une grande inspiration"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "深く息を吸います"
+          }
+        }
+      }
+    },
+    "Tense and release each muscle group": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tense and release each muscle group"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spanne jede Muskelgruppe an und entspanne sie"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contractez puis relâchez chaque groupe musculaire"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "各筋肉を緊張させてから緩めます"
+          }
+        }
+      }
+    },
+    "Tense and release muscle groups to relieve physical tension": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tense and release muscle groups to relieve physical tension"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spanne Muskelgruppen an und entspanne sie, um körperliche Spannung zu lösen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contractez et relâchez les muscles pour soulager les tensions physiques"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "筋肉を緊張・弛緩させて体の緊張を和らげます"
           }
         }
       }
@@ -3229,6 +7261,62 @@
         }
       }
     },
+    "Thank your mind for trying to protect you": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thank your mind for trying to protect you"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danke deinem Geist, dass er dich schützen will"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remerciez votre esprit d'essayer de vous protéger"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "守ろうとしてくれた心に感謝します"
+          }
+        }
+      }
+    },
+    "This feeling is temporary and will pass.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This feeling is temporary and will pass."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Gefühl ist vorübergehend und wird vergehen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce sentiment est passager et s'en ira."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この感覚は一時的で、必ず過ぎ去ります。"
+          }
+        }
+      }
+    },
     "This is the version of you we're building toward": {
       "localizations": {
         "de": {
@@ -3251,6 +7339,34 @@
         }
       }
     },
+    "This moment is all I need to focus on.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This moment is all I need to focus on."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Moment ist alles, worauf ich mich konzentrieren muss."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cet instant est tout ce sur quoi je dois me concentrer."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今この瞬間にだけ集中すればよいのです。"
+          }
+        }
+      }
+    },
     "This will delete all your journal entries, mood logs, and progress. This cannot be undone.": {
       "localizations": {
         "de": {
@@ -3269,6 +7385,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "すべてのジャーナル、気分の記録、進捗が削除されます。この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "Thought Record": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thought Record"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gedankenprotokoll"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relevé de pensées"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "思考記録"
           }
         }
       }
@@ -3439,6 +7583,34 @@
         }
       }
     },
+    "Trigger Mapping": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trigger Mapping"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auslöser kartieren"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cartographie des déclencheurs"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "トリガーの整理"
+          }
+        }
+      }
+    },
     "Triggers": {
       "localizations": {
         "de": {
@@ -3457,6 +7629,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "トリガー"
+          }
+        }
+      }
+    },
+    "Uncertainty": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uncertainty"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungewissheit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Incertitude"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不確実さ"
           }
         }
       }
@@ -3527,6 +7727,34 @@
         }
       }
     },
+    "Used by Navy SEALs to stay calm under pressure": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Used by Navy SEALs to stay calm under pressure"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Von Navy SEALs genutzt, um unter Druck ruhig zu bleiben"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Utilisée par les Navy SEALs pour rester calme sous pression"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "海軍特殊部隊も使う、プレッシャー下で冷静を保つ方法"
+          }
+        }
+      }
+    },
     "Version": {
       "localizations": {
         "de": {
@@ -3549,6 +7777,90 @@
         }
       }
     },
+    "Visualization": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualization"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualisierung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualisation"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "イメージ法"
+          }
+        }
+      }
+    },
+    "Visualize the thought as a cloud passing by": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Visualize the thought as a cloud passing by"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stelle dir den Gedanken als vorüberziehende Wolke vor"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imaginez la pensée comme un nuage qui passe"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その考えを、流れていく雲として思い描きます"
+          }
+        }
+      }
+    },
+    "Walk slowly, noticing each step": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Walk slowly, noticing each step"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geh langsam und bemerke jeden Schritt"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marchez lentement, en remarquant chaque pas"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一歩ずつ意識しながらゆっくり歩きます"
+          }
+        }
+      }
+    },
     "We'll use this as your starting point": {
       "localizations": {
         "de": {
@@ -3567,6 +7879,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "これを出発点にします"
+          }
+        }
+      }
+    },
+    "Well done!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Well done!"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gut gemacht!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bravo !"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "よくできました！"
           }
         }
       }
@@ -3839,6 +8179,90 @@
         }
       }
     },
+    "Work Stress": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Work Stress"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress bei der Arbeit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stress au travail"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仕事のストレス"
+          }
+        }
+      }
+    },
+    "Worry Window": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Worry Window"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sorgen-Fenster"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fenêtre à soucis"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "心配タイム"
+          }
+        }
+      }
+    },
+    "Write 3 things you're grateful for": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write 3 things you're grateful for"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibe 3 Dinge auf, für die du dankbar bist"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notez 3 choses pour lesquelles vous êtes reconnaissant"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "感謝していること3つを書きましょう"
+          }
+        }
+      }
+    },
     "Write First Entry": {
       "localizations": {
         "de": {
@@ -3917,6 +8341,34 @@
         }
       }
     },
+    "Write down the anxious thought": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write down the anxious thought"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibe den ängstlichen Gedanken auf"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notez la pensée anxieuse"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不安な考えを書き出します"
+          }
+        }
+      }
+    },
     "Write in Journal": {
       "localizations": {
         "de": {
@@ -3935,6 +8387,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "ジャーナルに書く"
+          }
+        }
+      }
+    },
+    "Write to yourself with kindness": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Write to yourself with kindness"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schreibe dir selbst mit Freundlichkeit"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Écrivez-vous avec bienveillance"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分にやさしく手紙を書きます"
           }
         }
       }
@@ -4067,6 +8547,146 @@
           "stringUnit": {
             "state": "translated",
             "value": "嵐の中でも揺るがない"
+          }
+        }
+      }
+    },
+    "thing you can TASTE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "thing you can TASTE"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ding, das du SCHMECKEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "chose que vous pouvez GOÛTER"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "味わえるもの"
+          }
+        }
+      }
+    },
+    "things you can HEAR": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "things you can HEAR"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinge, die du HÖREN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "choses que vous pouvez ENTENDRE"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "聞こえるもの"
+          }
+        }
+      }
+    },
+    "things you can SEE": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "things you can SEE"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinge, die du SEHEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "choses que vous pouvez VOIR"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "見えるもの"
+          }
+        }
+      }
+    },
+    "things you can SMELL": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "things you can SMELL"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinge, die du RIECHEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "choses que vous pouvez SENTIR"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "においを感じるもの"
+          }
+        }
+      }
+    },
+    "things you can TOUCH": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "things you can TOUCH"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dinge, die du FÜHLEN kannst"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "choses que vous pouvez TOUCHER"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "触れられるもの"
           }
         }
       }

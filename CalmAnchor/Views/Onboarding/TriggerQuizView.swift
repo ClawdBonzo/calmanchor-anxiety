@@ -113,7 +113,7 @@ struct TriggerChip: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.system(size: 15))
-                Text(label)
+                Text(LocalizedStringKey(label))
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)

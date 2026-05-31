@@ -533,7 +533,7 @@ struct HealingTaskRow: View {
             }
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(task.title)
+                Text(LocalizedStringKey(task.title))
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .strikethrough(task.isCompleted)
                     .foregroundStyle(task.isCompleted ? .white.opacity(0.35) : .white.opacity(0.88))

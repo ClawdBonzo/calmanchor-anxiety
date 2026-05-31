@@ -188,7 +188,7 @@ struct PanicSOSView: View {
         VStack(spacing: 28) {
             Spacer()
 
-            Text(breathLabel)
+            Text(LocalizedStringKey(breathLabel))
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundStyle(.white.opacity(0.75))
                 .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: breathLabel)
@@ -271,7 +271,7 @@ struct PanicSOSView: View {
             }
             .accessibilityHidden(true)
 
-            Text(currentAffirmation)
+            Text(LocalizedStringKey(currentAffirmation))
                 .font(.system(size: 24, weight: .bold, design: .serif))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
@@ -312,7 +312,7 @@ struct PanicSOSView: View {
 
     // MARK: - Shared CTA button
 
-    private func ctaButton(label: String, color: Color, action: @escaping () -> Void) -> some View {
+    private func ctaButton(label: LocalizedStringKey, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(label)
                 .font(.system(size: 17, weight: .bold, design: .rounded))
@@ -612,7 +612,7 @@ struct GroundingRow: View {
                 Image(systemName: icon)
                     .font(.system(size: 14))
                     .foregroundStyle(.white.opacity(0.5))
-                Text(sense)
+                Text(LocalizedStringKey(sense))
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.75))
             }

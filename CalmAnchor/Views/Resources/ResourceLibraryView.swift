@@ -23,7 +23,7 @@ struct ResourceLibraryView: View {
                         HStack(spacing: 8) {
                             ForEach(ResourceCategory.allCases, id: \.self) { category in
                                 Button(action: { withAnimation { selectedCategory = category } }) {
-                                    Text(category.rawValue)
+                                    Text(LocalizedStringKey(category.rawValue))
                                         .font(.system(size: 14, weight: .semibold, design: .rounded))
                                         .padding(.horizontal, 16)
                                         .padding(.vertical, 8)
@@ -234,10 +234,10 @@ struct ResourceCardView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(resource.title)
+                        Text(LocalizedStringKey(resource.title))
                             .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundStyle(.primary)
-                        Text(resource.description)
+                        Text(LocalizedStringKey(resource.description))
                             .font(.system(size: 13, weight: .medium, design: .rounded))
                             .foregroundStyle(.secondary)
                             .lineLimit(isExpanded ? nil : 1)
@@ -267,7 +267,7 @@ struct ResourceCardView: View {
                                 .background(AppConstants.Colors.calmBlue)
                                 .clipShape(Circle())
 
-                            Text(step)
+                            Text(LocalizedStringKey(step))
                                 .font(.system(size: 14, weight: .medium, design: .rounded))
                                 .foregroundStyle(.secondary)
                         }
