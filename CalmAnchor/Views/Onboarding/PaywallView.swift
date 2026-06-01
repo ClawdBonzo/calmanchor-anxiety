@@ -288,12 +288,19 @@ struct PaywallView: View {
 
     @ViewBuilder
     private var footerSection: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             if let sub = ctaSubtitle {
                 Text(sub)
                     .font(.system(size: 12, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.4))
             }
+
+            Text("Payment is charged to your Apple Account at confirmation of purchase. Subscriptions automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account is charged for renewal within 24 hours before the period ends. Manage or cancel anytime in your Apple Account settings.")
+                .font(.system(size: 10, weight: .regular, design: .rounded))
+                .foregroundStyle(.white.opacity(0.3))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 24)
 
             HStack(spacing: 0) {
                 Button("Restore Purchase") { Task { await restore() } }
@@ -303,14 +310,14 @@ struct PaywallView: View {
 
                 Text("·").foregroundStyle(.white.opacity(0.2))
 
-                Button("Terms") {}
+                Link("Terms of Use", destination: URL(string: "https://gwlabs.app/terms")!)
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.35))
                     .frame(maxWidth: .infinity)
 
                 Text("·").foregroundStyle(.white.opacity(0.2))
 
-                Button("Privacy") {}
+                Link("Privacy", destination: URL(string: "https://gwlabs.app/privacy")!)
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.35))
                     .frame(maxWidth: .infinity)

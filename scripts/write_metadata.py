@@ -97,14 +97,38 @@ KEYWORDS = {
 "ja": "不安,パニック,呼吸,瞑想,マインドフルネス,ストレス,気分,記録,リラックス,グラウンディング,メンタル,落ち着き",
 }
 
+# Auto-renewable-subscription compliance footer (Guideline 3.1.2) appended to each description.
+TERMS = {
+"en": ("\n\nSUBSCRIPTION & LEGAL\n"
+       "CalmAnchor offers auto-renewable subscriptions (weekly, monthly, yearly) and an optional one-time Lifetime purchase. "
+       "Subscriptions auto-renew unless canceled at least 24 hours before the end of the current period; manage or cancel in your Apple Account settings.\n"
+       "Terms of Use (EULA): https://gwlabs.app/terms\n"
+       "Privacy Policy: https://gwlabs.app/privacy"),
+"de": ("\n\nABO & RECHTLICHES\n"
+       "CalmAnchor bietet automatisch verlängerbare Abos (wöchentlich, monatlich, jährlich) und einen optionalen einmaligen Lifetime-Kauf. "
+       "Abos verlängern sich automatisch, sofern nicht mindestens 24 Stunden vor Ende des laufenden Zeitraums gekündigt wird; verwalte oder kündige in deinen Apple-Account-Einstellungen.\n"
+       "Nutzungsbedingungen (EULA): https://gwlabs.app/terms\n"
+       "Datenschutzrichtlinie: https://gwlabs.app/privacy"),
+"fr": ("\n\nABONNEMENT & MENTIONS LÉGALES\n"
+       "CalmAnchor propose des abonnements à renouvellement automatique (hebdomadaire, mensuel, annuel) et un achat unique Lifetime facultatif. "
+       "Les abonnements se renouvellent automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours ; gérez ou annulez dans les réglages de votre compte Apple.\n"
+       "Conditions d'utilisation (CLUF) : https://gwlabs.app/terms\n"
+       "Politique de confidentialité : https://gwlabs.app/privacy"),
+"ja": ("\n\nサブスクリプションと規約\n"
+       "CalmAnchor は自動更新サブスクリプション（週額・月額・年額）と、任意の買い切りLifetimeを提供します。"
+       "サブスクリプションは、現在の期間終了の少なくとも24時間前に解約しない限り自動更新されます。管理・解約はApple Accountの設定から行えます。\n"
+       "利用規約（EULA）: https://gwlabs.app/terms\n"
+       "プライバシーポリシー: https://gwlabs.app/privacy"),
+}
+
 # locale -> field values
 LOCALES = {
- "en-US": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"], desc=EN_DESC),
- "en-GB": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"].replace("personalized","personalised"), desc=EN_DESC_GB),
- "en-AU": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"].replace("personalized","personalised"), desc=EN_DESC_GB),
- "de-DE": dict(name=NAME["de-DE"], subtitle=SUBTITLE["de-DE"], keywords=KEYWORDS["de-DE"], promo=PROMO["de-DE"], desc=DESC["de-DE"]),
- "fr-FR": dict(name=NAME["fr-FR"], subtitle=SUBTITLE["fr-FR"], keywords=KEYWORDS["fr-FR"], promo=PROMO["fr-FR"], desc=DESC["fr-FR"]),
- "ja":    dict(name=NAME["ja"],    subtitle=SUBTITLE["ja"],    keywords=KEYWORDS["ja"],    promo=PROMO["ja"],    desc=DESC["ja"]),
+ "en-US": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"], desc=EN_DESC + TERMS["en"]),
+ "en-GB": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"].replace("personalized","personalised"), desc=EN_DESC_GB + TERMS["en"]),
+ "en-AU": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"].replace("personalized","personalised"), desc=EN_DESC_GB + TERMS["en"]),
+ "de-DE": dict(name=NAME["de-DE"], subtitle=SUBTITLE["de-DE"], keywords=KEYWORDS["de-DE"], promo=PROMO["de-DE"], desc=DESC["de-DE"] + TERMS["de"]),
+ "fr-FR": dict(name=NAME["fr-FR"], subtitle=SUBTITLE["fr-FR"], keywords=KEYWORDS["fr-FR"], promo=PROMO["fr-FR"], desc=DESC["fr-FR"] + TERMS["fr"]),
+ "ja":    dict(name=NAME["ja"],    subtitle=SUBTITLE["ja"],    keywords=KEYWORDS["ja"],    promo=PROMO["ja"],    desc=DESC["ja"] + TERMS["ja"]),
 }
 
 LIMITS = {"name": 30, "subtitle": 30, "keywords": 100, "promo": 170, "desc": 4000}
