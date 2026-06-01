@@ -92,18 +92,22 @@ struct SettingsView: View {
                 }
 
                 // Resources
-                Section("Resources") {
+                Section {
                     Button(action: { showResourceLibrary = true }) {
                         Label("Coping Techniques Library", systemImage: "book.fill")
                     }
 
                     Label("Crisis Hotline: 988", systemImage: "phone.fill")
                         .foregroundStyle(.red)
+                } header: {
+                    Text("Resources")
+                } footer: {
+                    Text("CalmAnchor offers self-help and wellness tools and is not a substitute for professional medical advice, diagnosis, or treatment. If you're in crisis, call or text 988 (US) or your local emergency number.")
                 }
 
                 // Data
                 Section("Data & Privacy") {
-                    Label("All data stored locally on device", systemImage: "lock.shield.fill")
+                    Label("Your entries are stored locally on device", systemImage: "lock.shield.fill")
                         .font(.system(size: 14))
                         .foregroundStyle(.secondary)
 
@@ -125,11 +129,11 @@ struct SettingsView: View {
                             .foregroundStyle(.secondary)
                     }
 
-                    Link(destination: URL(string: "https://example.com/privacy")!) {
+                    Link(destination: URL(string: "https://gwlabs.app/privacy")!) {
                         Label("Privacy Policy", systemImage: "hand.raised.fill")
                     }
 
-                    Link(destination: URL(string: "https://example.com/terms")!) {
+                    Link(destination: URL(string: "https://gwlabs.app/terms")!) {
                         Label("Terms of Service", systemImage: "doc.text.fill")
                     }
                 }

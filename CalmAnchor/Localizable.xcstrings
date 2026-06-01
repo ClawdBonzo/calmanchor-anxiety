@@ -8747,7 +8747,63 @@
         }
       }
     },
-    "·": {}
+    "·": {},
+    "CalmAnchor offers self-help and wellness tools and is not a substitute for professional medical advice, diagnosis, or treatment. If you're in crisis, call or text 988 (US) or your local emergency number.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "CalmAnchor offers self-help and wellness tools and is not a substitute for professional medical advice, diagnosis, or treatment. If you're in crisis, call or text 988 (US) or your local emergency number."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CalmAnchor bietet Selbsthilfe- und Wellness-Tools und ist kein Ersatz für professionelle medizinische Beratung, Diagnose oder Behandlung. In einer Krise wähle oder texte 988 (USA) oder deine örtliche Notrufnummer."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CalmAnchor propose des outils d'auto-assistance et de bien-être et ne remplace pas un avis, un diagnostic ou un traitement médical professionnel. En cas de crise, appelez ou envoyez un message au 988 (États-Unis) ou à votre numéro d'urgence local."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CalmAnchor はセルフヘルプとウェルネスのためのツールであり、専門的な医療上の助言・診断・治療に代わるものではありません。危機的な状況にある場合は、988（米国）またはお住まいの地域の緊急通報番号に電話またはテキストしてください。"
+          }
+        }
+      }
+    },
+    "Your entries are stored locally on device": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Your entries are stored locally on device"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Einträge werden lokal auf dem Gerät gespeichert"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vos entrées sont stockées localement sur l'appareil"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたの記録は端末内にローカルで保存されます"
+          }
+        }
+      }
+    }
   },
   "version": "1.0"
 }

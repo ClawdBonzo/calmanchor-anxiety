@@ -16,7 +16,7 @@ EN_DESC = (
 "• Mood & anxiety analytics to reveal your patterns over time\n"
 "• Healing streaks to keep you motivated\n\n"
 "PRIVATE BY DESIGN\n"
-"All your data stays on your device. No account, no cloud, no tracking.\n\n"
+"Your journal, mood, and personal entries never leave your device. No account, no ads, no third-party tracking.\n\n"
 "CalmAnchor is your anchor in the storm. Download it free and find your calm today."
 )
 
@@ -36,7 +36,7 @@ DESC = {
 "• Stimmungs- und Angstanalysen, die deine Muster sichtbar machen\n"
 "• Heilungs-Serien, die dich motivieren\n\n"
 "PRIVAT VON GRUND AUF\n"
-"Alle deine Daten bleiben auf deinem Gerät. Kein Konto, keine Cloud, kein Tracking.\n\n"
+"Dein Tagebuch, deine Stimmung und deine persönlichen Einträge verlassen nie dein Gerät. Kein Konto, keine Werbung, kein Tracking durch Dritte.\n\n"
 "CalmAnchor ist dein Anker im Sturm. Lade die App kostenlos und finde noch heute deine Ruhe.",
 "fr-FR":
 "Quand l'anxiété surgit, il vous faut plus que des conseils — il vous faut un plan. CalmAnchor vous "
@@ -51,7 +51,7 @@ DESC = {
 "• Analyses de l'humeur et de l'anxiété pour révéler vos tendances\n"
 "• Séries de guérison pour rester motivé\n\n"
 "PRIVÉ PAR CONCEPTION\n"
-"Toutes vos données restent sur votre appareil. Aucun compte, aucun cloud, aucun suivi.\n\n"
+"Votre journal, votre humeur et vos entrées personnelles ne quittent jamais votre appareil. Aucun compte, aucune publicité, aucun suivi tiers.\n\n"
 "CalmAnchor est votre ancre dans la tempête. Téléchargez-la gratuitement et trouvez votre calme dès aujourd'hui.",
 "ja":
 "不安が押し寄せたとき、必要なのはアドバイス以上のもの——「計画」です。CalmAnchor は、ひと呼吸ずつ"
@@ -65,7 +65,7 @@ DESC = {
 "• 気分と不安のパターンを可視化する分析機能\n"
 "• モチベーションを保つヒーリングの連続記録\n\n"
 "プライバシー第一の設計\n"
-"すべてのデータは端末内に保存されます。アカウント不要、クラウド不要、トラッキングなし。\n\n"
+"あなたのジャーナル・気分・個人的な記録が端末の外に出ることはありません。アカウント不要、広告なし、第三者トラッキングなし。\n\n"
 "CalmAnchor は、嵐の中のあなたの錨です。無料でダウンロードして、今日、あなたの落ち着きを見つけましょう。",
 }
 
