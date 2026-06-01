@@ -1,6 +1,6 @@
 # GW Labs Privacy Policy
 
-**Effective date: May 31, 2026**
+**Effective date: June 1, 2026**
 
 This Privacy Policy applies to the mobile applications published by GW Labs ("we," "us," "our") — collectively, "our apps." We design our apps to be private by default. This policy explains what our apps do and do not do with your information. Where a specific app's behavior differs from what is described here, the disclosures shown on that app's App Store product page ("App Privacy" label) apply to that app.
 
@@ -17,12 +17,12 @@ Content you create in our apps — such as entries, logs, history, preferences, 
 
 ## Purchases and subscriptions
 
-Some of our apps offer optional in-app purchases and subscriptions. To process, validate, and restore these purchases, we use:
+Some of our apps offer optional in-app purchases and auto-renewable subscriptions (for example, weekly, monthly, or yearly plans, and one-time purchases). To process, validate, and restore these purchases, we use:
 
-- **Apple / App Store** — Apple processes all payments. We never see or receive your payment-card details. Apple's handling of your data is governed by Apple's privacy policy.
+- **Apple / App Store** — Apple processes all payments and manages billing and renewals. We never see or receive your payment-card details. Subscriptions are charged to your Apple Account at confirmation of purchase and renew automatically unless auto-renew is turned off at least 24 hours before the end of the current period; you can manage or cancel anytime in your Apple Account settings. Apple's handling of your data is governed by Apple's privacy policy.
 - **RevenueCat** — our subscription-management provider. To verify your purchase status across reinstalls and devices, RevenueCat receives a **randomly generated, anonymous app-user identifier** and **purchase/transaction data** (such as which product was bought and its status). This identifier is not your name, email, or Apple ID. It is used only to deliver the purchase functionality you requested.
 
-We do not use this information for advertising, and we do not sell it. RevenueCat's processing of this data is governed by RevenueCat's privacy policy.
+We do not use this information for advertising, and we do not sell it. RevenueCat's processing of this data is governed by RevenueCat's privacy policy. Your use of paid features is also subject to our Terms of Use (EULA) at https://gwlabs.app/terms.
 
 ## Data we "collect" (App Store privacy disclosure)
 
@@ -39,7 +39,7 @@ Our apps are not directed to children under 13, and we do not knowingly collect 
 
 ## Your choices and rights
 
-Because your content lives on your device, you remain in control of it. You can view, edit, or delete your content within the app, remove all app data by deleting the app, and manage or cancel any subscription through your Apple ID subscription settings. Depending on where you live (for example, under the EU/UK GDPR or the California CCPA), you may have additional rights regarding personal data. Since we do not hold your in-app content on our servers, most such requests can be fulfilled directly on your device; for anything involving purchase records, contact us using the details below.
+Because your content lives on your device, you remain in control of it. You can view, edit, or delete your content within the app, remove all app data by deleting the app, and manage or cancel any subscription through your Apple Account subscription settings. Depending on where you live (for example, under the EU/UK GDPR or the California CCPA), you may have additional rights regarding personal data. Since we do not hold your in-app content on our servers, most such requests can be fulfilled directly on your device; for anything involving purchase records, contact us using the details below.
 
 ## Health and wellness apps
 
