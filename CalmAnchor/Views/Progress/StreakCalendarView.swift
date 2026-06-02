@@ -7,7 +7,6 @@ struct StreakCalendarView: View {
     @Query private var profiles: [UserProfile]
     @Query(sort: \JournalEntry.date) private var journals: [JournalEntry]
     @Query(sort: \MoodEntry.date) private var moods: [MoodEntry]
-    @Query(sort: \HealingTask.sortOrder) private var allTasks: [HealingTask]
     @State private var selectedMonth = Date()
     @State private var showPaywall = false
 

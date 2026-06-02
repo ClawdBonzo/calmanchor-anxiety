@@ -5,6 +5,7 @@ import SwiftData
 struct CalmAnchorApp: App {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @StateObject private var revenueCat = RevenueCatService.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -33,6 +34,7 @@ struct CalmAnchorApp: App {
                 .environmentObject(revenueCat)
                 .preferredColorScheme(.dark)
                 .onAppear {
+                    NotificationService.shared.bootstrap()
                     #if DEBUG
                     if DemoSeeder.shouldSeed {
                         DemoSeeder.seed(into: sharedModelContainer.mainContext)
@@ -49,6 +51,27 @@ struct CalmAnchorApp: App {
                     revenueCat.configure()
                     #endif
                 }
+                .onChange(of: scenePhase) { _, phase in
+                    handleScenePhase(phase)
+                }
+        }
+    }
+
+    @MainActor
+    private func handleScenePhase(_ phase: ScenePhase) {
+        let context = sharedModelContainer.mainContext
+        switch phase {
+        case .active:
+            WidgetSync.refresh(from: context)
+        case .background:
+            guard let profile = try? context.fetch(FetchDescriptor<UserProfile>()).first else { return }
+            Task {
+                await NotificationService.shared.syncAll(
+                    profile: profile,
+                    hasActivityToday: NotificationService.shared.hasActivityToday(profile))
+            }
+        default:
+            break
         }
     }
 }

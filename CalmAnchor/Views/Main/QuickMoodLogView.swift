@@ -4,6 +4,7 @@ import SwiftData
 struct QuickMoodLogView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.requestReview) private var requestReview
     @Query private var profiles: [UserProfile]
     @State private var moodLevel: Int = 5
     @State private var anxietyLevel: Int = 5
@@ -77,9 +78,13 @@ struct QuickMoodLogView: View {
         )
         modelContext.insert(entry)
 
+        QuestService.recordEvent(.logMood, in: modelContext)
+
         if let profile = profiles.first {
             StreakService.updateStreak(for: profile)
+            ReviewPromptManager.requestForStreakMilestone(profile.currentStreak, using: requestReview)
         }
+        WidgetSync.refresh(from: modelContext)
 
         dismiss()
     }

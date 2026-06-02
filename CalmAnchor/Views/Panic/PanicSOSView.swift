@@ -4,7 +4,9 @@ import SwiftData
 struct PanicSOSView: View {
     @Binding var isPresented: Bool
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var liveActivity = PanicLiveActivityController()
 
     @State private var currentPhase: SOSPhase = .grounding
     @State private var breathCount = 0
@@ -361,6 +363,7 @@ struct PanicSOSView: View {
     private func startBreathing() {
         breathCount = 0
         breathScale = 0.6
+        liveActivity.start()
         breathingTask?.cancel()
         breathingTask = Task { @MainActor in
             await runBreathCycle()
@@ -373,15 +376,18 @@ struct PanicSOSView: View {
             guard !Task.isCancelled else { return }
 
             breathLabel = "Breathe In..."
+            await liveActivity.update(phase: .inhale, cycle: breathCount + 1, secondsInPhase: 4)
             withAnimation(reduceMotion ? nil : .easeInOut(duration: 4)) { breathScale = 1.0 }
             try? await Task.sleep(for: .seconds(4))
             guard !Task.isCancelled else { return }
 
             breathLabel = "Hold..."
+            await liveActivity.update(phase: .hold, cycle: breathCount + 1, secondsInPhase: 4)
             try? await Task.sleep(for: .seconds(4))
             guard !Task.isCancelled else { return }
 
             breathLabel = "Breathe Out..."
+            await liveActivity.update(phase: .exhale, cycle: breathCount + 1, secondsInPhase: 4)
             withAnimation(reduceMotion ? nil : .easeInOut(duration: 4)) { breathScale = 0.6 }
             try? await Task.sleep(for: .seconds(4))
             guard !Task.isCancelled else { return }
@@ -394,6 +400,7 @@ struct PanicSOSView: View {
     private func stopAllTasks() {
         sessionTimerTask?.cancel(); sessionTimerTask = nil
         breathingTask?.cancel(); breathingTask = nil
+        Task { await liveActivity.end() }
     }
 
     // Keep for API compatibility with breathing view's "Continue" button
@@ -415,6 +422,11 @@ struct PanicSOSView: View {
             resolved: true
         )
         modelContext.insert(event)
+        QuestService.recordEvent(.calmSession, in: modelContext)
+        WidgetSync.refresh(from: modelContext)
+        ReviewPromptManager.requestAfterCalmSession(intensityBefore: intensityBefore,
+                                                    intensityAfter: intensityAfter,
+                                                    using: requestReview)
         stopAllTasks()
         withAnimation(.easeInOut(duration: 0.35)) { isPresented = false }
     }

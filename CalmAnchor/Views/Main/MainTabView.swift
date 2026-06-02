@@ -3,6 +3,7 @@ import SwiftUI
 struct MainTabView: View {
     @State private var selectedTab = MainTabView.initialTab
     @State private var showPanicMode = MainTabView.initialPanic
+    @State private var showWidgetMood = false
 
     // DEBUG-only: allow screenshot capture to jump to a specific tab / panic screen
     // via launch args -demoTab <0-4> and -demoPanic. No effect in Release.
@@ -63,6 +64,21 @@ struct MainTabView: View {
                 PanicSOSView(isPresented: $showPanicMode)
                     .transition(.opacity)
                     .zIndex(100)
+            }
+        }
+        .sheet(isPresented: $showWidgetMood) {
+            QuickMoodLogView()
+                .presentationDetents([.medium])
+        }
+        .onOpenURL { url in
+            switch url.host {
+            case "panic":
+                showPanicMode = true
+            case "logmood":
+                selectedTab = 0
+                showWidgetMood = true
+            default:
+                break
             }
         }
     }

@@ -5,7 +5,7 @@ struct DailyPromptEntry: TimelineEntry {
     let date: Date
     let prompt: String
     let affirmation: String
-    let streakCount: Int
+    let snapshot: WidgetSnapshot
 }
 
 struct DailyPromptProvider: TimelineProvider {
@@ -33,40 +33,36 @@ struct DailyPromptProvider: TimelineProvider {
     ]
 
     func placeholder(in context: Context) -> DailyPromptEntry {
-        DailyPromptEntry(
-            date: Date(),
-            prompt: "What made you feel safe today?",
-            affirmation: "I am safe in this moment.",
-            streakCount: 0
-        )
+        DailyPromptEntry(date: Date(),
+                         prompt: prompts[0],
+                         affirmation: affirmations[0],
+                         snapshot: .empty)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (DailyPromptEntry) -> Void) {
-        let entry = DailyPromptEntry(
-            date: Date(),
-            prompt: prompts.randomElement() ?? prompts[0],
-            affirmation: affirmations.randomElement() ?? affirmations[0],
-            streakCount: 3
-        )
-        completion(entry)
+        completion(makeEntry())
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<DailyPromptEntry>) -> Void) {
-        let calendar = Calendar.current
-        let dayOfYear = calendar.ordinality(of: .day, in: .year, for: Date()) ?? 0
-        let promptIndex = dayOfYear % prompts.count
-        let affirmationIndex = dayOfYear % affirmations.count
+        let entry = makeEntry()
+        // Refresh at next local midnight (so "today" resets) with a 6h fallback.
+        let cal = Calendar.current
+        let nextMidnight = cal.nextDate(after: Date(),
+                                        matching: DateComponents(hour: 0),
+                                        matchingPolicy: .nextTime)
+            ?? Date().addingTimeInterval(6 * 3600)
+        completion(Timeline(entries: [entry], policy: .after(nextMidnight)))
+    }
 
-        let entry = DailyPromptEntry(
+    private func makeEntry() -> DailyPromptEntry {
+        let cal = Calendar.current
+        let day = cal.ordinality(of: .day, in: .year, for: Date()) ?? 0
+        return DailyPromptEntry(
             date: Date(),
-            prompt: prompts[promptIndex],
-            affirmation: affirmations[affirmationIndex],
-            streakCount: 0
+            prompt: prompts[day % prompts.count],
+            affirmation: affirmations[day % affirmations.count],
+            snapshot: WidgetDataStore.read()
         )
-
-        let nextUpdate = calendar.date(byAdding: .hour, value: 6, to: Date())!
-        let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
-        completion(timeline)
     }
 }
 
@@ -74,84 +70,112 @@ struct CalmAnchorWidgetEntryView: View {
     var entry: DailyPromptEntry
     @Environment(\.widgetFamily) var family
 
+    private let teal = Color(red: 0, green: 0.788, blue: 0.718)
+    private let gold = Color(red: 0.961, green: 0.843, blue: 0.431)
+
     var body: some View {
         switch family {
-        case .systemSmall:
-            smallWidget
-        case .systemMedium:
-            mediumWidget
-        default:
-            mediumWidget
+        case .systemSmall:  smallWidget
+        case .systemLarge:  largeWidget
+        default:            mediumWidget
+        }
+    }
+
+    private var streakChip: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "flame.fill").foregroundStyle(.orange)
+            Text(entry.snapshot.currentStreak > 0
+                 ? "\(entry.snapshot.currentStreak)-day streak"
+                 : "Start your streak")
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+        }
+    }
+
+    private var levelChip: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "star.circle.fill").foregroundStyle(gold)
+            Text("Lv \(entry.snapshot.level)")
+                .font(.system(size: 12, weight: .bold, design: .rounded))
         }
     }
 
     private var smallWidget: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image("BrandIcon")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 20, height: 20)
-                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                    Text("CalmAnchor")
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundStyle(.secondary)
-            }
-
+        VStack(alignment: .leading, spacing: 6) {
+            streakChip
             Spacer()
-
             Text(entry.affirmation)
                 .font(.system(size: 14, weight: .semibold, design: .rounded))
-                .foregroundStyle(.primary)
                 .lineLimit(3)
-
             Spacer()
         }
         .padding(12)
+        .widgetURL(URL(string: "calmanchor://logmood"))
         .containerBackground(.fill.tertiary, for: .widget)
     }
 
     private var mediumWidget: some View {
         HStack(spacing: 16) {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Image(systemName: "leaf.fill")
-                        .foregroundStyle(.green)
-                    Text("CalmAnchor")
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundStyle(.secondary)
-                }
-
+            VStack(alignment: .leading, spacing: 6) {
+                streakChip
                 Text(entry.prompt)
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
                     .lineLimit(2)
-
                 Spacer()
-
                 Text(entry.affirmation)
-                    .font(.system(size: 13, weight: .medium, design: .serif))
-                    .foregroundStyle(.secondary)
-                    .italic()
-                    .lineLimit(2)
+                    .font(.system(size: 12, weight: .medium, design: .serif))
+                    .foregroundStyle(.secondary).italic().lineLimit(2)
             }
-
             Spacer()
-
-            VStack {
-                Image(systemName: "heart.circle.fill")
-                    .font(.system(size: 36))
-                    .foregroundStyle(.red.opacity(0.8))
-                Text("SOS")
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundStyle(.red)
+            Link(destination: URL(string: "calmanchor://panic")!) {
+                VStack(spacing: 2) {
+                    Image(systemName: "heart.circle.fill")
+                        .font(.system(size: 32)).foregroundStyle(.red.opacity(0.85))
+                    Text("SOS").font(.system(size: 11, weight: .bold, design: .rounded))
+                        .foregroundStyle(.red)
+                }
             }
         }
         .padding(14)
+        .widgetURL(URL(string: "calmanchor://logmood"))
+        .containerBackground(.fill.tertiary, for: .widget)
+    }
+
+    private var largeWidget: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                streakChip
+                Spacer()
+                levelChip
+            }
+            Divider()
+            Text(entry.prompt)
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .lineLimit(2)
+            Text(entry.affirmation)
+                .font(.system(size: 14, weight: .medium, design: .serif))
+                .foregroundStyle(.secondary).italic().lineLimit(3)
+            Spacer()
+            HStack {
+                Label(entry.snapshot.todayMoodLogged ? "Mood logged today" : "Log today's mood",
+                      systemImage: entry.snapshot.todayMoodLogged ? "checkmark.circle.fill" : "face.smiling")
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .foregroundStyle(entry.snapshot.todayMoodLogged ? teal : .primary)
+                Spacer()
+                Link(destination: URL(string: "calmanchor://panic")!) {
+                    Text("SOS")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 14).padding(.vertical, 6)
+                        .background(.red.opacity(0.85), in: Capsule())
+                }
+            }
+        }
+        .padding(16)
+        .widgetURL(URL(string: "calmanchor://logmood"))
         .containerBackground(.fill.tertiary, for: .widget)
     }
 }
 
-@main
 struct CalmAnchorWidgets: Widget {
     let kind = "CalmAnchorWidget"
 
@@ -160,7 +184,15 @@ struct CalmAnchorWidgets: Widget {
             CalmAnchorWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Daily Calm")
-        .description("Your daily journal prompt and affirmation.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .description("Your streak, today's mood, and a daily affirmation.")
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    }
+}
+
+@main
+struct CalmAnchorWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        CalmAnchorWidgets()
+        PanicBreathingLiveActivity()
     }
 }

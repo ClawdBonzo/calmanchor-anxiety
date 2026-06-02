@@ -9,8 +9,10 @@ struct OnboardingContainerView: View {
     @State private var selectedTriggers: Set<String> = []
     @State private var baselineMood: Int = 5
     @State private var dailyMinutes: Int = 10
+    @State private var notificationsEnabled = true
+    @State private var reminderTime = UserProfile.defaultReminderTime
 
-    private let totalSteps = 7
+    private let totalSteps = 8
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -39,6 +41,13 @@ struct OnboardingContainerView: View {
                 DailyMinutesView(dailyMinutes: $dailyMinutes, onNext: nextStep)
                     .tag(4)
 
+                NotificationOptInView(
+                    notificationsEnabled: $notificationsEnabled,
+                    reminderTime: $reminderTime,
+                    onNext: nextStep
+                )
+                .tag(5)
+
                 CraftingPlanView(
                     calmName: calmName,
                     onNext: {
@@ -46,22 +55,22 @@ struct OnboardingContainerView: View {
                         nextStep()
                     }
                 )
-                .tag(5)
+                .tag(6)
 
                 PaywallView(
                     calmName: calmName,
                     onContinue: { completeOnboarding() },
                     onRestore:  { completeOnboarding() }
                 )
-                .tag(6)
+                .tag(7)
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .scrollDismissesKeyboard(.immediately)
             .ignoresSafeArea()
 
-            // Progress dots — visible only on steps 1–5
-            if currentStep >= 1 && currentStep <= 5 {
-                StepProgressDots(current: currentStep - 1, total: 5)
+            // Progress dots — visible only on the input steps
+            if currentStep >= 1 && currentStep <= 6 {
+                StepProgressDots(current: currentStep - 1, total: 6)
                     .padding(.top, 56)
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 0.3), value: currentStep)
@@ -83,8 +92,12 @@ struct OnboardingContainerView: View {
             baselineMood: baselineMood,
             dailyMinutes: dailyMinutes
         )
+        profile.notificationsEnabled = notificationsEnabled
+        profile.reminderTime = reminderTime
         modelContext.insert(profile)
         HealingPlanService.generatePlan(for: profile, in: modelContext)
+
+        Task { await NotificationService.shared.syncAll(profile: profile, hasActivityToday: false) }
     }
 
     private func completeOnboarding() {

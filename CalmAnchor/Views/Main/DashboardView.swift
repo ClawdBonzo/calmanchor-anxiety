@@ -6,10 +6,21 @@ struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var revenueCat: RevenueCatService
     @Query private var profiles: [UserProfile]
-    @Query(sort: \MoodEntry.date, order: .reverse) private var moods: [MoodEntry]
-    @Query(sort: \JournalEntry.date, order: .reverse) private var journals: [JournalEntry]
+    @Query private var todaysMoods: [MoodEntry]
     @Query private var gameStatsArray: [GameStats]
+    @Query private var quests: [Quest]
 
+    init(showPanicMode: Binding<Bool>) {
+        _showPanicMode = showPanicMode
+        let cal = Calendar.current
+        let start = cal.startOfDay(for: Date())
+        let end = cal.date(byAdding: .day, value: 1, to: start) ?? start
+        _todaysMoods = Query(
+            filter: #Predicate<MoodEntry> { $0.date >= start && $0.date < end },
+            sort: \.date, order: .reverse)
+    }
+
+    @State private var journalCount = 0
     @State private var showQuickMood = false
     @State private var showJournal = false
     @State private var showCalmCard = false
@@ -22,9 +33,10 @@ struct DashboardView: View {
     private var profile: UserProfile? { profiles.first }
     private var gameStats: GameStats? { gameStatsArray.first }
 
-    private var todaysMoods: [MoodEntry] {
+    private var todaysQuests: [Quest] {
         let today = Calendar.current.startOfDay(for: Date())
-        return moods.filter { Calendar.current.startOfDay(for: $0.date) == today }
+        return quests.filter { $0.isActive && $0.dueDate >= today }
+            .sorted { $0.createdDate < $1.createdDate }
     }
 
     var body: some View {
@@ -39,6 +51,7 @@ struct DashboardView: View {
                         panicButton
                         if revenueCat.isPremium { stayedCalmCard }
                         todayMoodCard
+                        dailyQuestsCard
                         if revenueCat.isPremium { promptCard }
                         if revenueCat.isPremium { streakCard }
                         if revenueCat.isPremium { healingTasksCard }
@@ -72,6 +85,9 @@ struct DashboardView: View {
             }
         }
         .onAppear {
+            QuestService.refreshDailyQuests(in: modelContext)
+            WidgetSync.refresh(from: modelContext)
+            journalCount = (try? modelContext.fetchCount(FetchDescriptor<JournalEntry>())) ?? 0
             guard !reduceMotion else { return }
             withAnimation(.easeOut(duration: 1.2).repeatForever(autoreverses: false)) {
                 panicPulse = true
@@ -385,7 +401,7 @@ struct DashboardView: View {
             )
             divider
             PremiumStatItem(
-                value: "\(journals.count)",
+                value: "\(journalCount)",
                 label: "Journals",
                 icon: "book.fill",
                 color: AppConstants.Colors.calmBlue
@@ -428,6 +444,64 @@ struct DashboardView: View {
         }
         .padding(16)
         .glassCard()
+    }
+
+    // MARK: - Daily Quests
+
+    private var dailyQuestsCard: some View {
+        let total = todaysQuests.count
+        let done = todaysQuests.filter(\.isCompleted).count
+        let progress = total == 0 ? 0 : Double(done) / Double(total)
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Image(systemName: "checklist")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(AppConstants.Colors.sunsetGold)
+                Text("Daily Quests")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                Spacer()
+                Text("\(done)/\(total)")
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule().fill(.white.opacity(0.08))
+                    Capsule().fill(AppConstants.Colors.sunsetGold.opacity(0.85))
+                        .frame(width: max(0, geo.size.width * progress))
+                }
+            }
+            .frame(height: 6)
+
+            ForEach(todaysQuests) { quest in
+                HStack(spacing: 12) {
+                    Image(systemName: quest.isCompleted ? "checkmark.circle.fill" : "circle")
+                        .font(.system(size: 22))
+                        .foregroundStyle(quest.isCompleted ? AppConstants.Colors.mintGreen : .white.opacity(0.25))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(LocalizedStringKey(quest.title))
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .strikethrough(quest.isCompleted)
+                            .foregroundStyle(quest.isCompleted ? .white.opacity(0.35) : .white.opacity(0.88))
+                        Text(LocalizedStringKey(quest.questDescription))
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundStyle(.white.opacity(0.35))
+                    }
+                    Spacer()
+                    Text("+\(quest.xpReward)")
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                        .foregroundStyle(AppConstants.Colors.sunsetGold)
+                        .padding(.horizontal, 8).padding(.vertical, 3)
+                        .background(AppConstants.Colors.sunsetGold.opacity(0.12))
+                        .clipShape(Capsule())
+                }
+            }
+        }
+        .padding(16)
+        .glassCard()
+        .sensoryFeedback(.success, trigger: done)
     }
 
     // MARK: - Quick Actions
@@ -519,12 +593,17 @@ struct PremiumQuickAction: View {
 
 struct HealingTaskRow: View {
     @Bindable var task: HealingTask
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         HStack(spacing: 12) {
             Button(action: {
                 task.isCompleted.toggle()
-                if task.isCompleted { task.completedDate = Date() }
+                if task.isCompleted {
+                    task.completedDate = Date()
+                    QuestService.recordEvent(.healingTask, in: modelContext)
+                    WidgetSync.refresh(from: modelContext)
+                }
             }) {
                 Image(systemName: task.isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 22))

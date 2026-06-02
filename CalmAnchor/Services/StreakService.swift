@@ -27,6 +27,9 @@ struct StreakService {
         profile.longestStreak = max(profile.longestStreak, profile.currentStreak)
         profile.lastActiveDate = today
         profile.totalSessions += 1
+
+        // Just logged today → there's no streak to lose tonight.
+        Task { @MainActor in NotificationService.shared.cancelStreakRisk() }
     }
 
     static func activeDates(journals: [JournalEntry], moods: [MoodEntry]) -> Set<DateComponents> {

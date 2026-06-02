@@ -45,6 +45,21 @@ final class RevenueCatService: NSObject, ObservableObject {
     func purchase(_ package: Package) async throws -> Bool {
         let result = try await Purchases.shared.purchase(package: package)
         isPremium = result.customerInfo.entitlements[Self.entitlementID]?.isActive == true
+
+        // If this purchase started a free trial, remind the user ~24h before it converts.
+        if isPremium, let intro = package.storeProduct.introductoryDiscount,
+           intro.paymentMode == .freeTrial {
+            let unitSeconds: Double
+            switch intro.subscriptionPeriod.unit {
+            case .day:   unitSeconds = 86_400
+            case .week:  unitSeconds = 604_800
+            case .month: unitSeconds = 2_592_000
+            case .year:  unitSeconds = 31_536_000
+            @unknown default: unitSeconds = 86_400
+            }
+            let trialEnds = Date().addingTimeInterval(Double(intro.subscriptionPeriod.value) * unitSeconds)
+            await NotificationService.shared.scheduleTrialEnding(trialEnds: trialEnds)
+        }
         return isPremium
     }
 

@@ -14,6 +14,14 @@ final class UserProfile {
     var lastActiveDate: Date?
     var totalSessions: Int
     var isPremium: Bool
+    var notificationsEnabled: Bool = false
+    var reminderTime: Date = UserProfile.defaultReminderTime
+    var taskRemindersEnabled: Bool = true
+
+    /// 8:00 PM today — only hour/minute are ever read when building triggers.
+    static var defaultReminderTime: Date {
+        Calendar.current.date(bySettingHour: 20, minute: 0, second: 0, of: Date()) ?? Date()
+    }
 
     init(
         calmName: String = "",

@@ -16,6 +16,42 @@ struct SettingsView: View {
 
     private var profile: UserProfile? { profiles.first }
 
+    private var notificationsBinding: Binding<Bool> {
+        Binding(
+            get: { profile?.notificationsEnabled ?? false },
+            set: { newValue in
+                guard let p = profile else { return }
+                Task { @MainActor in
+                    if newValue {
+                        let granted = await NotificationService.shared.requestAuthorization()
+                        p.notificationsEnabled = granted
+                        await NotificationService.shared.syncAll(
+                            profile: p,
+                            hasActivityToday: NotificationService.shared.hasActivityToday(p))
+                    } else {
+                        p.notificationsEnabled = false
+                        NotificationService.shared.cancelAll()
+                    }
+                }
+            }
+        )
+    }
+
+    private var reminderTimeBinding: Binding<Date> {
+        Binding(
+            get: { profile?.reminderTime ?? UserProfile.defaultReminderTime },
+            set: { newValue in
+                guard let p = profile else { return }
+                p.reminderTime = newValue
+                Task { @MainActor in
+                    await NotificationService.shared.syncAll(
+                        profile: p,
+                        hasActivityToday: NotificationService.shared.hasActivityToday(p))
+                }
+            }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -54,6 +90,18 @@ struct SettingsView: View {
                         Spacer()
                         Text("\(profile?.triggers.count ?? 0) selected")
                             .foregroundStyle(.secondary)
+                    }
+                }
+
+                // Reminders
+                Section("Reminders") {
+                    Toggle(isOn: notificationsBinding) {
+                        Label("Daily Reminders", systemImage: "bell.fill")
+                    }
+                    if profile?.notificationsEnabled == true {
+                        DatePicker(selection: reminderTimeBinding, displayedComponents: .hourAndMinute) {
+                            Label("Reminder Time", systemImage: "clock.badge")
+                        }
                     }
                 }
 
@@ -178,6 +226,7 @@ struct SettingsView: View {
         try? modelContext.delete(model: PanicEvent.self)
         try? modelContext.delete(model: HealingTask.self)
         try? modelContext.delete(model: UserProfile.self)
+        NotificationService.shared.cancelAll()
         hasCompletedOnboarding = false
     }
 }
