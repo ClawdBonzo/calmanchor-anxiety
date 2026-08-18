@@ -6,6 +6,7 @@ struct PanicSOSView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.requestReview) private var requestReview
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
     @State private var liveActivity = PanicLiveActivityController()
 
     @State private var currentPhase: SOSPhase = .grounding
@@ -94,7 +95,7 @@ struct PanicSOSView: View {
 
                     Spacer()
 
-                    Button(action: { completeSession() }) {
+                    Button(action: { abandonSession() }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 28))
                             .foregroundStyle(.white.opacity(0.35))
@@ -164,6 +165,26 @@ struct PanicSOSView: View {
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundStyle(.white.opacity(0.45))
             }
+
+            // Capture a real "before" intensity so progress stats aren't a constant.
+            VStack(spacing: 6) {
+                HStack {
+                    Text("How intense is it right now?")
+                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.7))
+                    Spacer()
+                    Text("\(intensityBefore)/10")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(AppConstants.Colors.electricTeal)
+                }
+                Slider(value: Binding(get: { Double(intensityBefore) },
+                                      set: { intensityBefore = Int($0.rounded()) }),
+                       in: 1...10, step: 1)
+                    .tint(AppConstants.Colors.electricTeal)
+                    .accessibilityLabel("Anxiety intensity now")
+                    .accessibilityValue("\(intensityBefore) out of 10")
+            }
+            .padding(.horizontal, 28)
 
             VStack(alignment: .leading, spacing: 14) {
                 GroundingRow(count: 5, sense: "things you can SEE",   icon: "eye.fill")
@@ -413,6 +434,9 @@ struct PanicSOSView: View {
         }
     }
 
+    /// A genuinely completed session (reached the completion screen). This is
+    /// the only path that records a resolved event, credits the streak, awards
+    /// the quest, and may ask for a review.
     private func completeSession() {
         let event = PanicEvent(
             intensityBefore: intensityBefore,
@@ -422,11 +446,43 @@ struct PanicSOSView: View {
             resolved: true
         )
         modelContext.insert(event)
+
+        // The completion slider IS a mood check-in — log it as today's mood so
+        // the session flows straight into the tracking loop (no extra taps).
+        // Anxiety 1-10 maps inversely onto mood 1-10.
+        let mood = MoodEntry(moodLevel: max(1, min(10, 11 - intensityAfter)),
+                             anxietyLevel: intensityAfter,
+                             notes: "Logged after a Panic SOS session")
+        modelContext.insert(mood)
+        QuestService.recordEvent(.logMood, in: modelContext)
+
+        // Using the panic tool IS daily activity — credit the streak.
+        if let profile = profiles.first {
+            StreakService.updateStreak(for: profile)
+            ReviewPromptManager.requestForStreakMilestone(profile.currentStreak, using: requestReview)
+        }
         QuestService.recordEvent(.calmSession, in: modelContext)
         WidgetSync.refresh(from: modelContext)
         ReviewPromptManager.requestAfterCalmSession(intensityBefore: intensityBefore,
                                                     intensityAfter: intensityAfter,
                                                     using: requestReview)
+        stopAllTasks()
+        withAnimation(.easeInOut(duration: 0.35)) { isPresented = false }
+    }
+
+    /// The user closed the sheet early. Record it honestly (unresolved, no
+    /// technique claims, no XP, no review prompt) so analytics stay truthful.
+    private func abandonSession() {
+        if secondsElapsed >= 10 {
+            let event = PanicEvent(
+                intensityBefore: intensityBefore,
+                intensityAfter: intensityBefore,   // unknown — assume unchanged
+                duration: secondsElapsed,
+                techniquesUsed: [],
+                resolved: false
+            )
+            modelContext.insert(event)
+        }
         stopAllTasks()
         withAnimation(.easeInOut(duration: 0.35)) { isPresented = false }
     }

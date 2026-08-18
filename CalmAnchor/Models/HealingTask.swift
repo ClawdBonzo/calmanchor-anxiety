@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class HealingTask {
+    #Index<HealingTask>([\.dayNumber])
     var id: UUID
     var title: String
     var taskDescription: String

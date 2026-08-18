@@ -28,7 +28,9 @@ final class RevenueCatService: NSObject, ObservableObject {
             let customerInfo = try await Purchases.shared.customerInfo()
             isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         } catch {
+            #if DEBUG
             print("RevenueCat: subscription check failed — \(error.localizedDescription)")
+            #endif
         }
     }
 
@@ -38,7 +40,9 @@ final class RevenueCatService: NSObject, ObservableObject {
             offerings = fetched
             currentOffering = fetched.current
         } catch {
+            #if DEBUG
             print("RevenueCat: offerings fetch failed — \(error.localizedDescription)")
+            #endif
         }
     }
 

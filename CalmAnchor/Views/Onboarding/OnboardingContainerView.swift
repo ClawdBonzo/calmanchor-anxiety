@@ -67,6 +67,10 @@ struct OnboardingContainerView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .scrollDismissesKeyboard(.immediately)
             .ignoresSafeArea()
+            // Navigation is driven by each page's CTA. Blocking the swipe gesture
+            // prevents skipping the profile-creation step (which shipped as a bug
+            // that produced profile-less installs).
+            .highPriorityGesture(DragGesture())
 
             // Progress dots — visible only on the input steps
             if currentStep >= 1 && currentStep <= 6 {
@@ -85,22 +89,41 @@ struct OnboardingContainerView: View {
         }
     }
 
+    /// Idempotent upsert. Safe to call more than once (swipe back-and-forth) and
+    /// from both the crafting screen and completeOnboarding(), so a user can
+    /// never reach the main app without a profile + healing plan.
     private func createProfile() {
-        let profile = UserProfile(
-            calmName: calmName.trimmingCharacters(in: .whitespaces).isEmpty ? "Friend" : calmName,
-            triggers: Array(selectedTriggers),
-            baselineMood: baselineMood,
-            dailyMinutes: dailyMinutes
-        )
+        let name = calmName.trimmingCharacters(in: .whitespaces).isEmpty ? "Friend" : calmName
+        let existing = (try? modelContext.fetch(FetchDescriptor<UserProfile>()))?.first
+        let profile: UserProfile
+        if let existing {
+            profile = existing
+            profile.calmName = name
+            profile.triggers = Array(selectedTriggers)
+            profile.baselineMood = baselineMood
+            profile.dailyMinutes = dailyMinutes
+        } else {
+            profile = UserProfile(calmName: name,
+                                  triggers: Array(selectedTriggers),
+                                  baselineMood: baselineMood,
+                                  dailyMinutes: dailyMinutes)
+            modelContext.insert(profile)
+        }
         profile.notificationsEnabled = notificationsEnabled
         profile.reminderTime = reminderTime
-        modelContext.insert(profile)
-        HealingPlanService.generatePlan(for: profile, in: modelContext)
+
+        // Only generate the plan once; regenerate only if none exists yet.
+        let taskCount = (try? modelContext.fetchCount(FetchDescriptor<HealingTask>())) ?? 0
+        if taskCount == 0 {
+            HealingPlanService.generatePlan(for: profile, in: modelContext)
+        }
+        try? modelContext.save()
 
         Task { await NotificationService.shared.syncAll(profile: profile, hasActivityToday: false) }
     }
 
     private func completeOnboarding() {
+        createProfile()          // guarantees a profile even if the user swiped past step 6
         hasCompletedOnboarding = true
     }
 }

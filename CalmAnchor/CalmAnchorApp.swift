@@ -62,15 +62,22 @@ struct CalmAnchorApp: App {
         let context = sharedModelContainer.mainContext
         switch phase {
         case .active:
+            // Roll the day forward: quests, "today" windows, widget, and re-check
+            // entitlement (a single failed launch check must not lock out a subscriber).
+            QuestService.refreshDailyQuests(in: context, isPremium: revenueCat.isPremium)
             WidgetSync.refresh(from: context)
-        case .background:
+            Task { await revenueCat.checkSubscriptionStatus() }
+            Task { await PanicLiveActivityController.endOrphans() }
+        case .inactive, .background:
+            // Schedule on .inactive too — it fires before suspension, so the
+            // streak-risk nudge is reliably registered even if .background is cut short.
             guard let profile = try? context.fetch(FetchDescriptor<UserProfile>()).first else { return }
             Task {
                 await NotificationService.shared.syncAll(
                     profile: profile,
                     hasActivityToday: NotificationService.shared.hasActivityToday(profile))
             }
-        default:
+        @unknown default:
             break
         }
     }
@@ -96,8 +103,12 @@ struct RootView: View {
                     .zIndex(999)
             }
         }
+        // A deep link (e.g. the widget's SOS button) means the user needs the app
+        // NOW — never make a panicking user wait through the splash.
+        .onOpenURL { _ in
+            withAnimation(.easeOut(duration: 0.15)) { showSplash = false }
+        }
         .onAppear {
-            // Structured concurrency replaces DispatchQueue.main.asyncAfter
             Task { @MainActor in
                 try? await Task.sleep(for: .milliseconds(2200))
                 withAnimation(.easeOut(duration: 0.5)) { showSplash = false }

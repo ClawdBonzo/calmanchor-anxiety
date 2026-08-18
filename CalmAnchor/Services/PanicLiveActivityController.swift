@@ -35,4 +35,13 @@ final class PanicLiveActivityController {
         await activity.end(ActivityContent(state: final, staleDate: nil), dismissalPolicy: .after(.now + 3))
         self.activity = nil
     }
+
+    /// If the app was force-quit or crashed mid-session, a stale Live Activity
+    /// can linger on the Lock Screen / Dynamic Island. Clear any on foreground.
+    static func endOrphans() async {
+        for stale in Activity<PanicBreathingAttributes>.activities {
+            let final = PanicBreathingAttributes.ContentState(phase: .complete, cycle: 6, phaseEndsAt: .now)
+            await stale.end(ActivityContent(state: final, staleDate: nil), dismissalPolicy: .immediate)
+        }
+    }
 }

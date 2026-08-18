@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class PanicEvent {
+    #Index<PanicEvent>([\.date])
     var id: UUID
     var date: Date
     var intensityBefore: Int // 1-10

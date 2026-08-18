@@ -42,9 +42,12 @@ enum QuestType: String, CaseIterable {
 /// on every appear; resets at local midnight without any background timer.
 enum QuestService {
     /// Ensure today's 3 quests exist; deactivate any from previous days.
+    /// - Parameter isPremium: free users can't reach the healing plan, so their
+    ///   daily set omits that quest — a visible goal that can never be completed
+    ///   is worse than no goal at all.
     @MainActor
     @discardableResult
-    static func refreshDailyQuests(in context: ModelContext) -> [Quest] {
+    static func refreshDailyQuests(in context: ModelContext, isPremium: Bool = true) -> [Quest] {
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
         guard let tomorrow = cal.date(byAdding: .day, value: 1, to: today) else { return [] }
@@ -67,10 +70,11 @@ enum QuestService {
             return todays.sorted { $0.createdDate < $1.createdDate }
         }
 
-        // Generate today's set.
+        // Generate today's set (free users skip the premium-only healing task quest).
         let due = tomorrow.addingTimeInterval(-1)
         var created: [Quest] = []
-        for type in QuestType.allCases {
+        let types = QuestType.allCases.filter { isPremium || $0 != .healingTask }
+        for type in types {
             let q = Quest(type: type.rawValue,
                           title: type.title,
                           questDescription: type.detail,

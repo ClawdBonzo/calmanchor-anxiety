@@ -109,7 +109,9 @@ struct CalmAnchorWidgetEntryView: View {
             Spacer()
         }
         .padding(12)
-        .widgetURL(URL(string: "calmanchor://logmood"))
+        // Small widget has no room for a separate SOS button, so the whole
+        // tile is the panic entry point — the highest-value action.
+        .widgetURL(URL(string: "calmanchor://panic"))
         .containerBackground(.fill.tertiary, for: .widget)
     }
 
@@ -189,10 +191,78 @@ struct CalmAnchorWidgets: Widget {
     }
 }
 
+// MARK: - Lock Screen SOS widget
+// For a panic app the distance from "I'm having an attack" to the breathing
+// orb IS the product. This puts SOS one tap from the Lock Screen — no unlock,
+// no app hunt, no splash.
+
+struct SOSEntry: TimelineEntry {
+    let date: Date
+    let streak: Int
+}
+
+struct SOSProvider: TimelineProvider {
+    func placeholder(in context: Context) -> SOSEntry { SOSEntry(date: Date(), streak: 0) }
+    func getSnapshot(in context: Context, completion: @escaping (SOSEntry) -> Void) {
+        completion(SOSEntry(date: Date(), streak: WidgetDataStore.read().currentStreak))
+    }
+    func getTimeline(in context: Context, completion: @escaping (Timeline<SOSEntry>) -> Void) {
+        let entry = SOSEntry(date: Date(), streak: WidgetDataStore.read().currentStreak)
+        completion(Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(6 * 3600))))
+    }
+}
+
+struct SOSAccessoryView: View {
+    var entry: SOSEntry
+    @Environment(\.widgetFamily) var family
+
+    var body: some View {
+        switch family {
+        case .accessoryCircular:
+            ZStack {
+                AccessoryWidgetBackground()
+                VStack(spacing: 1) {
+                    Image(systemName: "wind").font(.system(size: 18, weight: .bold))
+                    Text("SOS").font(.system(size: 10, weight: .heavy, design: .rounded))
+                }
+            }
+            .widgetURL(URL(string: "calmanchor://panic"))
+        case .accessoryRectangular:
+            HStack(spacing: 8) {
+                Image(systemName: "wind").font(.system(size: 20, weight: .bold))
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("Panic SOS").font(.system(size: 14, weight: .bold, design: .rounded))
+                    Text(entry.streak > 0 ? "Breathe · \(entry.streak)-day streak" : "Tap to breathe")
+                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .widgetURL(URL(string: "calmanchor://panic"))
+        default:
+            Image(systemName: "wind").widgetURL(URL(string: "calmanchor://panic"))
+        }
+    }
+}
+
+struct CalmAnchorSOSWidget: Widget {
+    let kind = "CalmAnchorSOSWidget"
+
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: SOSProvider()) { entry in
+            SOSAccessoryView(entry: entry)
+                .containerBackground(.clear, for: .widget)
+        }
+        .configurationDisplayName("Panic SOS")
+        .description("One tap to guided breathing — right from your Lock Screen.")
+        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline])
+    }
+}
+
 @main
 struct CalmAnchorWidgetBundle: WidgetBundle {
     var body: some Widget {
         CalmAnchorWidgets()
+        CalmAnchorSOSWidget()
         PanicBreathingLiveActivity()
     }
 }

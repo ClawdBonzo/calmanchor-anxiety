@@ -7,36 +7,40 @@ struct StreakCalendarView: View {
     @Query private var profiles: [UserProfile]
     @Query(sort: \JournalEntry.date) private var journals: [JournalEntry]
     @Query(sort: \MoodEntry.date) private var moods: [MoodEntry]
+    @Query(sort: \PanicEvent.date) private var panicEvents: [PanicEvent]
     @State private var selectedMonth = Date()
     @State private var showPaywall = false
+    @State private var todaysTasks: [HealingTask] = []
 
     private var profile: UserProfile? { profiles.first }
     private var activeDates: Set<DateComponents> {
-        StreakService.activeDates(journals: journals, moods: moods)
+        StreakService.activeDates(journals: journals, moods: moods, panicEvents: panicEvents)
     }
 
     var body: some View {
         NavigationStack {
-            Group {
-                if !revenueCat.isPremium {
-                    PremiumGateView(
-                        feature: "Healing Streaks",
-                        icon: "flame.fill",
-                        description: "Track your daily streak, view your healing calendar, and follow your personalized plan."
-                    ) { showPaywall = true }
-                } else {
-                    ScrollView {
-                        VStack(spacing: 24) {
-                            streakSummary
-                            calendarView
-                            todayPlanSection
-                            Spacer().frame(height: 80)
-                        }
-                        .padding(.horizontal, 20)
+            // Streaks + calendar are free: the streak is the retention hook, and a
+            // user who can't see it has no reason to keep it. Only the healing
+            // plan (the paid content) is gated below.
+            ScrollView {
+                VStack(spacing: 24) {
+                    streakSummary
+                    calendarView
+                    if revenueCat.isPremium {
+                        todayPlanSection
+                    } else {
+                        PremiumGateView(
+                            feature: "Personalized Healing Plan",
+                            icon: "leaf.fill",
+                            description: "Unlock your 30-day plan tailored to your triggers."
+                        ) { showPaywall = true }
                     }
-                    .background(Color(hex: "080E1C"))
+                    Spacer().frame(height: 80)
                 }
+                .padding(.horizontal, 20)
             }
+            .background(Color(hex: "080E1C"))
+            .onAppear { todaysTasks = HealingPlanService.todaysTasks(from: modelContext) }
             .navigationTitle("Healing Streaks")
             .sheet(isPresented: $showPaywall) {
                 PaywallView(
@@ -133,7 +137,7 @@ struct StreakCalendarView: View {
                     .font(.system(size: 18, weight: .bold, design: .rounded))
             }
 
-            let tasks = HealingPlanService.todaysTasks(from: modelContext)
+            let tasks = todaysTasks
             if tasks.isEmpty {
                 Text("Rest day - no tasks scheduled.")
                     .font(.system(size: 14, weight: .medium, design: .rounded))

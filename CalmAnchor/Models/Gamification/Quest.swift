@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class Quest {
+    #Index<Quest>([\.isActive, \.dueDate])
     @Attribute(.unique) var id: UUID
     var type: String
     var title: String

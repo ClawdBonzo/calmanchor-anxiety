@@ -5,11 +5,16 @@ struct DashboardView: View {
     @Binding var showPanicMode: Bool
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var revenueCat: RevenueCatService
-    @Query private var profiles: [UserProfile]
+    @ObservedObject private var celebrations = CelebrationCenter.shared
+    @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
     @Query private var todaysMoods: [MoodEntry]
     @Query private var gameStatsArray: [GameStats]
-    @Query private var quests: [Quest]
+    /// Active quests only — the table grows 3 rows/day forever, so never load it all.
+    @Query(filter: #Predicate<Quest> { $0.isActive }) private var quests: [Quest]
 
+    /// The "today" window is baked into the predicate at init. MainTabView keys
+    /// this view on the current day (`.id(dayKey)`) so it re-inits — and the
+    /// window rolls forward — at local midnight / on foreground.
     init(showPanicMode: Binding<Bool>) {
         _showPanicMode = showPanicMode
         let cal = Calendar.current
@@ -21,6 +26,8 @@ struct DashboardView: View {
     }
 
     @State private var journalCount = 0
+    /// Fetched once on appear (and re-keyed per day by MainTabView), not in body.
+    @State private var todaysTasks: [HealingTask] = []
     @State private var showQuickMood = false
     @State private var showJournal = false
     @State private var showCalmCard = false
@@ -49,11 +56,11 @@ struct DashboardView: View {
                         greetingSection
                             .padding(.top, 12)
                         panicButton
-                        if revenueCat.isPremium { stayedCalmCard }
+                        stayedCalmCard          // share loop is free — it's how we acquire users
                         todayMoodCard
                         dailyQuestsCard
-                        if revenueCat.isPremium { promptCard }
-                        if revenueCat.isPremium { streakCard }
+                        promptCard              // reflection builds the journaling habit we monetize
+                        streakCard              // free: the streak is the retention hook
                         if revenueCat.isPremium { healingTasksCard }
                         quickActionsRow
                     }
@@ -83,19 +90,48 @@ struct DashboardView: View {
                     streakDays: profile?.currentStreak ?? 0
                 )
             }
+            // Streak milestone moment (3/7/14/30/60/100). Routes into the share card.
+            .fullScreenCover(item: $celebrations.celebration) { event in
+                if case .streakMilestone(let days) = event {
+                    StreakMilestoneView(
+                        days: days,
+                        calmName: profile?.calmName ?? "Friend",
+                        onShare: {
+                            celebrations.celebration = nil
+                            showCalmCard = true
+                        },
+                        onDismiss: { celebrations.celebration = nil }
+                    )
+                }
+            }
+            // XP / level-up toast
+            .overlay(alignment: .top) {
+                if let toast = celebrations.toast {
+                    CelebrationToast(event: toast)
+                        .padding(.top, 8)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                        .zIndex(50)
+                }
+            }
         }
         .onAppear {
-            QuestService.refreshDailyQuests(in: modelContext)
+            QuestService.refreshDailyQuests(in: modelContext, isPremium: revenueCat.isPremium)
             WidgetSync.refresh(from: modelContext)
             journalCount = (try? modelContext.fetchCount(FetchDescriptor<JournalEntry>())) ?? 0
-            guard !reduceMotion else { return }
-            withAnimation(.easeOut(duration: 1.2).repeatForever(autoreverses: false)) {
-                panicPulse = true
-            }
-            withAnimation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true)) {
-                streakGlow = true
-            }
+            todaysTasks = HealingPlanService.todaysTasks(from: modelContext)
+            startAmbientAnimations()
         }
+        // An anxious user who turns on Reduce Motion mid-session should see the
+        // pulsing stop immediately — not only on next launch.
+        .onChange(of: reduceMotion) { _, reduce in
+            if reduce { panicPulse = false; streakGlow = false } else { startAmbientAnimations() }
+        }
+    }
+
+    private func startAmbientAnimations() {
+        guard !reduceMotion else { return }
+        withAnimation(.easeOut(duration: 1.2).repeatForever(autoreverses: false)) { panicPulse = true }
+        withAnimation(.easeInOut(duration: 2.5).repeatForever(autoreverses: true)) { streakGlow = true }
     }
 
     // MARK: - Greeting
@@ -114,21 +150,38 @@ struct DashboardView: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
-                // Level badge (if GameStats loaded)
+                // Level badge + XP progress toward the next level. Users earn
+                // 50–100 XP per action; this is where they finally see it land.
                 if let stats = gameStats {
-                    HStack(spacing: 5) {
-                        Image(systemName: "star.circle.fill")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(AppConstants.Colors.sunsetGold)
-                        Text("Lv \(stats.currentLevel)")
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
+                    let progress = stats.getXPProgressToNextLevel()
+                    VStack(alignment: .trailing, spacing: 4) {
+                        HStack(spacing: 5) {
+                            Image(systemName: "star.circle.fill")
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(AppConstants.Colors.sunsetGold)
+                            Text("Lv \(stats.currentLevel)")
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .foregroundStyle(.white)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(AppConstants.Colors.sunsetGold.opacity(0.12))
+                        .clipShape(Capsule())
+                        .overlay(Capsule().stroke(AppConstants.Colors.sunsetGold.opacity(0.25), lineWidth: 1))
+
+                        if stats.currentLevel < 20 {
+                            GeometryReader { geo in
+                                ZStack(alignment: .leading) {
+                                    Capsule().fill(.white.opacity(0.10))
+                                    Capsule().fill(AppConstants.Colors.sunsetGold.opacity(0.85))
+                                        .frame(width: max(0, geo.size.width * progress.percentage))
+                                        .animation(.easeOut(duration: 0.6), value: progress.percentage)
+                                }
+                            }
+                            .frame(width: 72, height: 4)
+                            .accessibilityLabel("\(progress.current) of \(progress.needed) XP to next level")
+                        }
                     }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(AppConstants.Colors.sunsetGold.opacity(0.12))
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(AppConstants.Colors.sunsetGold.opacity(0.25), lineWidth: 1))
                 }
 
                 // Streak badge
@@ -431,7 +484,7 @@ struct DashboardView: View {
                 Spacer()
             }
 
-            let tasks = HealingPlanService.todaysTasks(from: modelContext)
+            let tasks = todaysTasks
             if tasks.isEmpty {
                 Text("No tasks today — enjoy a rest day!")
                     .font(.system(size: 13, weight: .medium, design: .rounded))

@@ -17,6 +17,8 @@ final class UserProfile {
     var notificationsEnabled: Bool = false
     var reminderTime: Date = UserProfile.defaultReminderTime
     var taskRemindersEnabled: Bool = true
+    /// When the one-per-30-days streak grace day was last spent (nil = never).
+    var lastGraceUsedDate: Date? = nil
 
     /// 8:00 PM today — only hour/minute are ever read when building triggers.
     static var defaultReminderTime: Date {

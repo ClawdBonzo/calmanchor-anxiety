@@ -35,8 +35,12 @@ struct PaywallView: View {
     @State private var errorMessage: String?
     @State private var headerAppeared = false
     @State private var contentAppeared = false
+    /// productIdentifier -> is this user eligible for the intro/free-trial offer.
+    @State private var trialEligibility: [String: Bool] = [:]
 
-    // MARK: Fallback plan data
+    // MARK: Fallback plan data (only shown if RevenueCat offerings fail to load).
+    // We cannot verify trial eligibility offline, so the fallback never
+    // advertises a trial — the live path does once eligibility is known.
     private let fallbackPlans: [PlanInfo] = [
         PlanInfo(packageType: .weekly,   productID: "calm_weekly",
                  name: "Weekly",   price: "$4.99",  priceSuffix: "/wk",
@@ -44,11 +48,11 @@ struct PaywallView: View {
                  savingsNote: ""),
         PlanInfo(packageType: .monthly,  productID: "calm_monthly",
                  name: "Monthly",  price: "$9.99",  priceSuffix: "/mo",
-                 badge: "BEST VALUE", hasTrial: true,  trialLabel: "3-Day Free Trial",
+                 badge: "BEST VALUE", hasTrial: false, trialLabel: "",
                  savingsNote: ""),
         PlanInfo(packageType: .annual,   productID: "calm_yearly",
                  name: "Yearly",   price: "$49.99", priceSuffix: "/yr",
-                 badge: "Save 58%",  hasTrial: true,  trialLabel: "3-Day Free Trial",
+                 badge: "Save 58%",  hasTrial: false, trialLabel: "",
                  savingsNote: "Save 58% vs monthly"),
         PlanInfo(packageType: .lifetime, productID: "calm_lifetime",
                  name: "Lifetime", price: "$79.99", priceSuffix: "",
@@ -140,6 +144,9 @@ struct PaywallView: View {
             }
         }
         .preferredColorScheme(.dark)
+        // Re-check trial eligibility whenever the offered packages change (they
+        // arrive async from RevenueCat, so this also covers the initial load).
+        .task(id: sortedPackages.map(\.identifier)) { await loadTrialEligibility() }
         .onAppear {
             headerAppeared = true
             Task { @MainActor in
@@ -384,7 +391,8 @@ struct PaywallView: View {
             } else {
                 priceStr = plan.price
             }
-            return "3-day free trial, then \(priceStr)\(plan.priceSuffix). Cancel anytime."
+            let trial = plan.trialLabel.isEmpty ? "Free trial" : plan.trialLabel.capitalizedFirst
+            return "\(trial), then \(priceStr)\(plan.priceSuffix). Cancel anytime."
         }
         return nil
     }
@@ -396,28 +404,33 @@ struct PaywallView: View {
         return liveInfo(for: pkg)
     }
 
+    /// A trial is only advertised when the product actually carries a free-trial
+    /// intro offer AND this user is eligible for it (RevenueCat eligibility check).
+    /// Never hardcode "3-Day Free Trial": ineligible users would be charged
+    /// immediately after being promised a trial.
     private func liveInfo(for pkg: Package) -> PlanInfo {
-        let rcHasTrial = pkg.storeProduct.introductoryDiscount != nil
-        let rcTrialDays = pkg.storeProduct.introductoryDiscount.map { "\($0.subscriptionPeriod.value)-day free trial" }
+        let intro = pkg.storeProduct.introductoryDiscount
+        let productHasFreeTrial = intro?.paymentMode == .freeTrial
+        let eligible = trialEligibility[pkg.storeProduct.productIdentifier] ?? false
+        let showTrial = productHasFreeTrial && eligible
+        let trialLabel = showTrial ? Self.trialLabel(for: intro) : ""
 
         switch pkg.packageType {
         case .weekly:
             return PlanInfo(packageType: .weekly, productID: "calm_weekly",
                             name: "Weekly", price: pkg.localizedPriceString, priceSuffix: "/wk",
-                            badge: "", hasTrial: false, trialLabel: "",
+                            badge: "", hasTrial: showTrial, trialLabel: trialLabel,
                             savingsNote: "")
         case .monthly:
-            let trial = rcHasTrial ? (rcTrialDays ?? "3-day free trial") : "3-day free trial"
             return PlanInfo(packageType: .monthly, productID: "calm_monthly",
                             name: "Monthly", price: pkg.localizedPriceString, priceSuffix: "/mo",
-                            badge: "BEST VALUE", hasTrial: true, trialLabel: trial,
+                            badge: "BEST VALUE", hasTrial: showTrial, trialLabel: trialLabel,
                             savingsNote: "")
         case .annual:
-            let trial = rcHasTrial ? (rcTrialDays ?? "3-day free trial") : "3-day free trial"
             return PlanInfo(packageType: .annual, productID: "calm_yearly",
                             name: "Yearly", price: pkg.localizedPriceString, priceSuffix: "/yr",
-                            badge: "Save 58%", hasTrial: true, trialLabel: trial,
-                            savingsNote: "vs $119.88/yr billed monthly")
+                            badge: "Save 58%", hasTrial: showTrial, trialLabel: trialLabel,
+                            savingsNote: "vs monthly billing")
         case .lifetime:
             return PlanInfo(packageType: .lifetime, productID: "calm_lifetime",
                             name: "Lifetime", price: pkg.localizedPriceString, priceSuffix: "",
@@ -426,9 +439,36 @@ struct PaywallView: View {
         default:
             return PlanInfo(packageType: pkg.packageType, productID: "",
                             name: pkg.storeProduct.localizedTitle, price: pkg.localizedPriceString, priceSuffix: "",
-                            badge: "", hasTrial: rcHasTrial, trialLabel: rcTrialDays ?? "",
+                            badge: "", hasTrial: showTrial, trialLabel: trialLabel,
                             savingsNote: "")
         }
+    }
+
+    /// "3-day free trial", "1-week free trial", "1-month free trial" — honours the unit.
+    static func trialLabel(for intro: StoreProductDiscount?) -> String {
+        guard let intro else { return "" }
+        let n = intro.subscriptionPeriod.value
+        let unit: String
+        switch intro.subscriptionPeriod.unit {
+        case .day:   unit = n == 1 ? "day" : "days"
+        case .week:  unit = n == 1 ? "week" : "weeks"
+        case .month: unit = n == 1 ? "month" : "months"
+        case .year:  unit = n == 1 ? "year" : "years"
+        @unknown default: unit = "days"
+        }
+        return "\(n)-\(unit) free trial"
+    }
+
+    /// Ask RevenueCat which of the offered products this user can still trial.
+    private func loadTrialEligibility() async {
+        let ids = sortedPackages.map(\.storeProduct.productIdentifier)
+        guard !ids.isEmpty else { return }
+        let result = await Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: ids)
+        var map: [String: Bool] = [:]
+        for (id, eligibility) in result {
+            map[id] = (eligibility.status == IntroEligibilityStatus.eligible)
+        }
+        trialEligibility = map
     }
 }
 
@@ -549,5 +589,12 @@ struct PremiumPlanCard: View {
 private extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil
+    }
+}
+
+private extension String {
+    var capitalizedFirst: String {
+        guard let f = first else { return self }
+        return f.uppercased() + dropFirst()
     }
 }

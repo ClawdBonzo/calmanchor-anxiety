@@ -132,6 +132,12 @@ struct SettingsView: View {
                     }
                     .disabled(isRestoring)
 
+                    if revenueCat.isPremium {
+                        Link(destination: URL(string: "https://apps.apple.com/account/subscriptions")!) {
+                            Label("Manage Subscription", systemImage: "creditcard")
+                        }
+                    }
+
                     if let msg = restoreMessage {
                         Text(msg)
                             .font(.system(size: 12, weight: .medium))
@@ -145,8 +151,12 @@ struct SettingsView: View {
                         Label("Coping Techniques Library", systemImage: "book.fill")
                     }
 
-                    Label("Crisis Hotline: 988", systemImage: "phone.fill")
-                        .foregroundStyle(.red)
+                    // The most important tap in the app — make it actually dial.
+                    Link(destination: URL(string: "tel:988")!) {
+                        Label("Crisis Hotline: 988", systemImage: "phone.fill")
+                            .foregroundStyle(.red)
+                    }
+                    .accessibilityHint("Calls the 988 Suicide and Crisis Lifeline")
                 } header: {
                     Text("Resources")
                 } footer: {
@@ -173,7 +183,7 @@ struct SettingsView: View {
                     HStack {
                         Label("Version", systemImage: "info.circle.fill")
                         Spacer()
-                        Text("1.0.0")
+                        Text(Self.appVersionString)
                             .foregroundStyle(.secondary)
                     }
 
@@ -220,13 +230,27 @@ struct SettingsView: View {
         }
     }
 
+    /// "Reset All Data" means ALL of it — including gamification, so a fresh
+    /// onboarding doesn't inherit the previous level/XP/quests.
     private func resetData() {
         try? modelContext.delete(model: MoodEntry.self)
         try? modelContext.delete(model: JournalEntry.self)
         try? modelContext.delete(model: PanicEvent.self)
         try? modelContext.delete(model: HealingTask.self)
         try? modelContext.delete(model: UserProfile.self)
-        NotificationService.shared.cancelAll()
+        try? modelContext.delete(model: GameStats.self)
+        try? modelContext.delete(model: Quest.self)
+        try? modelContext.delete(model: XPEvent.self)
+        try? modelContext.delete(model: Badge.self)
+        try? modelContext.save()
+        NotificationService.shared.cancelEverything()
+        WidgetSync.refresh(from: modelContext)
         hasCompletedOnboarding = false
+    }
+
+    private static var appVersionString: String {
+        let v = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+        let b = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
+        return b.isEmpty ? v : "\(v) (\(b))"
     }
 }

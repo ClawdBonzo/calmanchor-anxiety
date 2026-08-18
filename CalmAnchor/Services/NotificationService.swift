@@ -16,6 +16,7 @@ final class NotificationService: NSObject, ObservableObject {
         static let streakRisk    = "calm.streakRisk"
         static let taskReminder  = "calm.task"
         static let trialEnding   = "calm.trialEnding"
+        static let winBack       = "calm.winBack"
     }
 
     func bootstrap() {
@@ -51,9 +52,37 @@ final class NotificationService: NSObject, ObservableObject {
         await scheduleStreakRisk(hasActivityToday: hasActivityToday,
                                  reminderTime: profile.reminderTime,
                                  currentStreak: profile.currentStreak)
+        await scheduleWinBack(reminderTime: profile.reminderTime, calmName: profile.calmName)
     }
 
+    /// Lapsed-user win-back: fires 3 days from now at the reminder hour, and is
+    /// re-armed on every sync — so it only ever fires if the user truly stops
+    /// opening the app. The highest-ROI notification in any habit product.
+    func scheduleWinBack(reminderTime: Date, calmName: String) async {
+        center.removePendingNotificationRequests(withIdentifiers: [ID.winBack])
+        let cal = Calendar.current
+        guard let base = cal.date(byAdding: .day, value: 3, to: Date()) else { return }
+        let h = cal.component(.hour, from: reminderTime), m = cal.component(.minute, from: reminderTime)
+        guard let fire = cal.date(bySettingHour: h, minute: m, second: 0, of: base) else { return }
+        let comps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: fire)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
+        let name = calmName.isEmpty ? "there" : calmName
+        let content = makeContent(String(localized: "We're still here, \(name)"),
+                                  String(localized: "Anxiety doesn't wait — and neither does your anchor. One breath is enough to come back."))
+        try? await center.add(UNNotificationRequest(identifier: ID.winBack, content: content, trigger: trigger))
+    }
+
+    /// Cancels the reminder family only. Deliberately spares the trial-ending
+    /// notice: turning off daily reminders must not silently drop the
+    /// "your trial converts tomorrow" heads-up we promised at purchase.
     func cancelAll() {
+        center.removePendingNotificationRequests(withIdentifiers: [
+            ID.dailyReminder, ID.streakRisk, ID.taskReminder, ID.winBack
+        ])
+    }
+
+    /// Full wipe — used by "Reset All Data" (which also drops the entitlement context).
+    func cancelEverything() {
         center.removeAllPendingNotificationRequests()
     }
 
@@ -67,8 +96,8 @@ final class NotificationService: NSObject, ObservableObject {
         center.removePendingNotificationRequests(withIdentifiers: [ID.dailyReminder])
         let comps = Calendar.current.dateComponents([.hour, .minute], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
-        let content = makeContent("Your daily anchor 🌊",
-                                  "A few minutes of calm is waiting. Check in with yourself.")
+        let content = makeContent(String(localized: "Your daily anchor 🌊"),
+                                  String(localized: "A few minutes of calm is waiting. Check in with yourself."))
         try? await center.add(UNNotificationRequest(identifier: ID.dailyReminder,
                                                     content: content, trigger: trigger))
     }
@@ -88,12 +117,17 @@ final class NotificationService: NSObject, ObservableObject {
            rt.addingTimeInterval(1800) > fire {
             fire = rt.addingTimeInterval(1800)
         }
+        // Never let the nudge spill past midnight — that would arrive after the
+        // streak has already lapsed. Clamp to 23:45 today at the latest.
+        if let latest = cal.date(bySettingHour: 23, minute: 45, second: 0, of: Date()), fire > latest {
+            fire = latest
+        }
         guard fire > Date() else { return }
 
         let comps = cal.dateComponents([.year, .month, .day, .hour, .minute], from: fire)
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
-        let content = makeContent("Keep your \(currentStreak)-day streak alive 🔥",
-                                  "A quick mood log or journal entry keeps your momentum going.")
+        let content = makeContent(String(localized: "Keep your \(currentStreak)-day streak alive 🔥"),
+                                  String(localized: "A quick mood log or journal entry keeps your momentum going."))
         try? await center.add(UNNotificationRequest(identifier: ID.streakRisk,
                                                     content: content, trigger: trigger))
     }
@@ -105,8 +139,8 @@ final class NotificationService: NSObject, ObservableObject {
         guard authStatus == .authorized, remindAt > Date() else { return }
         let comps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: remindAt)
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: false)
-        let content = makeContent("Your free trial ends tomorrow",
-                                  "Your CalmAnchor Pro trial converts in 24 hours. Manage anytime in Settings.")
+        let content = makeContent(String(localized: "Your free trial ends tomorrow"),
+                                  String(localized: "Your CalmAnchor Pro trial converts in 24 hours. Manage anytime in Settings."))
         try? await center.add(UNNotificationRequest(identifier: ID.trialEnding,
                                                     content: content, trigger: trigger))
     }

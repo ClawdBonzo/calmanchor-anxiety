@@ -2,37 +2,67 @@ import SwiftUI
 import SwiftData
 import Charts
 
-struct ProgressChartsView: View {
-    @EnvironmentObject private var revenueCat: RevenueCatService
-    @Query(sort: \MoodEntry.date) private var moods: [MoodEntry]
-    @Query(sort: \JournalEntry.date) private var journals: [JournalEntry]
-    @Query(sort: \PanicEvent.date) private var panicEvents: [PanicEvent]
-    @State private var timeRange: TimeRange = .week
-    @State private var showPaywall = false
+/// All chart aggregates, computed ONCE per data/range change (never in `body`).
+struct ProgressStats: Equatable {
+    var avgMood: Double = 0
+    var journalImprovedPct: Int? = nil
+    var anxietyTrendingDown = false
+    var panicCount = 0
+    var avgBefore: Double = 0
+    var avgAfter: Double = 0
+    var avgDurationMin = 0
 
-    enum TimeRange: String, CaseIterable {
-        case week = "7 Days"
-        case month = "30 Days"
-        case all = "All Time"
+    static func compute(moods: [MoodEntry], journals: [JournalEntry], panic: [PanicEvent]) -> ProgressStats {
+        var s = ProgressStats()
+        if !moods.isEmpty {
+            s.avgMood = Double(moods.reduce(0) { $0 + $1.moodLevel }) / Double(moods.count)
+        }
+        if !journals.isEmpty {
+            let improved = journals.reduce(0) { $0 + ($1.moodAfter > $1.moodBefore ? 1 : 0) }
+            s.journalImprovedPct = Int(Double(improved) / Double(journals.count) * 100)
+        }
+        // Compare the most recent 7 against the ones BEFORE them (no overlap —
+        // the old suffix/prefix logic compared a set against itself for small n).
+        if moods.count >= 8 {
+            let recent = moods.suffix(7)
+            let older = moods.dropLast(7)
+            let r = Double(recent.reduce(0) { $0 + $1.anxietyLevel }) / Double(recent.count)
+            let o = Double(older.reduce(0) { $0 + $1.anxietyLevel }) / Double(older.count)
+            s.anxietyTrendingDown = r < o
+        }
+        let resolved = panic.filter(\.resolved)   // abandoned sessions aren't outcomes
+        s.panicCount = resolved.count
+        if !resolved.isEmpty {
+            let n = Double(resolved.count)
+            s.avgBefore = Double(resolved.reduce(0) { $0 + $1.intensityBefore }) / n
+            s.avgAfter  = Double(resolved.reduce(0) { $0 + $1.intensityAfter }) / n
+            s.avgDurationMin = Int((resolved.reduce(0.0) { $0 + $1.duration } / n) / 60)
+        }
+        return s
     }
+}
 
-    private var filteredMoods: [MoodEntry] {
-        let cutoff = cutoffDate
-        return moods.filter { $0.date >= cutoff }
-    }
+enum ProgressTimeRange: String, CaseIterable {
+    case week = "7 Days"
+    case month = "30 Days"
+    case all = "All Time"
 
-    private var filteredJournals: [JournalEntry] {
-        let cutoff = cutoffDate
-        return journals.filter { $0.date >= cutoff }
-    }
-
-    private var cutoffDate: Date {
-        switch timeRange {
-        case .week: return Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        case .month: return Calendar.current.date(byAdding: .day, value: -30, to: Date())!
-        case .all: return .distantPast
+    var cutoff: Date {
+        switch self {
+        case .week:  return Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? .distantPast
+        case .month: return Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? .distantPast
+        case .all:   return .distantPast
         }
     }
+}
+
+/// Outer shell: gate + range picker. The queries live in the inner content view
+/// so they're only installed for premium users (free users never fetch three
+/// tables to render a paywall) and rebuilt per range via `.id(timeRange)`.
+struct ProgressChartsView: View {
+    @EnvironmentObject private var revenueCat: RevenueCatService
+    @State private var timeRange: ProgressTimeRange = .week
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -47,16 +77,13 @@ struct ProgressChartsView: View {
                     ScrollView {
                         VStack(spacing: 24) {
                             Picker("Time Range", selection: $timeRange) {
-                                ForEach(TimeRange.allCases, id: \.self) { range in
+                                ForEach(ProgressTimeRange.allCases, id: \.self) { range in
                                     Text(range.rawValue).tag(range)
                                 }
                             }
                             .pickerStyle(.segmented)
-                            moodTrendChart
-                            anxietyTrendChart
-                            journalImpactChart
-                            panicSummary
-                            insightsSection
+                            ProgressChartsContent(range: timeRange)
+                                .id(timeRange)   // rebuild queries for the new window
                             Spacer().frame(height: 80)
                         }
                         .padding(.horizontal, 20)
@@ -73,6 +100,40 @@ struct ProgressChartsView: View {
                 )
                 .environmentObject(revenueCat)
             }
+        }
+    }
+}
+
+/// Inner content: SQL-scoped queries + aggregates computed once (never in body).
+struct ProgressChartsContent: View {
+    let range: ProgressTimeRange
+    @Query private var moods: [MoodEntry]
+    @Query private var journals: [JournalEntry]
+    @Query(sort: \PanicEvent.date) private var panicEvents: [PanicEvent]
+    @State private var stats = ProgressStats()
+
+    init(range: ProgressTimeRange) {
+        self.range = range
+        let cutoff = range.cutoff
+        _moods = Query(filter: #Predicate<MoodEntry> { $0.date >= cutoff }, sort: \.date)
+        _journals = Query(filter: #Predicate<JournalEntry> { $0.date >= cutoff }, sort: \.date)
+    }
+
+    // Already SQL-scoped by the query; kept as the names the chart code uses.
+    private var filteredMoods: [MoodEntry] { moods }
+    private var filteredJournals: [JournalEntry] { journals }
+
+    var body: some View {
+        VStack(spacing: 24) {
+            moodTrendChart
+            anxietyTrendChart
+            journalImpactChart
+            panicSummary
+            insightsSection
+        }
+        // Recompute aggregates only when the underlying data changes.
+        .task(id: moods.count &+ journals.count &* 31 &+ panicEvents.count &* 997) {
+            stats = ProgressStats.compute(moods: moods, journals: journals, panic: panicEvents)
         }
     }
 
@@ -207,20 +268,16 @@ struct ProgressChartsView: View {
                     .font(.system(size: 18, weight: .bold, design: .rounded))
             }
 
-            if panicEvents.isEmpty {
+            if stats.panicCount == 0 {
                 Text("No panic events recorded. You're doing great!")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
             } else {
-                let avgBefore = Double(panicEvents.map(\.intensityBefore).reduce(0, +)) / Double(panicEvents.count)
-                let avgAfter = Double(panicEvents.map(\.intensityAfter).reduce(0, +)) / Double(panicEvents.count)
-                let avgDuration = panicEvents.map(\.duration).reduce(0, +) / Double(panicEvents.count)
-
                 HStack(spacing: 16) {
-                    PanicStat(label: "Events", value: "\(panicEvents.count)", icon: "number")
-                    PanicStat(label: "Avg Before", value: String(format: "%.1f", avgBefore), icon: "arrow.up")
-                    PanicStat(label: "Avg After", value: String(format: "%.1f", avgAfter), icon: "arrow.down")
-                    PanicStat(label: "Avg Time", value: "\(Int(avgDuration / 60))m", icon: "clock")
+                    PanicStat(label: "Events", value: "\(stats.panicCount)", icon: "number")
+                    PanicStat(label: "Avg Before", value: String(format: "%.1f", stats.avgBefore), icon: "arrow.up")
+                    PanicStat(label: "Avg After", value: String(format: "%.1f", stats.avgAfter), icon: "arrow.down")
+                    PanicStat(label: "Avg Time", value: "\(stats.avgDurationMin)m", icon: "clock")
                 }
             }
         }
@@ -240,24 +297,16 @@ struct ProgressChartsView: View {
 
             VStack(alignment: .leading, spacing: 8) {
                 if !moods.isEmpty {
-                    let avgMood = Double(moods.map(\.moodLevel).reduce(0, +)) / Double(moods.count)
-                    InsightRow(text: "Your average mood is \(String(format: "%.1f", avgMood))/10")
+                    InsightRow(text: "Your average mood is \(String(format: "%.1f", stats.avgMood))/10")
                 }
-
-                if !journals.isEmpty {
-                    let improved = journals.filter { $0.moodAfter > $0.moodBefore }.count
-                    let pct = Int(Double(improved) / Double(journals.count) * 100)
+                if let pct = stats.journalImprovedPct {
                     InsightRow(text: "Journaling improved your mood \(pct)% of the time")
                 }
-
-                if moods.count >= 2 {
-                    let recent = moods.suffix(7)
-                    let older = moods.prefix(max(1, moods.count - 7))
-                    let recentAvg = Double(recent.map(\.anxietyLevel).reduce(0, +)) / Double(recent.count)
-                    let olderAvg = Double(older.map(\.anxietyLevel).reduce(0, +)) / Double(older.count)
-                    if recentAvg < olderAvg {
-                        InsightRow(text: "Your anxiety is trending downward - keep going!")
-                    }
+                if stats.anxietyTrendingDown {
+                    InsightRow(text: "Your anxiety is trending downward - keep going!")
+                }
+                if moods.isEmpty && stats.journalImprovedPct == nil {
+                    InsightRow(text: "Log a few moods and your insights will appear here.")
                 }
             }
         }

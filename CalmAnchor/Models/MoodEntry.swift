@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class MoodEntry {
+    #Index<MoodEntry>([\.date])
     var id: UUID
     var date: Date
     var moodLevel: Int // 1-10

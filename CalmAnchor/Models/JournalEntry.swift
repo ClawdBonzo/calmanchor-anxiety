@@ -3,6 +3,7 @@ import SwiftData
 
 @Model
 final class JournalEntry {
+    #Index<JournalEntry>([\.date])
     var id: UUID
     var date: Date
     var moodBefore: Int

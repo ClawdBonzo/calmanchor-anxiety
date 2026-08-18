@@ -40,12 +40,22 @@ struct ViralShareCardView: View {
         }
     }
 
-    // Clean, shareable text — no odd Unicode characters
+    static let appStoreURL = URL(string: "https://apps.apple.com/app/id6761788508")!
+
+    // Clean, shareable text — includes an install path so a share can convert.
     private var shareText: String {
-        if streakDays > 1 {
-            return "I stayed calm today with CalmAnchor — Day \(streakDays) streak. My anchor is holding. #CalmAnchor"
-        }
-        return "I stayed calm today with CalmAnchor. My anchor is holding. #CalmAnchor"
+        let base = streakDays > 1
+            ? "I stayed calm today with CalmAnchor — Day \(streakDays) streak. My anchor is holding."
+            : "I stayed calm today with CalmAnchor. My anchor is holding."
+        return "\(base) #CalmAnchor \(Self.appStoreURL.absoluteString)"
+    }
+
+    /// The card rendered to a real image (3×), so shares carry the visual — not just text.
+    private var shareImage: Image {
+        let renderer = ImageRenderer(content: ShareCardImage(calmName: calmName, streakDays: streakDays))
+        renderer.scale = 3
+        if let ui = renderer.uiImage { return Image(uiImage: ui) }
+        return Image(systemName: "anchor")
     }
 
     var body: some View {
@@ -179,7 +189,9 @@ struct ViralShareCardView: View {
 
                 // ── Share + tagline ──────────────────────────────────────
                 VStack(spacing: 14) {
-                    ShareLink(item: shareText) {
+                    ShareLink(item: shareImage,
+                              message: Text(shareText),
+                              preview: SharePreview("My calm streak", image: shareImage)) {
                         HStack(spacing: 10) {
                             Image(systemName: "square.and.arrow.up")
                                 .font(.system(size: 16, weight: .semibold))
@@ -220,5 +232,69 @@ struct ViralShareCardView: View {
             cardAppeared = true
             if !reduceMotion { glowPulse = true }
         }
+    }
+}
+
+// MARK: - Static card for ImageRenderer (no animation state — renders deterministically)
+
+struct ShareCardImage: View {
+    let calmName: String
+    let streakDays: Int
+
+    var body: some View {
+        ZStack {
+            LinearGradient(colors: [Color(hex: "0A1428"), Color(hex: "1B2838"), Color(hex: "0D3B4F")],
+                           startPoint: .topLeading, endPoint: .bottomTrailing)
+
+            VStack(spacing: 22) {
+                ZStack {
+                    Circle()
+                        .fill(RadialGradient(colors: [AppConstants.Colors.electricTeal.opacity(0.35), .clear],
+                                             center: .center, startRadius: 4, endRadius: 70))
+                        .frame(width: 130, height: 130)
+                    Image(systemName: "anchor")
+                        .font(.system(size: 54, weight: .semibold))
+                        .foregroundStyle(LinearGradient(colors: [AppConstants.Colors.electricTeal,
+                                                                 AppConstants.Colors.roseGoldBright],
+                                                        startPoint: .topLeading, endPoint: .bottomTrailing))
+                }
+
+                Text("I Stayed Calm Today")
+                    .font(.system(size: 30, weight: .black, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+
+                if streakDays > 1 {
+                    HStack(spacing: 6) {
+                        Image(systemName: "flame.fill").foregroundStyle(AppConstants.Colors.sunsetGold)
+                        Text("Day \(streakDays) streak")
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .foregroundStyle(AppConstants.Colors.sunsetGold)
+                    }
+                    .padding(.horizontal, 14).padding(.vertical, 7)
+                    .background(AppConstants.Colors.sunsetGold.opacity(0.14), in: Capsule())
+                }
+
+                Text("anchored in the storm")
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.45))
+                    .italic()
+
+                HStack(spacing: 6) {
+                    Circle().fill(AppConstants.Colors.electricTeal.opacity(0.4)).frame(width: 8, height: 8)
+                    Text(calmName)
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                }
+
+                Text("CalmAnchor · Anxiety Journal")
+                    .font(.system(size: 11, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.32))
+                    .padding(.top, 6)
+            }
+            .padding(36)
+        }
+        .frame(width: 360, height: 480)
+        .clipShape(RoundedRectangle(cornerRadius: 28))
     }
 }

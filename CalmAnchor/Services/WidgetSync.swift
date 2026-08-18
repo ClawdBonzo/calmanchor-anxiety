@@ -10,11 +10,16 @@ enum WidgetSync {
         let profile = try? context.fetch(FetchDescriptor<UserProfile>()).first
         let stats   = try? context.fetch(FetchDescriptor<GameStats>()).first
 
-        let startOfDay = Calendar.current.startOfDay(for: Date())
-        let moods = (try? context.fetch(
-            FetchDescriptor<MoodEntry>(sortBy: [SortDescriptor(\.date, order: .reverse)])
-        )) ?? []
-        let todays = moods.filter { Calendar.current.startOfDay(for: $0.date) == startOfDay }
+        // Predicate-scoped + fetchLimit: this runs on every save (including mid
+        // panic session), so never materialize the whole mood table.
+        let cal = Calendar.current
+        let startOfDay = cal.startOfDay(for: Date())
+        let endOfDay = cal.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay
+        var todayDescriptor = FetchDescriptor<MoodEntry>(
+            predicate: #Predicate { $0.date >= startOfDay && $0.date < endOfDay },
+            sortBy: [SortDescriptor(\.date, order: .reverse)])
+        todayDescriptor.fetchLimit = 1
+        let todays = (try? context.fetch(todayDescriptor)) ?? []
 
         let snapshot = WidgetSnapshot(
             currentStreak: profile?.currentStreak ?? 0,
