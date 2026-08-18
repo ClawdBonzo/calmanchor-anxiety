@@ -9319,6 +9319,790 @@
           }
         }
       }
+    },
+    "How intense is it right now?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "How intense is it right now?"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie stark ist es gerade?"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelle est l'intensité en ce moment ?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今の強さはどれくらい？"
+          }
+        }
+      }
+    },
+    "Anxiety intensity now": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anxiety intensity now"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktuelle Angstintensität"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Intensité de l'anxiété actuelle"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在の不安の強さ"
+          }
+        }
+      }
+    },
+    "Logged after a Panic SOS session": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Logged after a Panic SOS session"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach einer Panik-SOS-Sitzung protokolliert"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enregistré après une séance SOS panique"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パニックSOSセッション後に記録"
+          }
+        }
+      }
+    },
+    "Personalized Healing Plan": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Personalized Healing Plan"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persönlicher Heilungsplan"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plan de guérison personnalisé"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パーソナルヒーリングプラン"
+          }
+        }
+      }
+    },
+    "Unlock your 30-day plan tailored to your triggers.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Unlock your 30-day plan tailored to your triggers."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schalte deinen 30-Tage-Plan frei, abgestimmt auf deine Auslöser."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Débloquez votre plan de 30 jours adapté à vos déclencheurs."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのトリガーに合わせた30日間プランを解放しましょう。"
+          }
+        }
+      }
+    },
+    "Share my streak": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Share my streak"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meine Serie teilen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partager ma série"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連続記録をシェア"
+          }
+        }
+      }
+    },
+    "Keep going": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keep going"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiter so"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continuer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この調子で"
+          }
+        }
+      }
+    },
+    "Level %lld reached!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Level %lld reached!"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Level %lld erreicht!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Niveau %lld atteint !"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レベル%lld到達！"
+          }
+        }
+      }
+    },
+    "%lld-day streak!": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%lld-day streak!"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld-Tage-Serie!"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Série de %lld jours !"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日連続！"
+          }
+        }
+      }
+    },
+    "%lld days strong": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%lld days strong"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Tage stark"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours de force"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日間継続"
+          }
+        }
+      }
+    },
+    "Three days in a row, %@. This is how calm becomes a habit.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Three days in a row, %@. This is how calm becomes a habit."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drei Tage in Folge, %@. So wird Ruhe zur Gewohnheit."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trois jours d'affilée, %@. C'est ainsi que le calme devient une habitude."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3日連続、%@。こうして落ち着きが習慣になります。"
+          }
+        }
+      }
+    },
+    "A full week, %@. You showed up for yourself every single day.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "A full week, %@. You showed up for yourself every single day."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eine ganze Woche, %@. Du warst jeden einzelnen Tag für dich da."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Une semaine complète, %@. Vous avez été là pour vous chaque jour."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まる1週間、%@。毎日自分のために時間をとりました。"
+          }
+        }
+      }
+    },
+    "Two weeks of anchoring. Your nervous system is learning.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Two weeks of anchoring. Your nervous system is learning."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwei Wochen Verankerung. Dein Nervensystem lernt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deux semaines d'ancrage. Votre système nerveux apprend."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2週間のアンカリング。神経系が学んでいます。"
+          }
+        }
+      }
+    },
+    "Thirty days. This isn't luck anymore — it's who you are now.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thirty days. This isn't luck anymore — it's who you are now."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dreißig Tage. Das ist kein Glück mehr – das bist jetzt du."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trente jours. Ce n'est plus de la chance — c'est qui vous êtes maintenant."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30日。もう運ではありません——それが今のあなたです。"
+          }
+        }
+      }
+    },
+    "Sixty days. Most people never get here. You did.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Sixty days. Most people never get here. You did."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sechzig Tage. Die meisten kommen nie hierher. Du schon."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soixante jours. Peu de gens arrivent ici. Vous, oui."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "60日。ほとんどの人はここまで来ません。あなたは来ました。"
+          }
+        }
+      }
+    },
+    "%lld days of choosing calm. Extraordinary.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%lld days of choosing calm. Extraordinary."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Tage, an denen du Ruhe gewählt hast. Außergewöhnlich."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jours à choisir le calme. Extraordinaire."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日間、落ち着きを選び続けました。素晴らしい。"
+          }
+        }
+      }
+    },
+    "Manage Subscription": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Manage Subscription"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abo verwalten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gérer l'abonnement"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サブスクリプションを管理"
+          }
+        }
+      }
+    },
+    "Calls the 988 Suicide and Crisis Lifeline": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Calls the 988 Suicide and Crisis Lifeline"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruft die 988 Suicide and Crisis Lifeline an"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Appelle la ligne 988 Suicide and Crisis Lifeline"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "988自殺・危機ライフラインに電話します"
+          }
+        }
+      }
+    },
+    "Log a few moods and your insights will appear here.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Log a few moods and your insights will appear here."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Protokolliere ein paar Stimmungen und deine Erkenntnisse erscheinen hier."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notez quelques humeurs et vos analyses apparaîtront ici."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "気分をいくつか記録すると、ここにインサイトが表示されます。"
+          }
+        }
+      }
+    },
+    "Free trial": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Free trial"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kostenlose Testphase"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Essai gratuit"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料トライアル"
+          }
+        }
+      }
+    },
+    "Your daily anchor 🌊": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Your daily anchor 🌊"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein täglicher Anker 🌊"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre ancre quotidienne 🌊"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日のアンカー 🌊"
+          }
+        }
+      }
+    },
+    "A few minutes of calm is waiting. Check in with yourself.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "A few minutes of calm is waiting. Check in with yourself."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein paar Minuten Ruhe warten auf dich. Check-in mit dir selbst."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quelques minutes de calme vous attendent. Prenez de vos nouvelles."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数分の落ち着きが待っています。自分をチェックしましょう。"
+          }
+        }
+      }
+    },
+    "Keep your %lld-day streak alive 🔥": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keep your %lld-day streak alive 🔥"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte deine %lld-Tage-Serie am Leben 🔥"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gardez votre série de %lld jours en vie 🔥"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld日連続を守ろう 🔥"
+          }
+        }
+      }
+    },
+    "A quick mood log or journal entry keeps your momentum going.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "A quick mood log or journal entry keeps your momentum going."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein kurzes Stimmungslog oder ein Tagebucheintrag hält deinen Schwung."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un rapide log d'humeur ou une entrée de journal garde votre élan."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "気分の記録やジャーナルで勢いを保ちましょう。"
+          }
+        }
+      }
+    },
+    "Your free trial ends tomorrow": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Your free trial ends tomorrow"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Testphase endet morgen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre essai gratuit se termine demain"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料トライアルは明日終了します"
+          }
+        }
+      }
+    },
+    "Your CalmAnchor Pro trial converts in 24 hours. Manage anytime in Settings.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Your CalmAnchor Pro trial converts in 24 hours. Manage anytime in Settings."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine CalmAnchor Pro-Testphase wird in 24 Stunden umgewandelt. Jederzeit in den Einstellungen verwalten."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Votre essai CalmAnchor Pro se convertit dans 24 heures. Gérez-le à tout moment dans Réglages."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CalmAnchor Proのトライアルは24時間後に有料に切り替わります。設定からいつでも管理できます。"
+          }
+        }
+      }
+    },
+    "We're still here, %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "We're still here, %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wir sind noch da, %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nous sommes toujours là, %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだここにいます、%@"
+          }
+        }
+      }
+    },
+    "Anxiety doesn't wait — and neither does your anchor. One breath is enough to come back.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anxiety doesn't wait — and neither does your anchor. One breath is enough to come back."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Angst wartet nicht – und dein Anker auch nicht. Ein Atemzug reicht, um zurückzukommen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L'anxiété n'attend pas — et votre ancre non plus. Une respiration suffit pour revenir."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不安は待ってくれません——あなたのアンカーも同じです。ひと呼吸で戻ってこられます。"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

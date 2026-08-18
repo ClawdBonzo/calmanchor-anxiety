@@ -38,8 +38,8 @@ struct CelebrationToast: View {
     private var title: String {
         switch event {
         case .xpGained(let n):        return "+\(n) XP"
-        case .levelUp(let l, _):      return "Level \(l) reached!"
-        case .streakMilestone(let d): return "\(d)-day streak!"
+        case .levelUp(let l, _):      return String(localized: "Level \(l) reached!")
+        case .streakMilestone(let d): return String(localized: "\(d)-day streak!")
         }
     }
     private var subtitle: String? {
@@ -87,7 +87,7 @@ struct StreakMilestoneView: View {
                 .accessibilityHidden(true)
 
                 VStack(spacing: 8) {
-                    Text("\(days) days strong")
+                    Text(String(localized: "\(days) days strong"))
                         .font(.system(size: 34, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                     Text(message)
@@ -130,12 +130,12 @@ struct StreakMilestoneView: View {
 
     private var message: String {
         switch days {
-        case 3:   return "Three days in a row, \(calmName). This is how calm becomes a habit."
-        case 7:   return "A full week, \(calmName). You showed up for yourself every single day."
-        case 14:  return "Two weeks of anchoring. Your nervous system is learning."
-        case 30:  return "Thirty days. This isn't luck anymore — it's who you are now."
-        case 60:  return "Sixty days. Most people never get here. You did."
-        default:  return "\(days) days of choosing calm. Extraordinary."
+        case 3:   return String(localized: "Three days in a row, \(calmName). This is how calm becomes a habit.")
+        case 7:   return String(localized: "A full week, \(calmName). You showed up for yourself every single day.")
+        case 14:  return String(localized: "Two weeks of anchoring. Your nervous system is learning.")
+        case 30:  return String(localized: "Thirty days. This isn't luck anymore — it's who you are now.")
+        case 60:  return String(localized: "Sixty days. Most people never get here. You did.")
+        default:  return String(localized: "\(days) days of choosing calm. Extraordinary.")
         }
     }
 }
