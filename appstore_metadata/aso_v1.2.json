@@ -1,0 +1,32 @@
+{
+ "en-US": {
+  "name": "CalmAnchor: Panic Attack Help",
+  "subtitle": "SOS Breathing & Grounding",
+  "keywords": "anxiety,relief,calm,attack,stop,5-4-3-2-1,box,breathe,journal,mood,tracker,stress,coping,cbt,worry"
+ },
+ "en-GB": {
+  "name": "CalmAnchor: Panic Attack Help",
+  "subtitle": "SOS Breathing & Grounding",
+  "keywords": "anxiety,relief,calm,attack,stop,5-4-3-2-1,box,breathe,journal,mood,tracker,stress,coping,cbt,worry"
+ },
+ "en-AU": {
+  "name": "CalmAnchor: Panic Attack Help",
+  "subtitle": "SOS Breathing & Grounding",
+  "keywords": "anxiety,relief,calm,attack,stop,5-4-3-2-1,box,breathe,journal,mood,tracker,stress,coping,cbt,worry"
+ },
+ "de-DE": {
+  "name": "CalmAnchor: Hilfe bei Panik",
+  "subtitle": "SOS-Atmung & Erdung",
+  "keywords": "angst,panikattacke,ruhe,beruhigen,atemübung,5-4-3-2-1,tagebuch,stimmung,stress,bewältigung,sorgen"
+ },
+ "fr-FR": {
+  "name": "CalmAnchor : Aide Panique",
+  "subtitle": "SOS Respiration & Ancrage",
+  "keywords": "anxiété,crise,angoisse,calme,apaiser,respiration,5-4-3-2-1,journal,humeur,stress,gérer,inquiétude"
+ },
+ "ja": {
+  "name": "CalmAnchor パニック対処",
+  "subtitle": "SOS呼吸＆グラウンディング",
+  "keywords": "不安,パニック発作,落ち着く,呼吸法,5-4-3-2-1,ジャーナル,気分,記録,ストレス,対処,心配,メンタル"
+ }
+}

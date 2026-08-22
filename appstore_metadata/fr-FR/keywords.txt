@@ -1,1 +1,1 @@
-calme,respiration,anxiété,panique,méditation,pleine conscience,stress,humeur,journal,relaxation
+anxiété,crise,angoisse,calme,apaiser,respiration,5-4-3-2-1,journal,humeur,stress,gérer,inquiétude

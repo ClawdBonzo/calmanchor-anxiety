@@ -1,1 +1,1 @@
-ruhe,atmung,angst,panik,meditation,achtsamkeit,stress,bewältigung,tagebuch,stimmung,entspannung
+angst,panikattacke,ruhe,beruhigen,atemübung,5-4-3-2-1,tagebuch,stimmung,stress,bewältigung,sorgen
