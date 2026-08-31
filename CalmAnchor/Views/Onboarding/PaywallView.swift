@@ -142,6 +142,7 @@ struct PaywallView: View {
                 footerSection
                     .padding(.bottom, 16)
             }
+            .fitsOrScrolls()
         }
         .preferredColorScheme(.dark)
         // Re-check trial eligibility whenever the offered packages change (they

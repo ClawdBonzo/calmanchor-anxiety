@@ -1,0 +1,47 @@
+{
+  "snapshot_date": "2026-08-31",
+  "coverage_through": "2026-08-30",
+  "notes": "First snapshot; baseline = ad-hoc analytics report of 2026-08-22 (14 lifetime first-time downloads Apr 7-Aug 22, 666 impressions/33 page views lifetime, 0 ratings, $0 revenue).",
+  "acquisition": {
+    "first_time_downloads_week_aug24_30": 0,
+    "first_time_downloads_week_aug17_23": 1,
+    "updates_week_aug24_30": 0,
+    "updates_week_aug17_23": 5,
+    "lifetime_first_time_approx": 15,
+    "sales_sku": "CALMANCHOR2024",
+    "funnel_aug20_30": {
+      "impressions": 319,
+      "impressions_search": 227,
+      "impressions_browse": 92,
+      "page_views": 34,
+      "page_views_search": 4,
+      "page_views_browse": 21,
+      "page_views_app_referrer": 9,
+      "taps": 4,
+      "first_time_downloads": 0,
+      "search_impression_to_page_view": "4/227",
+      "top_impression_territories": {"US": 119, "JP": 49, "FR": 35, "GB": 18, "DE": 18, "MX": 16}
+    }
+  },
+  "monetization": {
+    "revenue_lifetime": 0.0,
+    "trials": 0, "active_subs": 0, "mrr": 0,
+    "iap_states": "all four products READY_TO_SUBMIT (bounced back after version rejection); never approved, production paywall cannot sell",
+    "revenuecat": {"new_customers_28d": 16, "active_customers_28d": 19, "note": "RC counts anonymous-ID app opens; disagrees with ASC 0 first-time downloads this week due to reinstall ID churn + window; ASC authoritative"}
+  },
+  "engagement": {
+    "sessions": null, "retention": null, "deletions": null,
+    "note": "App Sessions / Installation-Deletion / Crashes analytics reports have zero instances; ONGOING request created 2026-08-22, user base likely below Apple privacy threshold. Re-check next week."
+  },
+  "quality": {
+    "ratings": {"US": {"count": 1, "avg": 5.0}},
+    "written_reviews": 0,
+    "crash_data": "no report instances yet"
+  },
+  "store_presence": {
+    "live_version": "1.1 (build 9, released 2026-08-18)",
+    "live_title": "CalmAnchor: Anxiety Journal (panic ASO not live; blocked on 1.2)",
+    "in_flight": "1.2 (build 11) REJECTED 2026-08-26 Guideline 4 Design - content cut off on iPad Air 11 M3; submission 60f4a0a8 UNRESOLVED_ISSUES; all 4 IAP items still Ready for Review in same submission",
+    "days_since_release": 13
+  }
+}

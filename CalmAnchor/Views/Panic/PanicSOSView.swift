@@ -114,6 +114,7 @@ struct PanicSOSView: View {
                 case .complete:     completeView
                 }
             }
+            .fitsOrScrolls()
         }
         .onAppear {
             startSessionTimer()

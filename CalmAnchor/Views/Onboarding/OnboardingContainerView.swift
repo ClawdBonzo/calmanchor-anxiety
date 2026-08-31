@@ -24,53 +24,54 @@ struct OnboardingContainerView: View {
             )
             .ignoresSafeArea()
 
-            // Page content
-            TabView(selection: $currentStep) {
-                SplashOnboardingView(onNext: nextStep)
-                    .tag(0)
-
-                NameInputView(calmName: $calmName, onNext: nextStep)
-                    .tag(1)
-
-                TriggerQuizView(selectedTriggers: $selectedTriggers, onNext: nextStep)
-                    .tag(2)
-
-                MoodBaselineView(baselineMood: $baselineMood, onNext: nextStep)
-                    .tag(3)
-
-                DailyMinutesView(dailyMinutes: $dailyMinutes, onNext: nextStep)
-                    .tag(4)
-
-                NotificationOptInView(
-                    notificationsEnabled: $notificationsEnabled,
-                    reminderTime: $reminderTime,
-                    onNext: nextStep
-                )
-                .tag(5)
-
-                CraftingPlanView(
-                    calmName: calmName,
-                    onNext: {
-                        createProfile()
-                        nextStep()
-                    }
-                )
-                .tag(6)
-
-                PaywallView(
-                    calmName: calmName,
-                    onContinue: { completeOnboarding() },
-                    onRestore:  { completeOnboarding() }
-                )
-                .tag(7)
+            // Page content. A switch (not a TabView) because navigation is
+            // driven solely by each page's CTA: swiping between steps is
+            // deliberately impossible (skipping the profile-creation step
+            // shipped as a bug that produced profile-less installs), and a
+            // paged TabView's gesture recognizer swallows the vertical drags
+            // that each page's fitsOrScrolls() ScrollView needs on short
+            // viewports (iPad compatibility windows).
+            Group {
+                switch currentStep {
+                case 0:
+                    SplashOnboardingView(onNext: nextStep)
+                        .fitsOrScrolls()
+                case 1:
+                    NameInputView(calmName: $calmName, onNext: nextStep)
+                        .fitsOrScrolls()
+                case 2:
+                    TriggerQuizView(selectedTriggers: $selectedTriggers, onNext: nextStep)
+                case 3:
+                    MoodBaselineView(baselineMood: $baselineMood, onNext: nextStep)
+                        .fitsOrScrolls()
+                case 4:
+                    DailyMinutesView(dailyMinutes: $dailyMinutes, onNext: nextStep)
+                        .fitsOrScrolls()
+                case 5:
+                    NotificationOptInView(
+                        notificationsEnabled: $notificationsEnabled,
+                        reminderTime: $reminderTime,
+                        onNext: nextStep
+                    )
+                    .fitsOrScrolls()
+                case 6:
+                    CraftingPlanView(
+                        calmName: calmName,
+                        onNext: {
+                            createProfile()
+                            nextStep()
+                        }
+                    )
+                    .fitsOrScrolls()
+                default:
+                    PaywallView(
+                        calmName: calmName,
+                        onContinue: { completeOnboarding() },
+                        onRestore:  { completeOnboarding() }
+                    )
+                }
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
             .scrollDismissesKeyboard(.immediately)
-            .ignoresSafeArea()
-            // Navigation is driven by each page's CTA. Blocking the swipe gesture
-            // prevents skipping the profile-creation step (which shipped as a bug
-            // that produced profile-less installs).
-            .highPriorityGesture(DragGesture())
 
             // Progress dots — visible only on the input steps
             if currentStep >= 1 && currentStep <= 6 {
