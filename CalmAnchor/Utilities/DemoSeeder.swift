@@ -148,6 +148,7 @@ enum DemoSeeder {
         context.insert(stats)
 
         try? context.save()
+        CalmGame.shared.debugReseedUnlocks(in: context)
     }
 
     @MainActor

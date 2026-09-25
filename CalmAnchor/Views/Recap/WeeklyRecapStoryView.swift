@@ -326,7 +326,15 @@ struct MoodBars: View {
     let values: [Double?]
     let labels: [String]
     var animate = true
-    @State private var grown = false
+    @State private var grown: Bool
+
+    init(values: [Double?], labels: [String], animate: Bool = true) {
+        self.values = values
+        self.labels = labels
+        self.animate = animate
+        // Rendered share cards never run onAppear, so start grown when static.
+        _grown = State(initialValue: !animate)
+    }
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 10) {

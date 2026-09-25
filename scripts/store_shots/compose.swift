@@ -466,14 +466,14 @@ for (i, fr) in frames.enumerated() {
     // Stickers per frame.
     switch n {
     case 1:
-        if let w = asset("widget-lock.png") { float(ctx, w, cx: 330, cy: H - 560, w: 560, deg: -7, card: false, shadow: 1.3) }
+        if let w = asset("widget-lock.png") { float(ctx, w, cx: 300, cy: scr.minY + 520, w: 660, deg: -7, card: false, shadow: 1.3) }
     case 2:
-        if let isl = asset("island.png") { float(ctx, isl, cx: W - 380, cy: scr.minY + 170, w: 640, deg: 5, card: false, shadow: 1.3) }
-        chip(ctx, "8 → 3", icon: "arrow.down.right", tint: teal, left: 50, cy: scr.minY + 1080, deg: -4)
+        if let isl = asset("island.png") { float(ctx, isl, cx: W - 440, cy: scr.minY + 190, w: 860, deg: 4, card: false, shadow: 1.3) }
+        chip(ctx, "8 → 3", icon: "arrow.down.right", tint: teal, left: 40, cy: scr.minY + 1180, deg: -4)
     case 3:
         confetti(ctx, around: CGPoint(x: W / 2, y: scr.minY + 420), spreadW: W * 1.05, spreadH: 700,
                  avoid: scr.insetBy(dx: 40, dy: 40), seed: 7)
-        if let c = asset("card-streak.png") { float(ctx, c, cx: W - 250, cy: H - 700, w: 420, deg: 8, card: true, shadow: 1.3) }
+        if let c = asset("card-streak.png") { float(ctx, c, cx: W - 215, cy: H - 430, w: 380, deg: 8, card: true, shadow: 1.3) }
     case 4:
         if let b = asset("badge-stormTamed.1.png") { float(ctx, b, cx: 170, cy: scr.minY + 1130, w: 330, deg: -10, card: false) }
         if let b = asset("badge-longestStreak.14.png") { float(ctx, b, cx: W - 170, cy: scr.minY + 520, w: 310, deg: 9, card: false) }

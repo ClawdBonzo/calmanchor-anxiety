@@ -156,5 +156,19 @@ final class CalmGame: ObservableObject {
         for id in ids { unlocked[id] = now.addingTimeInterval(-Double.random(in: 0...1_000_000)) }
     }
     func debugRefreshFacts(in context: ModelContext) { facts = CalmFacts.compute(in: context) }
+    /// Demo data: spread unlock dates over ~2 months, with 3 earned this week.
+    func debugReseedUnlocks(in context: ModelContext) {
+        facts = CalmFacts.compute(in: context)
+        let earned = CalmBadgeCatalog.all.filter { $0.isEarned(facts) }
+        let now = Date()
+        unlocked = [:]
+        for (i, b) in earned.enumerated() {
+            let daysAgo = i < 3 ? Double(i + 1) : Double(9 + (i * 7) % 52)
+            unlocked[b.id] = now.addingTimeInterval(-daysAgo * 86_400)
+        }
+        defaults.set(unlocked, forKey: unlockedKey)
+        defaults.set(true, forKey: absorbedKey)
+        defaults.set(unlocked.count, forKey: seenCountKey)
+    }
     #endif
 }
