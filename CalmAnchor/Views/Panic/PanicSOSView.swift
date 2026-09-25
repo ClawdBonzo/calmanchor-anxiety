@@ -117,6 +117,19 @@ struct PanicSOSView: View {
             .fitsOrScrolls()
         }
         .onAppear {
+            #if DEBUG
+            if let i = ProcessInfo.processInfo.arguments.firstIndex(of: "-CASOSPhase"),
+               i + 1 < ProcessInfo.processInfo.arguments.count,
+               ProcessInfo.processInfo.arguments[i + 1] == "breathing" {
+                // Screenshot capture: a steady mid-breath frame, no timers.
+                currentPhase = .breathing
+                breathCount = 2
+                breathLabel = "Hold..."
+                breathScale = 1.0
+                flareOpacity = 0
+                return
+            }
+            #endif
             startSessionTimer()
             if !reduceMotion {
                 Task { @MainActor in

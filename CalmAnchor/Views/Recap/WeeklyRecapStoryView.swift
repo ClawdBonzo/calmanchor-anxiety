@@ -115,7 +115,15 @@ struct WeeklyRecapStoryView: View {
             .accessibilityHidden(true)
         }
         .environment(\.colorScheme, .dark)
-        .onAppear { recap = WeeklyRecap.build(in: modelContext) }
+        .onAppear {
+            recap = WeeklyRecap.build(in: modelContext)
+            #if DEBUG
+            let args = ProcessInfo.processInfo.arguments
+            if let i = args.firstIndex(of: "-CARecapPage"), i + 1 < args.count, let n = Int(args[i + 1]) {
+                page = min(n, pages.count - 1); progress = 0.45
+            }
+            #endif
+        }
         .task(id: page) { await tick() }
         .sheet(item: $share) { p in
             ActivityShareSheet(items: [p.image, p.text]) { done in
@@ -295,6 +303,7 @@ struct WeeklyRecapStoryView: View {
     }
 
     private func tick() async {
+        if CalmGame.suppressed { return }   // screenshot capture holds the page still
         progress = 0
         while !Task.isCancelled && progress < 1 {
             try? await Task.sleep(for: .milliseconds(50))

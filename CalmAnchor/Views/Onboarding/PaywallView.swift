@@ -463,7 +463,7 @@ struct PaywallView: View {
     /// Ask RevenueCat which of the offered products this user can still trial.
     private func loadTrialEligibility() async {
         let ids = sortedPackages.map(\.storeProduct.productIdentifier)
-        guard !ids.isEmpty else { return }
+        guard !ids.isEmpty, Purchases.isConfigured else { return }
         let result = await Purchases.shared.checkTrialOrIntroDiscountEligibility(productIdentifiers: ids)
         var map: [String: Bool] = [:]
         for (id, eligibility) in result {

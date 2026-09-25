@@ -24,6 +24,9 @@ final class RevenueCatService: NSObject, ObservableObject {
     }
 
     func checkSubscriptionStatus() async {
+        // Scene-phase checks can run before configure() (and demo capture
+        // skips it entirely); touching Purchases.shared then is fatal.
+        guard Purchases.isConfigured else { return }
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
             isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
@@ -35,6 +38,7 @@ final class RevenueCatService: NSObject, ObservableObject {
     }
 
     func fetchOfferings() async {
+        guard Purchases.isConfigured else { return }
         do {
             let fetched = try await Purchases.shared.offerings()
             offerings = fetched
@@ -47,6 +51,7 @@ final class RevenueCatService: NSObject, ObservableObject {
     }
 
     func purchase(_ package: Package) async throws -> Bool {
+        guard Purchases.isConfigured else { return isPremium }
         let result = try await Purchases.shared.purchase(package: package)
         isPremium = result.customerInfo.entitlements[Self.entitlementID]?.isActive == true
 
@@ -68,6 +73,7 @@ final class RevenueCatService: NSObject, ObservableObject {
     }
 
     func restorePurchases() async throws -> Bool {
+        guard Purchases.isConfigured else { return isPremium }
         let customerInfo = try await Purchases.shared.restorePurchases()
         isPremium = customerInfo.entitlements[Self.entitlementID]?.isActive == true
         return isPremium

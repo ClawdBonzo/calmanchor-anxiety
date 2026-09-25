@@ -142,8 +142,8 @@ enum DemoSeeder {
         // MARK: Game stats — mid-journey level
         let stats = GameStats()
         stats.currentLevel = 6
-        stats.totalXP = 3600
-        stats.totalXPEarned = 3600
+        stats.totalXP = 3280       // most of the way to level 7 (3600)
+        stats.totalXPEarned = 3280
         stats.lastXPUpdate = now
         context.insert(stats)
 

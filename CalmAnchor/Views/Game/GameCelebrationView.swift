@@ -18,8 +18,8 @@ struct GameCelebrationView: View {
 
     var body: some View {
         ZStack {
-            Color.black.opacity(0.55).ignoresSafeArea()
-            DawnBackground(warmth: 0.95, stars: 80).opacity(0.97)
+            CalmBrand.abyss.ignoresSafeArea()
+            DawnBackground(warmth: 0.95, stars: 80)
 
             VStack(spacing: 20) {
                 Spacer(minLength: 20)
