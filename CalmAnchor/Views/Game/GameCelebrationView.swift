@@ -34,17 +34,23 @@ struct GameCelebrationView: View {
                         .scaleEffect(landed ? 1 : (reduceMotion ? 1 : 1.9))
                         .opacity(landed ? 1 : 0)
                 }
-                .frame(height: 280)
+                .frame(minHeight: 200, maxHeight: 280)
+                .layoutPriority(-1)
 
                 VStack(spacing: 10) {
                     Text(title)
                         .font(.calmDisplay(32, weight: .black))
                         .foregroundStyle(.white)
                         .multilineTextAlignment(.center)
+                        .minimumScaleFactor(0.7)
+                        .lineLimit(2)
+                    // Never truncate the message; on short screens the art
+                    // and spacers give way instead.
                     Text(line)
                         .font(.system(size: 17, weight: .medium, design: .rounded))
                         .foregroundStyle(.white.opacity(0.78))
                         .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
                         .padding(.horizontal, 28)
                 }
                 .opacity(appeared ? 1 : 0)
