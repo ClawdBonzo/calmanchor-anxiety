@@ -10,6 +10,8 @@ struct MainTabView: View {
     @State private var showWidgetMood = false
     @State private var dayKey = Calendar.current.startOfDay(for: Date())
     @ObservedObject private var game = CalmGame.shared
+    @State private var showcaseAchievements = false
+    @State private var showcaseRecap = false
     @Environment(\.requestReview) private var requestReview
 
     // DEBUG-only: allow screenshot capture to jump to a specific tab / panic screen
@@ -91,7 +93,12 @@ struct MainTabView: View {
         .task {
             repairMissingProfileIfNeeded()
             game.evaluate(in: modelContext)
+            #if DEBUG
+            runShowcase()
+            #endif
         }
+        .sheet(isPresented: $showcaseAchievements) { AchievementsView() }
+        .fullScreenCover(isPresented: $showcaseRecap) { WeeklyRecapStoryView() }
         .onChange(of: scenePhase) { _, phase in
             // Bump the day key on foreground so date-scoped views re-init.
             if phase == .active {
@@ -138,4 +145,21 @@ struct MainTabView: View {
             try? modelContext.save()
         }
     }
+
+    #if DEBUG
+    /// Screenshot/showcase staging: -CAShowcase achievements | badge | rank | streak | recap
+    private func runShowcase() {
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-CAShowcase"), i + 1 < args.count else { return }
+        switch args[i + 1] {
+        case "achievements": showcaseAchievements = true
+        case "recap":        showcaseRecap = true
+        case "badge":
+            if let b = CalmBadgeCatalog.badge(id: "stormTamed.1") { game.debugShow(.badge(b, alsoEarned: 2)) }
+        case "rank":   game.debugShow(.rankUp(level: 11))
+        case "streak": game.debugShow(.streak(days: 21))
+        default: break
+        }
+    }
+    #endif
 }

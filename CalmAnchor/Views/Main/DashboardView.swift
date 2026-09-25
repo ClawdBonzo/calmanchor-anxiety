@@ -6,6 +6,7 @@ struct DashboardView: View {
     @Environment(\.modelContext) private var modelContext
     @EnvironmentObject private var revenueCat: RevenueCatService
     @ObservedObject private var celebrations = CelebrationCenter.shared
+    @ObservedObject private var game = CalmGame.shared
     @Query(sort: \UserProfile.createdAt) private var profiles: [UserProfile]
     @Query private var todaysMoods: [MoodEntry]
     @Query private var gameStatsArray: [GameStats]
@@ -32,6 +33,8 @@ struct DashboardView: View {
     @State private var showJournal = false
     @State private var showCalmCard = false
     @State private var showPaywall = false
+    @State private var showAchievements = false
+    @State private var showRecap = false
     @State private var todayPrompt: String = AppConstants.journalPrompts.randomElement() ?? ""
     @State private var panicPulse = false
     @State private var streakGlow = false
@@ -49,13 +52,21 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
-                AnchorBackground()
+                DawnBackground(warmth: 0.3)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 18) {
                         greetingSection
                             .padding(.top, 12)
                         panicButton
+                        anchorPassButton        // rank + badges: the progression hook
+                        if let next = game.nextBadge {
+                            Button { showAchievements = true } label: {
+                                NextBadgeCard(badge: next, facts: game.facts)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                        if WeeklyRecap.isAvailable(in: modelContext) { recapCard }
                         stayedCalmCard          // share loop is free — it's how we acquire users
                         todayMoodCard
                         dailyQuestsCard
@@ -75,6 +86,12 @@ struct DashboardView: View {
             }
             .sheet(isPresented: $showJournal) {
                 JournalEntryView()
+            }
+            .sheet(isPresented: $showAchievements) {
+                AchievementsView()
+            }
+            .fullScreenCover(isPresented: $showRecap) {
+                WeeklyRecapStoryView()
             }
             .sheet(isPresented: $showPaywall) {
                 PaywallView(
@@ -136,40 +153,6 @@ struct DashboardView: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
-                // Level badge + XP progress toward the next level. Users earn
-                // 50–100 XP per action; this is where they finally see it land.
-                if let stats = gameStats {
-                    let progress = stats.getXPProgressToNextLevel()
-                    VStack(alignment: .trailing, spacing: 4) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "star.circle.fill")
-                                .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(AppConstants.Colors.sunsetGold)
-                            Text("Lv \(stats.currentLevel)")
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
-                                .foregroundStyle(.white)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(AppConstants.Colors.sunsetGold.opacity(0.12))
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(AppConstants.Colors.sunsetGold.opacity(0.25), lineWidth: 1))
-
-                        if stats.currentLevel < 20 {
-                            GeometryReader { geo in
-                                ZStack(alignment: .leading) {
-                                    Capsule().fill(.white.opacity(0.10))
-                                    Capsule().fill(AppConstants.Colors.sunsetGold.opacity(0.85))
-                                        .frame(width: max(0, geo.size.width * progress.percentage))
-                                        .animation(.easeOut(duration: 0.6), value: progress.percentage)
-                                }
-                            }
-                            .frame(width: 72, height: 4)
-                            .accessibilityLabel("\(progress.current) of \(progress.needed) XP to next level")
-                        }
-                    }
-                }
-
                 // Streak badge
                 if let streak = profile?.currentStreak, streak > 0 {
                     HStack(spacing: 4) {
@@ -415,6 +398,61 @@ struct DashboardView: View {
     }
 
     // MARK: - Streak Card
+
+    private var anchorPassButton: some View {
+        Button { showAchievements = true; Haptics.selection() } label: {
+            AnchorPassCard(stats: gameStats,
+                           streak: profile?.currentStreak ?? 0,
+                           badgesUnlocked: game.unlockedCount,
+                           badgesTotal: game.totalCount,
+                           compact: true)
+                .overlay(alignment: .topTrailing) {
+                    if game.hasUnseenBadges {
+                        Text(String(localized: "NEW"))
+                            .font(.system(size: 10, weight: .black, design: .rounded))
+                            .foregroundStyle(CalmBrand.midnight)
+                            .padding(.horizontal, 8).padding(.vertical, 4)
+                            .background(CalmBrand.accentGradient, in: Capsule())
+                            .offset(x: -10, y: -8)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint(String(localized: "Opens your badges and rank"))
+    }
+
+    private var recapCard: some View {
+        Button { showRecap = true; Haptics.selection() } label: {
+            HStack(spacing: 14) {
+                ZStack {
+                    Circle().fill(CalmBrand.accentGradient)
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 18, weight: .black))
+                        .foregroundStyle(CalmBrand.midnight)
+                        .offset(x: 2)
+                }
+                .frame(width: 48, height: 48)
+                VStack(alignment: .leading, spacing: 3) {
+                    Kicker(text: String(localized: "Your week in calm"), color: CalmBrand.gold)
+                    Text(String(localized: "Your recap is ready"))
+                        .font(.calmDisplay(17))
+                        .foregroundStyle(.white)
+                    Text(String(localized: "Sessions, moods and wins from the last 7 days"))
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+                Spacer()
+                Image(systemName: "chevron.right").foregroundStyle(.white.opacity(0.35))
+            }
+            .padding(16)
+            .background(
+                LinearGradient(colors: [CalmBrand.mauve.opacity(0.55), CalmBrand.harbor.opacity(0.6)],
+                               startPoint: .topLeading, endPoint: .bottomTrailing),
+                in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(CalmBrand.gold.opacity(0.3), lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+    }
 
     private var streakCard: some View {
         HStack(spacing: 0) {
