@@ -10,26 +10,26 @@ struct DailyPromptEntry: TimelineEntry {
 
 struct DailyPromptProvider: TimelineProvider {
     private let prompts = [
-        "What made you feel safe today?",
-        "Describe a moment of calm you experienced recently.",
-        "What are three things you're grateful for right now?",
-        "Write about a fear that turned out okay.",
-        "What would you tell a friend feeling anxious?",
-        "Describe your ideal peaceful place.",
-        "What coping skill helped you most this week?",
-        "Write a letter of compassion to yourself.",
-        "What boundary would help your peace of mind?",
-        "What small win can you celebrate today?",
+        String(localized: "What made you feel safe today?"),
+        String(localized: "Describe a moment of calm you experienced recently."),
+        String(localized: "What are three things you're grateful for right now?"),
+        String(localized: "Write about a fear that turned out okay."),
+        String(localized: "What would you tell a friend feeling anxious?"),
+        String(localized: "Describe your ideal peaceful place."),
+        String(localized: "What coping skill helped you most this week?"),
+        String(localized: "Write a letter of compassion to yourself."),
+        String(localized: "What boundary would help your peace of mind?"),
+        String(localized: "What small win can you celebrate today?"),
     ]
 
     private let affirmations = [
-        "I am safe in this moment.",
-        "This feeling is temporary and will pass.",
-        "I am stronger than my anxiety.",
-        "I choose peace over worry.",
-        "My breath is my anchor.",
-        "I release what I cannot control.",
-        "Each breath brings me closer to calm.",
+        String(localized: "I am safe in this moment."),
+        String(localized: "This feeling is temporary and will pass."),
+        String(localized: "I am stronger than my anxiety."),
+        String(localized: "I choose peace over worry."),
+        String(localized: "My breath is my anchor."),
+        String(localized: "I release what I cannot control."),
+        String(localized: "Each breath brings me closer to calm."),
     ]
 
     func placeholder(in context: Context) -> DailyPromptEntry {
@@ -85,8 +85,8 @@ struct CalmAnchorWidgetEntryView: View {
         HStack(spacing: 4) {
             Image(systemName: "flame.fill").foregroundStyle(.orange)
             Text(entry.snapshot.currentStreak > 0
-                 ? "\(entry.snapshot.currentStreak)-day streak"
-                 : "Start your streak")
+                 ? String(localized: "\(entry.snapshot.currentStreak)-day streak")
+                 : String(localized: "Start your streak"))
                 .font(.system(size: 12, weight: .bold, design: .rounded))
         }
     }
@@ -158,7 +158,7 @@ struct CalmAnchorWidgetEntryView: View {
                 .foregroundStyle(.secondary).italic().lineLimit(3)
             Spacer()
             HStack {
-                Label(entry.snapshot.todayMoodLogged ? "Mood logged today" : "Log today's mood",
+                Label(entry.snapshot.todayMoodLogged ? String(localized: "Mood logged today") : String(localized: "Log today's mood"),
                       systemImage: entry.snapshot.todayMoodLogged ? "checkmark.circle.fill" : "face.smiling")
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundStyle(entry.snapshot.todayMoodLogged ? teal : .primary)
@@ -232,7 +232,7 @@ struct SOSAccessoryView: View {
                 Image(systemName: "wind").font(.system(size: 20, weight: .bold))
                 VStack(alignment: .leading, spacing: 1) {
                     Text("Panic SOS").font(.system(size: 14, weight: .bold, design: .rounded))
-                    Text(entry.streak > 0 ? "Breathe · \(entry.streak)-day streak" : "Tap to breathe")
+                    Text(entry.streak > 0 ? String(localized: "Breathe · \(entry.streak)-day streak") : String(localized: "Tap to breathe"))
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundStyle(.secondary)
                 }

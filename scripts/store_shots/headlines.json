@@ -8,40 +8,36 @@
     {"l1": "Watch the waves", "l2": "get smaller.", "sub": "Mood and anxiety trends that show how far you've come."},
     {"l1": "Your calm,", "l2": "one screen.", "sub": "SOS, check-ins, quests and your next badge, all together."},
     {"l1": "Your week in calm,", "l2": "wrapped.", "sub": "A story of your sessions, moods and wins, ready to replay."},
-    {"l1": "Your thoughts.", "l2": "Your phone.", "sub": "No account, no ads. Your entries stay on your iPhone.",
-     "chips": ["No account", "No ads", "Stays on your iPhone"]}
+    {"l1": "Your thoughts.", "l2": "Your phone.", "sub": "No account, no ads. Your entries stay on your iPhone.", "chips": ["No account", "No ads", "Stays on your iPhone"]}
   ],
   "de": [
-    {"l1": "Panikattacke?", "l2": "Ein Tipp.", "sub": "Geführte Erdung und Atmung, direkt auf deinem Sperrbildschirm."},
+    {"l1": "Panikattacke?", "l2": "Einmal tippen.", "sub": "Geführte Erdung und Atmung, direkt auf deinem Sperrbildschirm."},
     {"l1": "Atme mit.", "l2": "Lass es ziehen.", "sub": "Ein Live-Countdown in der Dynamic Island. Bewerte vorher und nachher."},
     {"l1": "Jeder Erfolg,", "l2": "gefeiert.", "sub": "Konfetti für Serien, Abzeichen und neue Ränge. Teile die guten Tage."},
-    {"l1": "Verdiene deinen", "l2": "Ruhe-Rang.", "sub": "50 Abzeichen, 20 Ränge und ein Anchor Pass, der mit dir wächst."},
+    {"l1": "Erreiche deinen", "l2": "Ruhe-Rang.", "sub": "50 Abzeichen, 20 Ränge und ein Anchor Pass, der mit dir wächst."},
     {"l1": "Sieh die Wellen", "l2": "kleiner werden.", "sub": "Stimmungs- und Angstverläufe zeigen, wie weit du gekommen bist."},
     {"l1": "Deine Ruhe,", "l2": "ein Bildschirm.", "sub": "SOS, Check-ins, Quests und dein nächstes Abzeichen, alles zusammen."},
     {"l1": "Deine Woche in Ruhe,", "l2": "als Story.", "sub": "Deine Sitzungen, Stimmungen und Erfolge zum erneuten Ansehen."},
-    {"l1": "Deine Gedanken.", "l2": "Dein iPhone.", "sub": "Kein Konto, keine Werbung. Deine Einträge bleiben auf deinem iPhone.",
-     "chips": ["Kein Konto", "Keine Werbung", "Bleibt auf dem iPhone"]}
+    {"l1": "Deine Gedanken.", "l2": "Dein iPhone.", "sub": "Kein Konto, keine Werbung. Deine Einträge bleiben auf deinem iPhone.", "chips": ["Kein Konto", "Keine Werbung", "Bleibt auf dem iPhone"]}
   ],
   "fr": [
-    {"l1": "Crise de panique ?", "l2": "Un seul geste.", "sub": "Ancrage et respiration guidés, directement sur l’écran verrouillé."},
+    {"l1": "Crise d’angoisse ?", "l2": "Un seul geste.", "sub": "Ancrage et respiration guidés, directement sur l’écran verrouillé."},
     {"l1": "Respirez avec elle.", "l2": "Elle passe.", "sub": "Un compte à rebours dans la Dynamic Island. Évaluez avant et après."},
     {"l1": "Chaque victoire,", "l2": "célébrée.", "sub": "Des confettis pour les séries, badges et nouveaux rangs."},
-    {"l1": "Gagnez votre", "l2": "rang de calme.", "sub": "50 badges, 20 rangs et un Anchor Pass qui grandit avec vous."},
+    {"l1": "Grimpez les", "l2": "rangs du calme.", "sub": "50 badges, 20 rangs et un Anchor Pass qui grandit avec vous."},
     {"l1": "Les vagues", "l2": "rapetissent.", "sub": "Des courbes d’humeur et d’anxiété qui montrent vos progrès."},
     {"l1": "Votre calme,", "l2": "sur un écran.", "sub": "SOS, bilans, quêtes et votre prochain badge, réunis."},
     {"l1": "Votre semaine,", "l2": "en récap.", "sub": "Vos séances, humeurs et victoires, à revoir comme une story."},
-    {"l1": "Vos pensées.", "l2": "Votre iPhone.", "sub": "Sans compte, sans pub. Vos notes restent sur votre iPhone.",
-     "chips": ["Sans compte", "Sans pub", "Reste sur l’iPhone"]}
+    {"l1": "Vos pensées.", "l2": "Votre iPhone.", "sub": "Sans compte, sans pub. Vos notes restent sur votre iPhone.", "chips": ["Sans compte", "Sans pub", "Reste sur l’iPhone"]}
   ],
   "ja": [
-    {"l1": "パニック発作？", "l2": "ワンタップで。", "sub": "ロック画面から、グラウンディングと呼吸をガイド。"},
-    {"l1": "一緒に呼吸して、", "l2": "波をやり過ごす。", "sub": "ダイナミックアイランドにカウントダウン。前後の強さも記録。"},
-    {"l1": "小さな一歩も、", "l2": "盛大にお祝い。", "sub": "連続記録、バッジ、ランクアップに紙吹雪。"},
-    {"l1": "目指そう、", "l2": "穏やかランク。", "sub": "50のバッジ、20のランク、育っていくアンカーパス。"},
-    {"l1": "不安の波が", "l2": "小さくなる。", "sub": "気分と不安の推移で、あなたの歩みが見える。"},
-    {"l1": "穏やかさを、", "l2": "ひと画面に。", "sub": "SOS、チェックイン、クエスト、次のバッジをまとめて。"},
-    {"l1": "あなたの1週間を、", "l2": "ストーリーに。", "sub": "セッション、気分、達成をもう一度振り返れる。"},
-    {"l1": "あなたの想いは、", "l2": "あなたのiPhoneに。", "sub": "アカウント不要、広告なし。記録はiPhoneの中だけ。",
-     "chips": ["アカウント不要", "広告なし", "iPhoneに保存"]}
+    {"l1": "パニック発作？", "l2": "ワンタップで。", "sub": "ロック画面から、\nグラウンディングと呼吸をガイド。"},
+    {"l1": "一緒に呼吸して、", "l2": "波をやり過ごす。", "sub": "Dynamic Islandにカウントダウン。\n前後の強さも記録。"},
+    {"l1": "小さな一歩も、", "l2": "盛大にお祝い。", "sub": "連続記録、バッジ、\nランクアップに紙吹雪。"},
+    {"l1": "目指そう、", "l2": "穏やかランク。", "sub": "50のバッジ、20のランク、\n育っていくアンカーパス。"},
+    {"l1": "不安の波が", "l2": "小さくなる。", "sub": "気分と不安の推移で、\nあなたの歩みが見える。"},
+    {"l1": "穏やかさを、", "l2": "ひと画面に。", "sub": "SOS、チェックイン、クエスト、\n次のバッジをまとめて。"},
+    {"l1": "あなたの1週間を、", "l2": "ストーリーに。", "sub": "セッション、気分、達成を\nもう一度振り返れる。"},
+    {"l1": "あなたの想いは、", "l2": "あなたのiPhoneに。", "sub": "アカウント不要、広告なし。\n記録はiPhoneの中だけ。", "chips": ["アカウント不要", "広告なし", "iPhoneに保存"]}
   ]
 }

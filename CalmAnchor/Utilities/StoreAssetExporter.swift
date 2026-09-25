@@ -78,7 +78,7 @@ private struct LockWidgetMock: View {
                     Image(systemName: "wind").font(.system(size: 20, weight: .bold))
                     VStack(alignment: .leading, spacing: 1) {
                         Text("Panic SOS").font(.system(size: 14, weight: .bold, design: .rounded))
-                        Text("Breathe · 12-day streak").font(.system(size: 11, weight: .medium, design: .rounded))
+                        Text("Breathe · \(12)-day streak").font(.system(size: 11, weight: .medium, design: .rounded))
                             .opacity(0.75)
                     }
                 }
@@ -103,7 +103,7 @@ private struct IslandMock: View {
                 .frame(width: 40, height: 40)
             VStack(alignment: .leading, spacing: 1) {
                 Text(String(localized: "Hold")).font(.system(size: 17, weight: .heavy, design: .rounded))
-                Text(String(format: String(localized: "Breath %lld of 6"), 2)).font(.system(size: 12, weight: .semibold, design: .rounded)).opacity(0.7)
+                Text("Breath \(2) of \(6)").font(.system(size: 12, weight: .semibold, design: .rounded)).opacity(0.7)
             }
             .foregroundStyle(.white)
             Spacer(minLength: 16)

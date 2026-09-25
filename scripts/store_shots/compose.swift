@@ -119,7 +119,10 @@ func line(_ s: String, _ font: CTFont, _ color: CGColor, kern: CGFloat = 0) -> C
 func width(_ l: CTLine) -> CGFloat { CGFloat(CTLineGetTypographicBounds(l, nil, nil, nil)) }
 
 /// Greedy wrap (word-based for Latin, character-based for CJK) into ≤ maxLines.
+/// An explicit "\n" in the copy forces a break there (Japanese needs this so
+/// katakana words aren't split mid-word).
 func wrap(_ s: String, _ font: CTFont, _ maxW: CGFloat) -> [String] {
+    if s.contains("\n") { return s.split(separator: "\n").flatMap { wrap(String($0), font, maxW) } }
     let units: [String] = isCJK ? s.map(String.init) : s.split(separator: " ").map(String.init)
     let sep = isCJK ? "" : " "
     var lines: [String] = [], cur = ""
@@ -140,7 +143,7 @@ func wrap(_ s: String, _ font: CTFont, _ maxW: CGFloat) -> [String] {
 /// Balance two lines so the sub reads as a tidy block.
 func balanced(_ s: String, _ font: CTFont, _ maxW: CGFloat) -> [String] {
     var lo: CGFloat = maxW * 0.5, hi = maxW, best = wrap(s, font, maxW)
-    guard best.count == 2 else { return best }
+    guard best.count == 2, !s.contains("\n") else { return best }
     for _ in 0..<14 {
         let mid = (lo + hi) / 2
         let w = wrap(s, font, mid)

@@ -14,7 +14,7 @@ struct PanicBreathingLiveActivity: Widget {
                     .font(.system(size: 22, weight: .semibold))
                     .foregroundStyle(teal)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(context.state.phase.instruction)
+                    Text(LocalizedStringKey(context.state.phase.instruction))
                         .font(.system(size: 17, weight: .bold, design: .rounded))
                     Text("Breath \(context.state.cycle) of \(context.attributes.totalCycles)")
                         .font(.system(size: 12, weight: .medium))
@@ -37,7 +37,7 @@ struct PanicBreathingLiveActivity: Widget {
                     Image(systemName: "wind").foregroundStyle(teal)
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    Text(context.state.phase.instruction)
+                    Text(LocalizedStringKey(context.state.phase.instruction))
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                 }
                 DynamicIslandExpandedRegion(.bottom) {
