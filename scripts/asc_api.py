@@ -11,7 +11,7 @@ Auth (set env vars, or pass --key/--key-id/--issuer):
 Usage:
   python3 scripts/asc_api.py whoami                 # verify auth + show app/version
   python3 scripts/asc_api.py metadata               # push appstore_metadata/<locale>/*
-  python3 scripts/asc_api.py screenshots            # upload screenshots/final[/<locale>]
+  python3 scripts/asc_api.py screenshots            # replace iPhone 6.9" shots with screenshots/v13/<lang>
   python3 scripts/asc_api.py all                    # metadata + screenshots
   add --dry-run to preview without writing.
 """
@@ -21,9 +21,9 @@ import jwt  # PyJWT
 ROOT = os.path.join(os.path.dirname(__file__), "..")
 APP_ID = "6761788508"
 BASE = "https://api.appstoreconnect.apple.com"
-# locale -> screenshot source dir (None = use the shared English screenshots/final/*.png)
+# locale -> screenshot source dir under screenshots/v13 (UK/AU use the English set)
 SCREENSHOT_DIRS = {
-    "en-US": None, "en-GB": None, "en-AU": None,
+    "en-US": "en", "en-GB": "en", "en-AU": "en",
     "de-DE": "de", "fr-FR": "fr", "ja": "ja",
 }
 DISPLAY_TYPE = "APP_IPHONE_67"  # accepts 1290x2796 and 1320x2868 (6.9")
@@ -146,9 +146,10 @@ def push_metadata(tok, dry):
 
 def loc_shots(loc):
     sub = SCREENSHOT_DIRS[loc]
-    base = os.path.join(ROOT, "screenshots", "final", sub or "")
+    base = os.path.join(ROOT, "screenshots", "v13", sub)
+    # 01.png … 08.png only (skip contact.png)
     return sorted(f for f in (os.path.join(base, x) for x in os.listdir(base))
-                  if f.endswith(".png")) if os.path.isdir(base) else []
+                  if os.path.basename(f)[:2].isdigit() and f.endswith(".png")) if os.path.isdir(base) else []
 
 
 def upload_screenshots(tok, dry):
@@ -175,6 +176,9 @@ def upload_screenshots(tok, dry):
                 "relationships": {"appStoreVersionLocalization": {"data": {
                     "type": "appStoreVersionLocalizations", "id": lid}}}}})["data"]
         sid = sset["id"]
+        # A new version inherits the previous version's shots: clear them first.
+        for old in get_all(f"/v1/appScreenshotSets/{sid}/appScreenshots", tok):
+            req("DELETE", f"/v1/appScreenshots/{old['id']}", tok)
         for path in shots:
             blob = open(path, "rb").read()
             fn = os.path.basename(path)
