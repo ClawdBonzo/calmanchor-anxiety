@@ -600,6 +600,7 @@ struct DashboardView: View {
     // MARK: - Helpers
 
     private var greetingText: String {
+        if CalmGame.suppressed { return String(localized: "Good morning") }   // screenshot capture
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
         case 5..<12: return String(localized: "Good morning")
