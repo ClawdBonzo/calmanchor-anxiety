@@ -1,1 +1,1 @@
-anxiety,relief,calm,attack,stop,5-4-3-2-1,box,breathe,journal,mood,tracker,stress,coping,cbt,worry
+diary,tracker,worry,54321,sos,calm,breathing,box,mood,stress,coping,wellbeing,mindfulness,journal

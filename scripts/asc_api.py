@@ -97,7 +97,7 @@ def read_meta(loc):
         return open(p, encoding="utf-8").read().strip() if os.path.exists(p) else None
     return {"name": r("name.txt"), "subtitle": r("subtitle.txt"),
             "description": r("description.txt"), "keywords": r("keywords.txt"),
-            "promotionalText": r("promotional_text.txt")}
+            "promotionalText": r("promotional_text.txt"), "whatsNew": r("whats_new.txt")}
 
 
 def push_metadata(tok, dry):
@@ -132,6 +132,8 @@ def push_metadata(tok, dry):
                     for l in get_all(f"/v1/appStoreVersions/{vid}/appStoreVersionLocalizations", tok)}
         va = {"description": m["description"], "keywords": m["keywords"],
               "promotionalText": m["promotionalText"]}
+        if m.get("whatsNew"):
+            va["whatsNew"] = m["whatsNew"]   # rejected by ASC on a first version; fine on updates
         if loc in ver_locs:
             req("PATCH", f"/v1/appStoreVersionLocalizations/{ver_locs[loc]}", tok,
                 {"data": {"type": "appStoreVersionLocalizations", "id": ver_locs[loc], "attributes": va}})

@@ -1,117 +1,159 @@
 #!/usr/bin/env python3
-"""Write localized App Store metadata into appstore_metadata/<locale>/*.txt
-(fastlane-deliver layout, ready for ASC API push)."""
+"""CalmAnchor App Store listing — source of truth for every locale.
+
+Writes appstore_metadata/<locale>/{name,subtitle,keywords,promotional_text,
+description,whats_new}.txt and enforces App Store limits.
+
+Keyword strategy (researched per storefront from App Store search
+autocomplete + the top-ranking apps, Sept 2026 — see
+appstore_metadata/aso_v1.3.json for the evidence):
+  • Every market gets native search terms, never translations of the US list.
+  • No word is repeated across a locale's name / subtitle / keywords.
+  • Apple indexes secondary locales per storefront: the UK English field is
+    also searched in Germany, France and Australia, and US English in Japan.
+    So en-GB carries shared English terms ("stress", "journal", "sos",
+    "54321") once, and en-AU / de / fr / ja spend their space on terms the
+    secondary locale doesn't already cover.
+  • Every claim is true of the shipping app (see comments on features).
+"""
 import os
+
 ROOT = os.path.join(os.path.dirname(__file__), "..", "appstore_metadata")
 
-EN_DESC = (
-"Having a panic attack? Tap once. CalmAnchor puts guided box breathing and 5-4-3-2-1 grounding "
-"right on your Lock Screen — no unlocking, no searching, no waiting. Relief starts in seconds.\n\n"
-"Then it helps you need it less. Track your mood, follow a 30-day plan built around YOUR triggers, "
-"and watch your anxiety patterns change over time.\n\n"
-"PANIC SOS\n"
-"• One-tap Lock Screen widget — breathing help before you even unlock your phone\n"
-"• Guided box breathing with a live countdown in your Dynamic Island\n"
-"• 5-4-3-2-1 grounding to pull you back into the present\n"
-"• Calming affirmations, then a gentle check-in on how you feel\n\n"
-"LASTING CALM\n"
-"• Personalized 30-day healing plan tailored to your triggers\n"
-"• Daily mood & anxiety tracking with clear trend charts\n"
-"• Guided journal with prompts, gratitude, and affirmations\n"
-"• Streaks, daily quests, and milestones that keep you coming back\n\n"
+# ─────────────────────────────── English (US) ───────────────────────────────
+EN_US_DESC = (
+"Having a panic attack? Tap once.\n\n"
+"CalmAnchor opens straight into Panic SOS from a Lock Screen widget: 5-4-3-2-1 grounding, then six slow "
+"guided breaths with a live countdown in your Dynamic Island. Rate how intense it feels before and after, "
+"and watch it come down.\n\n"
+"Then it helps you need it less. Check in on your mood, follow a 30-day plan built around your triggers, "
+"and earn your way up the ranks as calm becomes a habit.\n\n"
+"PANIC SOS — FREE\n"
+"• One tap from your Lock Screen widget into a guided session\n"
+"• 5-4-3-2-1 grounding to bring you back to the present\n"
+"• Six slow breaths (in 4, hold 4, out 4) with a Dynamic Island countdown\n"
+"• Calming affirmations and a before-and-after intensity check\n"
+"• A coping library: box breathing, 4-7-8, body scan, thought records and more\n"
+"• The 988 Lifeline and Crisis Text Line, one tap away\n\n"
+"EARN YOUR CALM RANK — NEW\n"
+"• 50 badges to unlock, from First Anchor to secret moments like Night Watch\n"
+"• An Anchor Pass that levels up through 20 ranks, from Sea Glass to Pearl\n"
+"• Celebrations for streaks, badges and new ranks, with cards you can share\n"
+"• Daily quests, plus a grace day so one missed day doesn't erase your streak\n"
+"• Your week in calm: a story recap of your sessions, moods and wins\n\n"
+"LASTING CALM — PREMIUM\n"
+"• A personalized 30-day healing plan built around your triggers\n"
+"• A guided journal with gratitude, affirmations and free writing\n"
+"• Mood and anxiety trends over 7 days, 30 days or all time\n\n"
 "PRIVATE BY DESIGN\n"
-"Your journal, mood, and personal entries never leave your device. No account, no ads, no third-party tracking.\n\n"
-"CalmAnchor is your anchor in the storm. Download it free — your next panic attack doesn't have to win."
+"Your journal, moods and sessions stay on your iPhone. No account, no ads.\n\n"
+"CalmAnchor is a self-help and wellness tool, not a substitute for professional medical advice, diagnosis "
+"or treatment. If you're in crisis, call or text 988 or your local emergency number."
 )
 
-EN_DESC_GB = EN_DESC.replace("personalized", "personalised")
+# ───────────────────────────── English (UK / AU) ────────────────────────────
+def _en_intl(crisis_line: str) -> str:
+    d = (EN_US_DESC
+         .replace("personalized", "personalised")
+         .replace("• The 988 Lifeline and Crisis Text Line, one tap away\n", "")
+         .replace("If you're in crisis, call or text 988 or your local emergency number.", crisis_line))
+    return d
 
-DESC = {
-"de-DE":
-"Panikattacke? Ein Tipp genügt. CalmAnchor bringt geführte Box-Atmung und 5-4-3-2-1-Erdung direkt auf "
-"deinen Sperrbildschirm – kein Entsperren, kein Suchen, kein Warten. Erleichterung in Sekunden.\n\n"
-"Und danach hilft es dir, sie seltener zu brauchen. Verfolge deine Stimmung, folge einem 30-Tage-Plan rund um "
-"DEINE Auslöser und sieh zu, wie sich deine Angstmuster mit der Zeit verändern.\n\n"
-"PANIK-SOS\n"
-"• Ein-Tipp-Widget auf dem Sperrbildschirm – Atemhilfe, bevor du dein Handy überhaupt entsperrst\n"
-"• Geführte Box-Atmung mit Live-Countdown in der Dynamic Island\n"
-"• 5-4-3-2-1-Erdung, die dich zurück in die Gegenwart holt\n"
-"• Beruhigende Affirmationen und ein sanfter Check-in, wie es dir geht\n\n"
-"DAUERHAFTE RUHE\n"
-"• Persönlicher 30-Tage-Heilungsplan, abgestimmt auf deine Auslöser\n"
-"• Tägliches Stimmungs- und Angst-Tracking mit klaren Trend-Diagrammen\n"
-"• Geführtes Tagebuch mit Impulsen, Dankbarkeit und Affirmationen\n"
-"• Serien, tägliche Quests und Meilensteine, die dich dranbleiben lassen\n\n"
-"PRIVAT VON GRUND AUF\n"
-"Dein Tagebuch, deine Stimmung und deine persönlichen Einträge verlassen nie dein Gerät. Kein Konto, keine Werbung, kein Tracking durch Dritte.\n\n"
-"CalmAnchor ist dein Anker im Sturm. Lade die App kostenlos – deine nächste Panikattacke muss nicht gewinnen.",
-"fr-FR":
-"Crise de panique ? Un seul geste. CalmAnchor place la respiration carrée guidée et l'ancrage 5-4-3-2-1 "
-"directement sur votre écran verrouillé — sans déverrouiller, sans chercher, sans attendre. Le soulagement commence en quelques secondes.\n\n"
-"Puis il vous aide à en avoir moins besoin. Suivez votre humeur, suivez un plan de 30 jours construit autour de "
-"VOS déclencheurs et observez vos schémas d'anxiété évoluer.\n\n"
-"SOS PANIQUE\n"
-"• Widget d'écran verrouillé en un geste — de l'aide respiratoire avant même de déverrouiller votre téléphone\n"
-"• Respiration carrée guidée avec compte à rebours en direct dans la Dynamic Island\n"
-"• Ancrage 5-4-3-2-1 pour vous ramener dans le présent\n"
-"• Affirmations apaisantes, puis un doux bilan de comment vous vous sentez\n\n"
-"UN CALME DURABLE\n"
-"• Plan de guérison personnalisé sur 30 jours, adapté à vos déclencheurs\n"
-"• Suivi quotidien de l'humeur et de l'anxiété avec des graphiques de tendance clairs\n"
-"• Journal guidé avec invites, gratitude et affirmations\n"
-"• Séries, quêtes quotidiennes et jalons qui vous donnent envie de revenir\n\n"
-"PRIVÉ PAR CONCEPTION\n"
-"Votre journal, votre humeur et vos entrées personnelles ne quittent jamais votre appareil. Aucun compte, aucune publicité, aucun suivi tiers.\n\n"
-"CalmAnchor est votre ancre dans la tempête. Téléchargez-la gratuitement — votre prochaine crise de panique n'a pas à gagner.",
-"ja":
-"パニック発作？ワンタップで大丈夫。CalmAnchor は、ガイド付きボックス呼吸と5-4-3-2-1グラウンディングを"
-"ロック画面に直接配置——ロック解除も、探すことも、待つことも不要。数秒で楽になり始めます。\n\n"
-"そして、必要になる回数そのものを減らしていきます。気分を記録し、あなたのトリガーに合わせた30日間プランに取り組み、"
-"不安のパターンが時間とともに変わっていくのを実感してください。\n\n"
-"パニックSOS\n"
-"• ワンタップのロック画面ウィジェット — 端末のロックを解除する前に呼吸サポートを\n"
-"• Dynamic Island にライブカウントダウン付きのガイド付きボックス呼吸\n"
-"• 今この瞬間に引き戻す5-4-3-2-1グラウンディング\n"
-"• 心を落ち着けるアファメーションと、やさしい気分チェック\n\n"
-"続く落ち着き\n"
-"• あなたのトリガーに合わせた、30日間のパーソナルなヒーリングプラン\n"
-"• わかりやすいトレンドグラフ付きの、毎日の気分・不安記録\n"
-"• 問いかけ・感謝・アファメーション付きのガイド付きジャーナル\n"
-"• 続けたくなる連続記録、デイリークエスト、マイルストーン\n\n"
-"プライバシー第一の設計\n"
-"あなたのジャーナル・気分・個人的な記録が端末の外に出ることはありません。アカウント不要、広告なし、第三者トラッキングなし。\n\n"
-"CalmAnchor は、嵐の中のあなたの錨です。無料でダウンロード——次のパニック発作に負ける必要はありません。",
-}
+EN_GB_DESC = _en_intl("If you're in crisis, call Samaritans free on 116 123 or dial 999 in an emergency.")
+EN_AU_DESC = _en_intl("If you're in crisis, call Lifeline on 13 11 14 or dial 000 in an emergency.")
 
-PROMO = {
-"en-US": "Panic attack? One tap from your Lock Screen to guided breathing. Then a 30-day plan built around your triggers. Private, on-device, no account.",
-"de-DE": "Panikattacke? Ein Tipp vom Sperrbildschirm zur geführten Atmung. Dann ein 30-Tage-Plan rund um deine Auslöser. Privat, auf dem Gerät, kein Konto.",
-"fr-FR": "Crise de panique ? Un geste depuis l'écran verrouillé vers la respiration guidée. Puis un plan de 30 jours autour de vos déclencheurs. Privé, sur l'appareil.",
-"ja": "パニック発作？ロック画面からワンタップでガイド付き呼吸へ。その後はトリガーに合わせた30日間プラン。プライベート、端末内、アカウント不要。",
-}
+# ───────────────────────────────── German ───────────────────────────────────
+DE_DESC = (
+"Panikattacke? Ein Tipp genügt.\n\n"
+"CalmAnchor öffnet Panik-SOS direkt über ein Widget auf dem Sperrbildschirm: 5-4-3-2-1-Erdung, dann sechs "
+"ruhige, geführte Atemzüge mit Live-Countdown in der Dynamic Island. Bewerte vorher und nachher, wie stark "
+"es ist – und sieh zu, wie es nachlässt.\n\n"
+"Danach hilft dir CalmAnchor, es seltener zu brauchen: kurze Stimmungs-Check-ins, ein 30-Tage-Plan rund um "
+"deine Auslöser und Ränge, die mit dir wachsen.\n\n"
+"PANIK-SOS – KOSTENLOS\n"
+"• Ein Tipp vom Sperrbildschirm-Widget in eine geführte Sitzung\n"
+"• 5-4-3-2-1-Erdung, die dich ins Hier und Jetzt zurückholt\n"
+"• Sechs ruhige Atemzüge (4 ein, 4 halten, 4 aus) mit Countdown in der Dynamic Island\n"
+"• Beruhigende Affirmationen und ein Vorher-nachher-Check deiner Intensität\n"
+"• Eine Bibliothek mit Übungen: Box-Atmung, 4-7-8-Atmung, Body-Scan, Gedankenprotokoll und mehr\n\n"
+"VERDIENE DEINEN RUHE-RANG – NEU\n"
+"• 50 Abzeichen – von „Erster Anker“ bis zu geheimen Momenten wie „Nachtwache“\n"
+"• Ein Anchor Pass, der über 20 Ränge aufsteigt – von Meerglas bis Perle\n"
+"• Feiern für Serien, Abzeichen und neue Ränge, mit Karten zum Teilen\n"
+"• Tägliche Quests und ein Gnadentag, damit ein verpasster Tag deine Serie nicht beendet\n"
+"• „Deine Woche in Ruhe“: deine Sitzungen, Stimmungen und Erfolge als Story\n\n"
+"DAUERHAFTE RUHE – PREMIUM\n"
+"• Ein persönlicher 30-Tage-Plan, abgestimmt auf deine Auslöser\n"
+"• Ein geführtes Tagebuch mit Dankbarkeit, Affirmationen und freiem Schreiben\n"
+"• Stimmungs- und Angstverläufe über 7 Tage, 30 Tage oder insgesamt\n\n"
+"PRIVAT VON ANFANG AN\n"
+"Dein Tagebuch, deine Stimmungen und Sitzungen bleiben auf deinem iPhone. Kein Konto, keine Werbung.\n\n"
+"CalmAnchor ist ein Selbsthilfe- und Wellness-Tool und ersetzt keine ärztliche Beratung, Diagnose oder "
+"Behandlung. In einer Krise erreichst du die TelefonSeelsorge kostenlos und rund um die Uhr unter "
+"0800 111 0 111, im Notfall wähle 112."
+)
 
-NAME = {
-"en-US": "CalmAnchor: Panic Attack Help",
-"de-DE": "CalmAnchor: Hilfe bei Panik",
-"fr-FR": "CalmAnchor : Aide Panique",
-"ja": "CalmAnchor パニック対処",
-}
+# ───────────────────────────────── French ───────────────────────────────────
+FR_DESC = (
+"Crise d’angoisse ? Un seul geste.\n\n"
+"CalmAnchor ouvre directement le SOS panique depuis un widget de l’écran verrouillé : ancrage 5-4-3-2-1, "
+"puis six respirations lentes et guidées, avec un compte à rebours en direct dans la Dynamic Island. "
+"Évaluez l’intensité avant et après, et regardez-la redescendre.\n\n"
+"Ensuite, CalmAnchor vous aide à en avoir moins besoin : des bilans d’humeur rapides, un plan de 30 jours "
+"construit autour de vos déclencheurs et des rangs qui progressent avec vous.\n\n"
+"SOS PANIQUE – GRATUIT\n"
+"• Un geste depuis le widget de l’écran verrouillé vers une séance guidée\n"
+"• L’ancrage 5-4-3-2-1 pour revenir à l’instant présent\n"
+"• Six respirations lentes (inspirez 4, retenez 4, expirez 4) avec compte à rebours dans la Dynamic Island\n"
+"• Des affirmations apaisantes et une évaluation de l’intensité avant et après\n"
+"• Une bibliothèque d’exercices : respiration carrée, respiration 4-7-8, scan corporel, journal de pensées et plus\n\n"
+"GAGNEZ VOTRE RANG DE CALME – NOUVEAU\n"
+"• 50 badges à débloquer, de « Première ancre » à des moments secrets comme « Veille de nuit »\n"
+"• Un Anchor Pass qui évolue sur 20 rangs, du Verre de mer à la Perle\n"
+"• Des célébrations pour les séries, les badges et les nouveaux rangs, avec des cartes à partager\n"
+"• Des quêtes quotidiennes et un jour de grâce, pour qu’un jour manqué n’efface pas votre série\n"
+"• « Votre semaine de calme » : vos séances, humeurs et victoires en story\n\n"
+"UN CALME DURABLE – PREMIUM\n"
+"• Un plan personnalisé de 30 jours, adapté à vos déclencheurs\n"
+"• Un journal guidé avec gratitude, affirmations et écriture libre\n"
+"• L’évolution de votre humeur et de votre anxiété sur 7 jours, 30 jours ou depuis le début\n\n"
+"PRIVÉ PAR NATURE\n"
+"Votre journal, vos humeurs et vos séances restent sur votre iPhone. Sans compte, sans publicité.\n\n"
+"CalmAnchor est un outil de bien-être et d’auto-assistance ; il ne remplace pas un avis, un diagnostic ou "
+"un traitement médical. En cas de détresse, appelez le 3114 (gratuit, 24 h/24) ou, en cas d’urgence, le 112."
+)
 
-SUBTITLE = {
-"en-US": "SOS Breathing & Grounding",
-"de-DE": "SOS-Atmung & Erdung",
-"fr-FR": "SOS Respiration & Ancrage",
-"ja": "SOS呼吸＆グラウンディング",
-}
+# ──────────────────────────────── Japanese ──────────────────────────────────
+JA_DESC = (
+"パニック発作が起きたら、ワンタップで。\n\n"
+"CalmAnchorは、ロック画面のウィジェットからすぐに「パニックSOS」を開けます。5-4-3-2-1グラウンディングで"
+"今ここに意識を戻し、ダイナミックアイランドのカウントダウンに合わせて、ゆっくり6回の呼吸をガイドします。"
+"前後で不安の強さを記録するので、波が引いていくのを実感できます。\n\n"
+"そして、発作に頼らなくてすむ毎日へ。気分のチェックイン、あなたのトリガーに合わせた30日間プラン、"
+"続けるほど上がっていくランクが、穏やかさを習慣にしてくれます。\n\n"
+"パニックSOS（無料）\n"
+"・ロック画面のウィジェットから、ワンタップでガイド付きセッションへ\n"
+"・5-4-3-2-1グラウンディングで、今この瞬間に戻る\n"
+"・ゆっくり6回の呼吸（4秒吸って、4秒止めて、4秒吐く）とダイナミックアイランドのカウントダウン\n"
+"・心を落ち着けるアファメーションと、前後の強さのチェック\n"
+"・対処法ライブラリ：ボックス呼吸、4-7-8呼吸、ボディスキャン、思考記録など\n\n"
+"穏やかランクを目指そう（新機能）\n"
+"・「はじめての錨」から「夜の見張り」のようなシークレットまで、50個のバッジ\n"
+"・シーグラスからパールまで、20段階で成長するアンカーパス\n"
+"・連続記録、バッジ、ランクアップをお祝い。シェアできるカードつき\n"
+"・毎日のクエストと、1日休んでも連続記録を守る「猶予の一日」\n"
+"・「あなたの穏やかな1週間」：セッション、気分、達成をストーリーで振り返り\n\n"
+"続く穏やかさ（プレミアム）\n"
+"・あなたのトリガーに合わせた、パーソナライズされた30日間プラン\n"
+"・感謝、アファメーション、自由記述のガイド付きジャーナル\n"
+"・7日間、30日間、全期間の気分と不安の推移\n\n"
+"プライバシーを第一に\n"
+"ジャーナル、気分、セッションの記録はiPhoneの中だけに保存されます。アカウント不要、広告なし。\n\n"
+"CalmAnchorはセルフケアとウェルネスのためのツールであり、医師による助言・診断・治療の代わりにはなりません。"
+"つらいときは、いのちの電話（0570-783-556）へ。緊急時は119番に電話してください。"
+)
 
-KEYWORDS = {
-"en-US": "anxiety,relief,calm,attack,stop,5-4-3-2-1,box,breathe,journal,mood,tracker,stress,coping,cbt,worry",
-"de-DE": "angst,panikattacke,ruhe,beruhigen,atemübung,5-4-3-2-1,tagebuch,stimmung,stress,bewältigung,sorgen",
-"fr-FR": "anxiété,crise,angoisse,calme,apaiser,respiration,5-4-3-2-1,journal,humeur,stress,gérer,inquiétude",
-"ja": "不安,パニック発作,落ち着く,呼吸法,5-4-3-2-1,ジャーナル,気分,記録,ストレス,対処,心配,メンタル",
-}
-
-# Auto-renewable-subscription compliance footer (Guideline 3.1.2) appended to each description.
+# ─────────────────────────────── Subscription terms (3.1.2) ────────────────
 TERMS = {
 "en": ("\n\nSUBSCRIPTION & LEGAL\n"
        "CalmAnchor offers auto-renewable subscriptions (weekly, monthly, yearly) and an optional one-time Lifetime purchase. "
@@ -135,36 +177,72 @@ TERMS = {
        "プライバシーポリシー: https://gwlabs.app/privacy"),
 }
 
-# locale -> field values
+# ─────────────────────────────── Per-locale fields ─────────────────────────
 LOCALES = {
- "en-US": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"], desc=EN_DESC + TERMS["en"]),
- "en-GB": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"].replace("personalized","personalised"), desc=EN_DESC_GB + TERMS["en"]),
- "en-AU": dict(name=NAME["en-US"], subtitle=SUBTITLE["en-US"], keywords=KEYWORDS["en-US"], promo=PROMO["en-US"].replace("personalized","personalised"), desc=EN_DESC_GB + TERMS["en"]),
- "de-DE": dict(name=NAME["de-DE"], subtitle=SUBTITLE["de-DE"], keywords=KEYWORDS["de-DE"], promo=PROMO["de-DE"], desc=DESC["de-DE"] + TERMS["de"]),
- "fr-FR": dict(name=NAME["fr-FR"], subtitle=SUBTITLE["fr-FR"], keywords=KEYWORDS["fr-FR"], promo=PROMO["fr-FR"], desc=DESC["fr-FR"] + TERMS["fr"]),
- "ja":    dict(name=NAME["ja"],    subtitle=SUBTITLE["ja"],    keywords=KEYWORDS["ja"],    promo=PROMO["ja"],    desc=DESC["ja"] + TERMS["ja"]),
+ "en-US": dict(
+    name="CalmAnchor: Panic Attack Help",
+    subtitle="Anxiety Relief & Box Breathing",
+    keywords="grounding,54321,sos,calm,down,breathe,nervous,system,reset,vagus,coping,skills,mood,tracker,worry",
+    promo="Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm.",
+    whats_new="New: earn your calm rank.\n• 50 badges and an Anchor Pass with 20 ranks, from Sea Glass to Pearl\n• Celebrations for streaks, badges and new ranks, with cards to share\n• Your week in calm: a story recap of your sessions and moods\n• Smoother mood and anxiety charts, plus fixes",
+    desc=EN_US_DESC + TERMS["en"]),
+ "en-GB": dict(
+    name="CalmAnchor: Panic Attack Help",
+    subtitle="Anxiety Relief & Grounding",
+    keywords="diary,tracker,worry,54321,sos,calm,breathing,box,mood,stress,coping,wellbeing,mindfulness,journal",
+    promo="Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm.",
+    whats_new="New: earn your calm rank.\n• 50 badges and an Anchor Pass with 20 ranks, from Sea Glass to Pearl\n• Celebrations for streaks, badges and new ranks, with cards to share\n• Your week in calm: a story recap of your sessions and moods\n• Smoother mood and anxiety charts, plus fixes",
+    desc=EN_GB_DESC + TERMS["en"]),
+ "en-AU": dict(
+    name="CalmAnchor: Panic Attack Help",
+    subtitle="Calm Anxiety, Breathe Easy",
+    keywords="relief,exercises,nervous,system,reset,vagus,overthinking,agoraphobia,disorder,coach,relax,skills",
+    promo="Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm.",
+    whats_new="New: earn your calm rank.\n• 50 badges and an Anchor Pass with 20 ranks, from Sea Glass to Pearl\n• Celebrations for streaks, badges and new ranks, with cards to share\n• Your week in calm: a story recap of your sessions and moods\n• Smoother mood and anxiety charts, plus fixes",
+    desc=EN_AU_DESC + TERMS["en"]),
+ "de-DE": dict(
+    name="CalmAnchor: Panik & Angst SOS",
+    subtitle="Atemübungen bei Panikattacken",
+    keywords="panikattacke,angststörung,atmen,atemtechnik,beruhigen,erdung,stimmungstagebuch,herzrasen,ruhe,sorgen",
+    promo="Panikattacke? Ein Tipp vom Sperrbildschirm zu Erdung und geführter Atmung. Neu: 50 Abzeichen, 20 Ruhe-Ränge und deine Woche in Ruhe.",
+    whats_new="Neu: Verdiene deinen Ruhe-Rang.\n• 50 Abzeichen und ein Anchor Pass mit 20 Rängen, von Meerglas bis Perle\n• Feiern für Serien, Abzeichen und neue Ränge, mit Karten zum Teilen\n• Deine Woche in Ruhe: deine Sitzungen und Stimmungen als Story\n• Ruhigere Stimmungs- und Angstdiagramme und Fehlerbehebungen",
+    desc=DE_DESC + TERMS["de"]),
+ "fr-FR": dict(
+    name="CalmAnchor : Anxiété & Panique",
+    subtitle="Respiration & crise d'angoisse",
+    keywords="aide,ancrage,calme,calmer,apaiser,respirer,antistress,humeur,relaxation,tcc,inquiétude,peur,souffle",
+    promo="Crise d’angoisse ? Un geste depuis l’écran verrouillé vers l’ancrage et la respiration guidée. Nouveau : 50 badges, 20 rangs et votre semaine de calme.",
+    whats_new="Nouveau : gagnez votre rang de calme.\n• 50 badges et un Anchor Pass de 20 rangs, du Verre de mer à la Perle\n• Des célébrations pour les séries, badges et nouveaux rangs, avec des cartes à partager\n• Votre semaine de calme : vos séances et humeurs en story\n• Des courbes d’humeur et d’anxiété plus lisibles, et des corrections",
+    desc=FR_DESC + TERMS["fr"]),
+ "ja": dict(
+    name="CalmAnchor：パニック発作・不安の対処",
+    subtitle="深呼吸と呼吸法で、不安を和らげる",
+    keywords="パニック障害,不安障害,過呼吸,動悸,自律神経,マインドフルネス,瞑想,ストレス解消,気分記録,気持ち,日記,心のケア,メンタルケア,セルフケア,リラックス,落ち着く,認知行動療法,ボックス呼吸",
+    promo="パニック発作に、ロック画面からワンタップ。グラウンディングとガイド付き呼吸へ。新機能：50個のバッジ、20段階のランク、1週間の振り返り。",
+    whats_new="新機能：穏やかランクを目指そう。\n・50個のバッジと、シーグラスからパールまで20段階のアンカーパス\n・連続記録、バッジ、ランクアップのお祝いとシェア用カード\n・「あなたの穏やかな1週間」をストーリーで振り返り\n・気分と不安のグラフを見やすく改善、不具合の修正",
+    desc=JA_DESC + TERMS["ja"]),
 }
 
-LIMITS = {"name": 30, "subtitle": 30, "keywords": 100, "promo": 170, "desc": 4000}
+LIMITS = {"name": 30, "subtitle": 30, "keywords": 100, "promo": 170, "whats_new": 4000, "desc": 4000}
+
 
 def main():
-    print(f"{'locale':8} {'name':4} {'sub':4} {'kw':4} {'promo':6}")
+    print(f"{'locale':7} {'name':>4} {'sub':>4} {'kw':>4} {'promo':>5} {'new':>4} {'desc':>5}")
+    bad = False
     for loc, f in LOCALES.items():
         d = os.path.join(ROOT, loc)
         os.makedirs(d, exist_ok=True)
-        files = {"name.txt": f["name"], "subtitle.txt": f["subtitle"],
-                 "keywords.txt": f["keywords"], "promotional_text.txt": f["promo"],
-                 "description.txt": f["desc"]}
-        warn = ""
+        files = {"name.txt": f["name"], "subtitle.txt": f["subtitle"], "keywords.txt": f["keywords"],
+                 "promotional_text.txt": f["promo"], "description.txt": f["desc"], "whats_new.txt": f["whats_new"]}
         for fn, val in files.items():
-            open(os.path.join(d, fn), "w").write(val)
-        # length checks
-        for k, lim in [("name", LIMITS["name"]), ("subtitle", LIMITS["subtitle"]),
-                       ("keywords", LIMITS["keywords"]), ("promo", LIMITS["promo"])]:
-            v = f[{"name":"name","subtitle":"subtitle","keywords":"keywords","promo":"promo"}[k]]
-            if len(v) > lim:
-                warn += f" !{k}={len(v)}>{lim}"
-        print(f"{loc:8} {len(f['name']):<4} {len(f['subtitle']):<4} {len(f['keywords']):<4} {len(f['promo']):<6}{warn}")
+            open(os.path.join(d, fn), "w", encoding="utf-8").write(val)
+        warn = [f"{k}={len(f[k])}>{lim}" for k, lim in LIMITS.items() if len(f[k]) > lim]
+        bad |= bool(warn)
+        print(f"{loc:7} {len(f['name']):>4} {len(f['subtitle']):>4} {len(f['keywords']):>4} "
+              f"{len(f['promo']):>5} {len(f['whats_new']):>4} {len(f['desc']):>5}  {' '.join('!' + w for w in warn)}")
+    if bad:
+        raise SystemExit("limit exceeded")
+
 
 if __name__ == "__main__":
     main()

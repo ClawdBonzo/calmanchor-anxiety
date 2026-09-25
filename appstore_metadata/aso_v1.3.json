@@ -1,0 +1,76 @@
+{
+ "version": "1.3",
+ "researched": "2026-09-24",
+ "method": "App Store search autocomplete (MZSearchHints) per storefront + iTunes Search top-25 titles per seed term; raw data in aso_research_2026-09.json",
+ "secondary_indexing": {
+  "US": [
+   "en-US"
+  ],
+  "GB": [
+   "en-GB"
+  ],
+  "AU": [
+   "en-AU",
+   "en-GB"
+  ],
+  "DE": [
+   "de-DE",
+   "en-GB"
+  ],
+  "FR": [
+   "fr-FR",
+   "en-GB"
+  ],
+  "JP": [
+   "ja",
+   "en-US"
+  ]
+ },
+ "baseline_rank_top25": "not ranked for any core term in any market except FR 'crise de panique' #20 (Sept 2026)",
+ "evidence": {
+  "US": "panic attack relief/help, anxiety relief/help, box breathing, grounding + 54321, nervous system reset, vagus, coping skills, mood tracker, worry, calm down",
+  "GB": "panic attack tracker/help, anxiety diary, grounding 54321, worry, wellbeing, mindfulness, mood tracker",
+  "AU": "panic attack relief, overthinking, agoraphobia, nervous system; competitor 'Anchor – panic attack relief' ranks",
+  "DE": "Panikattacke(n), Angst, Angststörung, Atemübungen (plural typed), Atemtechnik, beruhigen, Stimmungstagebuch, Herzrasen, Vagusnerv, 54321 Erdung",
+  "FR": "crise d'angoisse, anxiété, panique, respiration, respirer, humeur, relaxation, TCC; 'cohérence cardiaque' dominant but NOT used (different technique)",
+  "JP": "パニック障害/発作, 不安, 呼吸法, 深呼吸, 自律神経, マインドフルネス, 瞑想, 気分記録, 過呼吸, 動悸, 心のケア, ボックス呼吸"
+ },
+ "locales": {
+  "en-US": {
+   "name": "CalmAnchor: Panic Attack Help",
+   "subtitle": "Anxiety Relief & Box Breathing",
+   "keywords": "grounding,54321,sos,calm,down,breathe,nervous,system,reset,vagus,coping,skills,mood,tracker,worry",
+   "promo": "Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm."
+  },
+  "en-GB": {
+   "name": "CalmAnchor: Panic Attack Help",
+   "subtitle": "Anxiety Relief & Grounding",
+   "keywords": "diary,tracker,worry,54321,sos,calm,breathing,box,mood,stress,coping,wellbeing,mindfulness,journal",
+   "promo": "Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm."
+  },
+  "en-AU": {
+   "name": "CalmAnchor: Panic Attack Help",
+   "subtitle": "Calm Anxiety, Breathe Easy",
+   "keywords": "relief,exercises,nervous,system,reset,vagus,overthinking,agoraphobia,disorder,coach,relax,skills",
+   "promo": "Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm."
+  },
+  "de-DE": {
+   "name": "CalmAnchor: Panik & Angst SOS",
+   "subtitle": "Atemübungen bei Panikattacken",
+   "keywords": "panikattacke,angststörung,atmen,atemtechnik,beruhigen,erdung,stimmungstagebuch,herzrasen,ruhe,sorgen",
+   "promo": "Panikattacke? Ein Tipp vom Sperrbildschirm zu Erdung und geführter Atmung. Neu: 50 Abzeichen, 20 Ruhe-Ränge und deine Woche in Ruhe."
+  },
+  "fr-FR": {
+   "name": "CalmAnchor : Anxiété & Panique",
+   "subtitle": "Respiration & crise d'angoisse",
+   "keywords": "aide,ancrage,calme,calmer,apaiser,respirer,antistress,humeur,relaxation,tcc,inquiétude,peur,souffle",
+   "promo": "Crise d’angoisse ? Un geste depuis l’écran verrouillé vers l’ancrage et la respiration guidée. Nouveau : 50 badges, 20 rangs et votre semaine de calme."
+  },
+  "ja": {
+   "name": "CalmAnchor：パニック発作・不安の対処",
+   "subtitle": "深呼吸と呼吸法で、不安を和らげる",
+   "keywords": "パニック障害,不安障害,過呼吸,動悸,自律神経,マインドフルネス,瞑想,ストレス解消,気分記録,気持ち,日記,心のケア,メンタルケア,セルフケア,リラックス,落ち着く,認知行動療法,ボックス呼吸",
+   "promo": "パニック発作に、ロック画面からワンタップ。グラウンディングとガイド付き呼吸へ。新機能：50個のバッジ、20段階のランク、1週間の振り返り。"
+  }
+ }
+}
