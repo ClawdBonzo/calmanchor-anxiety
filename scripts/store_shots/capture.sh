@@ -17,7 +17,7 @@ mkdir -p $WORK
 t() { local s=$1; shift; perl -e "alarm $s; exec @ARGV" "$@"; }
 
 APP=$(ls -td ~/Library/Developer/Xcode/DerivedData/CalmAnchor-*/Build/Products/Debug-iphonesimulator/CalmAnchor.app | head -1)
-t 180 xcrun simctl install $U "$APP" || { echo "install failed"; exit 1; }
+t 600 xcrun simctl install $U "$APP" || { echo "install failed"; exit 1; }
 t 60 xcrun simctl status_bar $U override --time 9:41 --batteryState charged --batteryLevel 100 \
   --cellularMode active --wifiBars 3 --cellularBars 4 --dataNetwork 5g
 

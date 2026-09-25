@@ -51,26 +51,27 @@
   "en-AU": {
    "name": "CalmAnchor: Panic Attack Help",
    "subtitle": "Calm Anxiety, Breathe Easy",
-   "keywords": "relief,exercises,nervous,system,reset,vagus,overthinking,agoraphobia,disorder,coach,relax,skills",
+   "keywords": "relief,exercises,nervous,system,reset,vagus,overthinking,agoraphobia,disorder,anxious,relax,skills",
    "promo": "Panic attack? One tap from your Lock Screen into grounding and guided breathing. New: 50 badges, 20 calm ranks and your week in calm."
   },
   "de-DE": {
    "name": "CalmAnchor: Panik & Angst SOS",
    "subtitle": "Atemübungen bei Panikattacken",
-   "keywords": "panikattacke,angststörung,atmen,atemtechnik,beruhigen,erdung,stimmungstagebuch,herzrasen,ruhe,sorgen",
-   "promo": "Panikattacke? Ein Tipp vom Sperrbildschirm zu Erdung und geführter Atmung. Neu: 50 Abzeichen, 20 Ruhe-Ränge und deine Woche in Ruhe."
+   "keywords": "panikattacke,angststörung,atmen,atemtechnik,beruhigen,erdung,stimmungstagebuch,herzrasen,entspannung",
+   "promo": "Panikattacke? Mit einem Tippen vom Sperrbildschirm zu Erdung und geführter Atmung. Neu: 50 Abzeichen, 20 Ränge und „Deine Woche in Ruhe“."
   },
   "fr-FR": {
    "name": "CalmAnchor : Anxiété & Panique",
    "subtitle": "Respiration & crise d'angoisse",
-   "keywords": "aide,ancrage,calme,calmer,apaiser,respirer,antistress,humeur,relaxation,tcc,inquiétude,peur,souffle",
-   "promo": "Crise d’angoisse ? Un geste depuis l’écran verrouillé vers l’ancrage et la respiration guidée. Nouveau : 50 badges, 20 rangs et votre semaine de calme."
+   "keywords": "aide,ancrage,calme,calmer,apaiser,respirer,antistress,humeur,relaxation,tcc,inquiétude,peur,attaque",
+   "promo": "Crise d’angoisse ? D’un geste, passez de l’écran verrouillé à l’ancrage et à la respiration guidée. Nouveau : 50 badges, 20 rangs et « Votre semaine de calme »."
   },
   "ja": {
-   "name": "CalmAnchor：パニック発作・不安の対処",
-   "subtitle": "深呼吸と呼吸法で、不安を和らげる",
-   "keywords": "パニック障害,不安障害,過呼吸,動悸,自律神経,マインドフルネス,瞑想,ストレス解消,気分記録,気持ち,日記,心のケア,メンタルケア,セルフケア,リラックス,落ち着く,認知行動療法,ボックス呼吸",
-   "promo": "パニック発作に、ロック画面からワンタップ。グラウンディングとガイド付き呼吸へ。新機能：50個のバッジ、20段階のランク、1週間の振り返り。"
+   "name": "CalmAnchor：パニック発作・不安の対処法",
+   "subtitle": "深呼吸と呼吸法で、心を落ち着かせる",
+   "keywords": "パニック障害,不安障害,過呼吸,動悸,自律神経,マインドフルネス,瞑想,ストレス解消,気分記録,緊張,日記,心のケア,メンタルケア,セルフケア,リラックス,認知行動療法,ボックス呼吸,心配",
+   "promo": "パニック発作に、ロック画面からワンタップ。グラウンディングとガイド付き呼吸へ。新機能：50個のバッジ、20段階のランク、「あなたの穏やかな1週間」。"
   }
- }
+ },
+ "native_review": "2026-09-25: independent native review applied (DE tap wording, FR typography/terms, JA meaning fix + 24h crisis line, EN 'healing' removed, UK spelling)"
 }

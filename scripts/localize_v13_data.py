@@ -161,9 +161,9 @@ T = {
     "Welcome Back": ("Willkommen zurück", "Bon retour", "おかえりなさい"),
     "Come back after a week away.": ("Komm nach einer Woche Pause zurück.", "Revenez après une semaine d’absence.", "1週間ぶりに戻ってくる"),
     "Welcome back. Returning is the bravest part.": ("Willkommen zurück. Zurückzukommen ist das Mutigste.", "Bon retour. Revenir, c’est le plus courageux.", "おかえりなさい。戻ってくることこそ、いちばん勇気のいることです。"),
-    "Saved by Grace": ("Schonfrist", "Jour de grâce", "猶予の一日"),
-    "Let a grace day save your streak.": ("Lass einen Schontag deine Serie retten.", "Laissez un jour de grâce sauver votre série.", "猶予日で連続記録を守る"),
-    "One missed day didn't undo your progress. Grace works.": ("Ein verpasster Tag macht deinen Fortschritt nicht zunichte. Der Schontag wirkt.", "Un jour manqué n’a pas effacé vos progrès. Le jour de grâce a fait son effet.", "1日休んでも、進歩は消えません。猶予日が役立ちました。"),
+    "Saved by Grace": ("Schonfrist", "Jour de grâce", "お休みの日"),
+    "Let a grace day save your streak.": ("Lass einen Schontag deine Serie retten.", "Laissez un jour de grâce sauver votre série.", "お休みの日で連続記録を守る"),
+    "One missed day didn't undo your progress. Grace works.": ("Ein verpasster Tag macht deinen Fortschritt nicht zunichte. Der Schontag wirkt.", "Un jour manqué n’a pas effacé vos progrès. Le jour de grâce a fait son effet.", "1日休んでも、進歩は消えません。お休みの日が守ってくれました。"),
 
     # Anchor Pass tiers
     "Sea Glass": ("Meerglas", "Verre de mer", "シーグラス"),

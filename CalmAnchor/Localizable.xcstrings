@@ -13710,7 +13710,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "猶予の一日"
+            "value": "お休みの日"
           }
         }
       }
@@ -13733,7 +13733,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "猶予日で連続記録を守る"
+            "value": "お休みの日で連続記録を守る"
           }
         }
       }
@@ -13756,7 +13756,7 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "1日休んでも、進歩は消えません。猶予日が役立ちました。"
+            "value": "1日休んでも、進歩は消えません。お休みの日が守ってくれました。"
           }
         }
       }
