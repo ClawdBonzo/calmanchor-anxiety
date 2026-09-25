@@ -103,7 +103,7 @@ private struct IslandMock: View {
                 .frame(width: 40, height: 40)
             VStack(alignment: .leading, spacing: 1) {
                 Text(String(localized: "Hold")).font(.system(size: 17, weight: .heavy, design: .rounded))
-                Text(String(localized: "Breath 3 of 6")).font(.system(size: 12, weight: .semibold, design: .rounded)).opacity(0.7)
+                Text(String(format: String(localized: "Breath %lld of 6"), 2)).font(.system(size: 12, weight: .semibold, design: .rounded)).opacity(0.7)
             }
             .foregroundStyle(.white)
             Spacer(minLength: 16)

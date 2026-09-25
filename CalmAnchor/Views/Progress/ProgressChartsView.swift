@@ -121,6 +121,23 @@ struct ProgressChartsContent: View {
 
     // Already SQL-scoped by the query; kept as the names the chart code uses.
     private var filteredMoods: [MoodEntry] { moods }
+
+    /// One point per day. Two check-ins on the same day used to stack in the
+    /// area chart (spikes) and zig-zag the smoothed line.
+    private struct DayPoint: Identifiable {
+        let day: Date; let mood: Double; let anxiety: Double
+        var id: Date { day }
+    }
+    private var dailyPoints: [DayPoint] {
+        let cal = Calendar.current
+        return Dictionary(grouping: filteredMoods) { cal.startOfDay(for: $0.date) }
+            .map { day, entries in
+                DayPoint(day: day,
+                         mood: Double(entries.map(\.moodLevel).reduce(0, +)) / Double(entries.count),
+                         anxiety: Double(entries.map(\.anxietyLevel).reduce(0, +)) / Double(entries.count))
+            }
+            .sorted { $0.day < $1.day }
+    }
     private var filteredJournals: [JournalEntry] { journals }
 
     var body: some View {
@@ -149,17 +166,17 @@ struct ProgressChartsContent: View {
             if filteredMoods.isEmpty {
                 chartPlaceholder("Log moods to see trends")
             } else {
-                Chart(filteredMoods) { mood in
+                Chart(dailyPoints) { point in
                     LineMark(
-                        x: .value("Date", mood.date, unit: .day),
-                        y: .value("Mood", mood.moodLevel)
+                        x: .value("Date", point.day, unit: .day),
+                        y: .value("Mood", point.mood)
                     )
                     .foregroundStyle(AppConstants.Colors.calmBlue)
                     .interpolationMethod(.catmullRom)
 
                     PointMark(
-                        x: .value("Date", mood.date, unit: .day),
-                        y: .value("Mood", mood.moodLevel)
+                        x: .value("Date", point.day, unit: .day),
+                        y: .value("Mood", point.mood)
                     )
                     .foregroundStyle(AppConstants.Colors.calmBlue)
                 }
@@ -187,10 +204,11 @@ struct ProgressChartsContent: View {
             if filteredMoods.isEmpty {
                 chartPlaceholder("Log moods to track anxiety")
             } else {
-                Chart(filteredMoods) { mood in
+                Chart(dailyPoints) { point in
                     AreaMark(
-                        x: .value("Date", mood.date, unit: .day),
-                        y: .value("Anxiety", mood.anxietyLevel)
+                        x: .value("Date", point.day, unit: .day),
+                        yStart: .value("Floor", 1),
+                        yEnd: .value("Anxiety", point.anxiety)
                     )
                     .foregroundStyle(
                         LinearGradient(
@@ -202,8 +220,8 @@ struct ProgressChartsContent: View {
                     .interpolationMethod(.catmullRom)
 
                     LineMark(
-                        x: .value("Date", mood.date, unit: .day),
-                        y: .value("Anxiety", mood.anxietyLevel)
+                        x: .value("Date", point.day, unit: .day),
+                        y: .value("Anxiety", point.anxiety)
                     )
                     .foregroundStyle(AppConstants.Colors.gentleCoral)
                     .interpolationMethod(.catmullRom)

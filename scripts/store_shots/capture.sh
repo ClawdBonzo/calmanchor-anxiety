@@ -45,12 +45,18 @@ for loc in $LOCALES; do
   base=(-seedDemoData -demoPremium -CAScreenshotMode -AppleLanguages "$AL" -AppleLocale $LC)
   for n in ${(ok)SHOTS}; do
     extra=(${(z)SHOTS[$n]})
+    # SKIP_EXISTING=1 keeps frames already captured (resume after a failure).
+    if [[ ${SKIP_EXISTING:-0} == 1 && -f $RAW/$n.png ]]; then echo "$loc $n kept"; continue; fi
     for attempt in 1 2 3; do
       t 30 xcrun simctl terminate $U $BUNDLE >/dev/null 2>&1
       t 150 xcrun simctl launch $U $BUNDLE $base $extra >/dev/null 2>&1
-      sleep 14
+      sleep 18
       t 60 xcrun simctl io $U screenshot $RAW/$n.png >/dev/null 2>&1
-      if [[ -f $RAW/$n.png && $(md5 -q $RAW/$n.png) != $HOME_MD5 ]]; then echo "$loc $n ok"; break; fi
+      # Reject the home screen and blank frames (the app hadn't drawn yet;
+      # a real 1320×2868 app frame is never under ~150 KB).
+      if [[ -f $RAW/$n.png && $(md5 -q $RAW/$n.png) != $HOME_MD5 && $(stat -f%z $RAW/$n.png) -gt 150000 ]]; then
+        echo "$loc $n ok"; break
+      fi
       echo "$loc $n retry $attempt"; rm -f $RAW/$n.png
     done
   done
