@@ -158,7 +158,12 @@ struct MainTabView: View {
             if let b = CalmBadgeCatalog.badge(id: "stormTamed.1") { game.debugShow(.badge(b, alsoEarned: 2)) }
         case "rank":   game.debugShow(.rankUp(level: 11))
         case "streak": game.debugShow(.streak(days: 21))
-        case "export": StoreAssetExporter.run(context: modelContext)
+        case "export":
+            // Let the demo seed (run from the App's onAppear) land first.
+            Task { @MainActor in
+                try? await Task.sleep(for: .seconds(3))
+                StoreAssetExporter.run(context: modelContext)
+            }
         default: break
         }
     }

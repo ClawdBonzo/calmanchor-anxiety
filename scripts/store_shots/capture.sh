@@ -61,10 +61,12 @@ for loc in $LOCALES; do
     done
   done
 
-  # Stickers, rendered by the app itself in this language.
+  # Stickers, rendered by the app itself in this language. Clear the last
+  # run's output first, or a stale done.txt makes us copy old stickers.
   t 30 xcrun simctl terminate $U $BUNDLE >/dev/null 2>&1
-  t 150 xcrun simctl launch $U $BUNDLE $base -CAShowcase export >/dev/null 2>&1
   DATA=$(t 30 xcrun simctl get_app_container $U $BUNDLE data)
+  rm -rf $DATA/Documents/StoreAssets
+  t 150 xcrun simctl launch $U $BUNDLE $base -CAShowcase export >/dev/null 2>&1
   for i in {1..60}; do [[ -f $DATA/Documents/StoreAssets/done.txt ]] && break; sleep 1; done
   rm -rf $WORK/assets/$loc; mkdir -p $WORK/assets/$loc
   cp $DATA/Documents/StoreAssets/*.png $WORK/assets/$loc/ 2>/dev/null
