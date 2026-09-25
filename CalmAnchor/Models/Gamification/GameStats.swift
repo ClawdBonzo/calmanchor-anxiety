@@ -25,14 +25,7 @@ final class GameStats {
         return thresholds
     }
 
-    func getLevelName() -> String {
-        let names = ["Anxious Beginner","Aware Adventurer","Curious Climber","Focus Friend",
-                     "Feeling Fighter","Future Forger","Freedom Finder","Grounded Gardener",
-                     "Growth Guide","Graceful Guardian","Harmony Healer","Heart Helper",
-                     "Hope Holder","Horizon Hugger","Anchored Advocate","Anchor Artist",
-                     "Ascended Ally","Anchor Awakener","Anchor Ambassador","Zen Master"]
-        return names[min(currentLevel - 1, names.count - 1)]
-    }
+    func getLevelName() -> String { CalmRanks.title(for: currentLevel) }
 
     func getLevelEmoji() -> String {
         switch currentLevel {

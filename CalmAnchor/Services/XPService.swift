@@ -52,7 +52,7 @@ enum XPService {
         let award = XPAward(xpGained: amount,
                             didLevelUp: leveledUp,
                             newLevel: stats.currentLevel,
-                            levelName: stats.getLevelName())
+                            levelName: stats.rankTitle)
         CelebrationCenter.shared.post(award)   // every award is now visible to the user
         return award
     }

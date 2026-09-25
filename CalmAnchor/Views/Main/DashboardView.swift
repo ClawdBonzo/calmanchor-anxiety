@@ -90,20 +90,6 @@ struct DashboardView: View {
                     streakDays: profile?.currentStreak ?? 0
                 )
             }
-            // Streak milestone moment (3/7/14/30/60/100). Routes into the share card.
-            .fullScreenCover(item: $celebrations.celebration) { event in
-                if case .streakMilestone(let days) = event {
-                    StreakMilestoneView(
-                        days: days,
-                        calmName: profile?.calmName ?? "Friend",
-                        onShare: {
-                            celebrations.celebration = nil
-                            showCalmCard = true
-                        },
-                        onDismiss: { celebrations.celebration = nil }
-                    )
-                }
-            }
             // XP / level-up toast
             .overlay(alignment: .top) {
                 if let toast = celebrations.toast {

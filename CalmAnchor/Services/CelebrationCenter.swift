@@ -30,11 +30,8 @@ final class CelebrationCenter: ObservableObject {
     private var toastTask: Task<Void, Never>?
 
     func post(_ award: XPAward) {
-        if award.didLevelUp {
-            show(toast: .levelUp(level: award.newLevel, name: award.levelName))
-        } else if award.xpGained > 0 {
-            show(toast: .xpGained(award.xpGained))
-        }
+        if award.xpGained > 0 { show(toast: .xpGained(award.xpGained)) }
+        if award.didLevelUp { CalmGame.shared.enqueue(.rankUp(level: award.newLevel)) }
     }
 
     func postStreakMilestone(_ days: Int) {
@@ -44,7 +41,7 @@ final class CelebrationCenter: ObservableObject {
         let key = "celebrated.streak.\(days)"
         guard !UserDefaults.standard.bool(forKey: key) else { return }
         UserDefaults.standard.set(true, forKey: key)
-        celebration = .streakMilestone(days: days)
+        CalmGame.shared.enqueue(.streak(days: days))
     }
 
     private func show(toast event: Event) {

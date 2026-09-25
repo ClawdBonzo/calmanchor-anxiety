@@ -4,7 +4,7 @@ import StoreKit
 
 struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.requestReview) private var requestReview
+    @Environment(\.openURL) private var openURL
     @EnvironmentObject private var revenueCat: RevenueCatService
     @Query private var profiles: [UserProfile]
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = true
@@ -176,7 +176,7 @@ struct SettingsView: View {
 
                 // About
                 Section("About") {
-                    Button(action: { requestReview() }) {
+                    Button(action: { openURL(CalmLinks.writeReview) }) {
                         Label("Rate CalmAnchor", systemImage: "star.bubble.fill")
                     }
 

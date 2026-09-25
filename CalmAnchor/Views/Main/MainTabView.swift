@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import StoreKit
 
 struct MainTabView: View {
     @Environment(\.modelContext) private var modelContext
@@ -8,6 +9,8 @@ struct MainTabView: View {
     @State private var showPanicMode = MainTabView.initialPanic
     @State private var showWidgetMood = false
     @State private var dayKey = Calendar.current.startOfDay(for: Date())
+    @ObservedObject private var game = CalmGame.shared
+    @Environment(\.requestReview) private var requestReview
 
     // DEBUG-only: allow screenshot capture to jump to a specific tab / panic screen
     // via launch args -demoTab <0-4> and -demoPanic. No effect in Release.
@@ -71,15 +74,39 @@ struct MainTabView: View {
                     .transition(.opacity)
                     .zIndex(100)
             }
+
+            // Celebrations wait until any Panic SOS session is over: nothing
+            // interrupts someone mid-panic.
+            if let celebration = game.current, !showPanicMode {
+                GameCelebrationView(celebration: celebration) { game.dismissCurrent() }
+                    .id(celebration.id)
+                    .transition(.opacity)
+                    .zIndex(90)
+            }
         }
         .sheet(isPresented: $showWidgetMood) {
             QuickMoodLogView()
                 .presentationDetents([.medium])
         }
-        .task { repairMissingProfileIfNeeded() }
+        .task {
+            repairMissingProfileIfNeeded()
+            game.evaluate(in: modelContext)
+        }
         .onChange(of: scenePhase) { _, phase in
             // Bump the day key on foreground so date-scoped views re-init.
-            if phase == .active { dayKey = Calendar.current.startOfDay(for: Date()) }
+            if phase == .active {
+                dayKey = Calendar.current.startOfDay(for: Date())
+                game.evaluate(in: modelContext)
+            }
+        }
+        .onChange(of: selectedTab) { _, _ in game.evaluate(in: modelContext) }
+        .onChange(of: showPanicMode) { _, open in
+            if !open { game.evaluate(in: modelContext) }
+        }
+        .onChange(of: game.wantsReview) { _, wants in
+            guard wants else { return }
+            game.wantsReview = false
+            ReviewPromptManager.requestAfterCelebration(using: requestReview)
         }
         .onOpenURL { url in
             switch url.host {

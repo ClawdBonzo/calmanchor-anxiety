@@ -4,7 +4,6 @@ import SwiftData
 struct JournalEntryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.requestReview) private var requestReview
     @Query private var profiles: [UserProfile]
     @State private var moodBefore: Int = 5
     @State private var moodAfter: Int = 5
@@ -229,9 +228,9 @@ struct JournalEntryView: View {
 
         if let profile = profiles.first {
             StreakService.updateStreak(for: profile)
-            ReviewPromptManager.requestForStreakMilestone(profile.currentStreak, using: requestReview)
         }
         WidgetSync.refresh(from: modelContext)
+        CalmGame.shared.evaluate(in: modelContext)
 
         dismiss()
     }

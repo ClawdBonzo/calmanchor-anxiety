@@ -27,7 +27,7 @@ enum WidgetSync {
             todayMoodLogged: !todays.isEmpty,
             todayMood: todays.first?.moodLevel ?? 0,
             level: stats?.currentLevel ?? 1,
-            levelName: stats?.getLevelName() ?? "Anxious Beginner",
+            levelName: stats?.rankTitle ?? CalmRanks.title(for: 1),
             lastUpdated: Date()
         )
         WidgetDataStore.write(snapshot)

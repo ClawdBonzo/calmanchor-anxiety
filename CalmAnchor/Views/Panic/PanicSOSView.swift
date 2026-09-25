@@ -460,7 +460,6 @@ struct PanicSOSView: View {
         // Using the panic tool IS daily activity — credit the streak.
         if let profile = profiles.first {
             StreakService.updateStreak(for: profile)
-            ReviewPromptManager.requestForStreakMilestone(profile.currentStreak, using: requestReview)
         }
         QuestService.recordEvent(.calmSession, in: modelContext)
         WidgetSync.refresh(from: modelContext)

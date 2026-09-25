@@ -99,6 +99,8 @@ enum QuestService {
         let descriptor = FetchDescriptor<Quest>(
             predicate: #Predicate { $0.isActive && !$0.isCompleted && $0.type == raw }
         )
+        // Every real event can unlock a badge, quest or not.
+        defer { CalmGame.shared.evaluate(in: context) }
         guard let quest = (try? context.fetch(descriptor))?
             .first(where: { $0.dueDate >= today }) else { return nil }
 

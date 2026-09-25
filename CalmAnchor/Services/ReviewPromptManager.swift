@@ -37,6 +37,14 @@ enum ReviewPromptManager {
         fire(using: request)
     }
 
+    /// Call when a batch of celebrations (badge / streak) has just cleared.
+    /// CalmGame only raises this once 3+ badges are unlocked.
+    static func requestAfterCelebration(using request: RequestReviewAction) {
+        guard !CalmGame.suppressed else { return }
+        guard canAsk() else { return }
+        fire(using: request)
+    }
+
     // MARK: - Guards
 
     private static func canAsk() -> Bool {
